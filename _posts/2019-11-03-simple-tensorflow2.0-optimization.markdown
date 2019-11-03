@@ -21,6 +21,8 @@ This quadratic equation can be reduced to
 $$ (x + 3)^2 = 0 $$
 therefore we can easily find the exact solution when $$ x = -3 $$.
 
+![Simple quadratic function](/assets/2019-11-03/quadratic-function-plot.png)
+
 # Numerical resolution with tensorflow 2.0
 For this example, we'll use tensorflow 2.0 and one of the optimizer in `tf.keras.optimizers` to find a numerical approximation of the previous equation.
 First, let's import the basic packages
@@ -46,7 +48,7 @@ def compute_loss():
     return coefficients[0][0]*x**2 + coefficients[1][0]*x + coefficients[2][0]
 {% endhighlight %}
 
-Then we choose one optimizer among those provided by `tf.keras`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#__init__)
+Then we choose the `stochastic gradient descent and momentum` optimizer among those provided by `tf.keras`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#__init__)
 {% highlight python %}
 optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
 {% endhighlight %}
