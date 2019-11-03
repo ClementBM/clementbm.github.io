@@ -31,18 +31,18 @@ import numpy as np
 import tensorflow as tf
 {% endhighlight %}
 
-Then we define the variable x with `tf.Variable`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/Variable#__init__). We arbitrarily initialize the variable `x` to 0.
+Then, we define the variable x with `tf.Variable`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/Variable#__init__). We arbitrarily initialize the variable `x` to 0.
 {% highlight python %}
 x = tf.Variable(initial_value=0, name='x', trainable=True, dtype=tf.float32)
 {% endhighlight %}
 
 
-Then we define the coefficients with `tf.constant`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/constant)
+We specify the coefficients with `tf.constant`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/constant)
 {% highlight python %}
 coefficients = tf.constant(value=[1,6,9], shape=(3,1), dtype=tf.float32)
 {% endhighlight %}
 
-Then we define the cost function as a method, because `minimize()` requires it
+As the `minimize()` function requires the cost function as a method, we set it as follow
 {% highlight python %}
 def compute_loss():
     return coefficients[0][0]*x**2 + coefficients[1][0]*x + coefficients[2][0]
@@ -53,7 +53,7 @@ Then we choose the `stochastic gradient descent and momentum` optimizer among th
 optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
 {% endhighlight %}
 
-And finally we magically call the `minimize()` method that will simply computes gradient using `tf.GradientTape` and calls `apply_gradients()`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#minimize)
+And finally we call the `minimize()` method that will simply computes gradient using `tf.GradientTape` and calls `apply_gradients()`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#minimize)
 {% highlight python %}
 for i in range(1000):
   optimizer.minimize(loss=compute_loss, var_list=[x])
