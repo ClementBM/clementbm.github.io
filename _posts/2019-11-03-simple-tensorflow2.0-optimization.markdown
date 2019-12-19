@@ -53,7 +53,7 @@ Then we choose the `stochastic gradient descent and momentum` optimizer among th
 optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
 {% endhighlight %}
 
-And finally we call the `minimize()` method that will simply computes gradient using `tf.GradientTape` and calls `apply_gradients()`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#minimize)
+And finally we call the `minimize()` method that will simply compute gradient using `tf.GradientTape` and call `apply_gradients()`, see the [doc](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/SGD#minimize)
 {% highlight python %}
 for i in range(1000):
   optimizer.minimize(loss=compute_loss, var_list=[x])
