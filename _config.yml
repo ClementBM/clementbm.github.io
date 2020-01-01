@@ -33,6 +33,7 @@ theme: minima
 remote_theme: jekyll-theme-hacker
 plugins:
   - jekyll-feed
+  - jemoji
 markdown: kramdown
 
 # Exclude from processing.
