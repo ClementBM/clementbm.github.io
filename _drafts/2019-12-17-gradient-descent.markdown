@@ -438,9 +438,6 @@ $$
     -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{r=1}^{\text{L}} {y_{kr}} \log(\hat{y_{kr}}) + (1 - y_{kr}) \log(1 - \hat{y_{kr}}))
 $$
 
-
-# Related topics
-
 # Sources
 * https://www.wikiwand.com/fr/Algorithme_du_gradient
 * https://bigtheta.io/2016/02/27/the-math-behind-backpropagation.html
