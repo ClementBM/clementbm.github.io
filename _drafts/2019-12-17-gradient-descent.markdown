@@ -478,6 +478,9 @@ $$
 **logistic regression**
 * https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf
 
+**derivative**
+* http://cs231n.stanford.edu/vecDerivs.pdf
+
 **softmax**
 * https://ljvmiranda921.github.io/notebook/2017/08/13/softmax-and-the-negative-log-likelihood/
 * https://developers.google.com/machine-learning/crash-course/multi-class-neural-networks/softmax
