@@ -64,28 +64,28 @@ $$
 $$
 
 > :alien: *alien says* :speech_balloon:\
-**m** the number of samples we have\
-**n** the dimension of the input, or the number of explanatory variables\
+M the number of samples we have\
+N the dimension of the input, or the number of explanatory variables\
 **Vectors** are underlined like this: $$\underline{x}$$\
 **Matrices** are double-underlined like this: $$\underline{\underline{X}}$$
 
 ### $$Y$$ *as* the target
-The variable to be predicted or the dependant variable is defined as $$\underline{\underline{Y}}$$, an $$M$$-by-$$L$$ matrix, i.e. $$\underline{\underline{Y}} \in \mathbb{R}^{M \times L}$$
+The variable to be predicted or the dependant variable is defined as $$\underline{\underline{Y}}$$, an $$\text{M}$$-by-$$\text{P}$$ matrix, i.e. $$\underline{\underline{Y}} \in \mathbb{R}^{\text{M} \times \text{P}}$$
 $$
 \underline{\underline{Y}} = 
 \begin{pmatrix}
-    y_{11} & \dots  & y_{1j}  & \dots  & y_{1\text{L}} \\
+    y_{11} & \dots  & y_{1j}  & \dots  & y_{1\text{P}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    y_{i1} & \dots  & y_{ij}  & \dots  & y_{i\text{L}} \\
+    y_{i1} & \dots  & y_{ij}  & \dots  & y_{i\text{P}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    y_{\text{M}1} & \dots  & y_{\text{M}j}  & \dots  & y_{\text{ML}}
+    y_{\text{M}1} & \dots  & y_{\text{M}j}  & \dots  & y_{\text{MP}}
 \end{pmatrix}
 $$
 
 $$\underline{y_i}$$ is the $$i^{\text{th}}$$ sample of the output target, i.e. $$
 \underline{y_i} = 
 \begin{pmatrix}
-    y_{i1} & \dots  & y_{ij}  & \dots  & y_{i\text{L}} \\
+    y_{i1} & \dots  & y_{ij}  & \dots  & y_{i\text{P}} \\
 \end{pmatrix}
 $$
 $$\underline{Y_j}$$ is the expression of the $$j^{\text{th}}$$ dependant variable, i.e. : 
@@ -101,18 +101,22 @@ $$
 $$
 
 > :alien: *alien says* :speech_balloon:\
-> **m** the number of samples we have\
-> **l** the dimension of the target
+> M the number of samples we have\
+> P the dimension of the target
 
-### D as dataset
-Combinations of X and Y
+### $$\mathcal{D}$$ as dataset
+The dataset is just the combinations of X and Y, that is
+
+$$
+\mathcal{D} = \big \{(\underline{x_i}, \underline{y_i}) \big \}, \forall i \in [1..\text{M}]
+$$
 
 ### $$NN$$ *as* Neural Network
-A dense neural network can be defined by a function whose parameters are $$\underline{x_i}$$ and the composite transfer fonction $$F$$, composed of functions $$f_{\Theta_{\ell}}$$, i.e. $$  \forall \ell \in [1..\text{P}]: [f_{\Theta_1}, ... , f_{\Theta_{\ell}}, ...,f_{\Theta_{\text{P}}}] $$
+A dense neural network can be defined by a composite transfer fonction $$F$$ composed of functions $$f_{\Theta_{\ell}}$$, $$ \forall \ell \in [1..\text{L}]: \big [ f_{\Theta_1}, ... , f_{\Theta_{\ell}}, ...,f_{\Theta_{\text{L}}} \big ] $$ and input parameters $$\underline{x_i}$$:
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{L}} \\
+    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{P}} \\
     \underline{x_i} \rightarrow F(\underline{x_i}) = \underline{\hat{y_i}}
 \end{array}
 $$
@@ -125,7 +129,7 @@ so we can write
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{L}} \\
+    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{P}} \\
     \underline{x} \rightarrow F(\underline{x}) = \underline{\hat{y}}
 \end{array}
 $$
@@ -156,9 +160,9 @@ And the last one
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{H}_{p-1}} \rightarrow \mathbb{R}^{\text{H}_p} \equiv \mathbb{R}^{\text{L}} \\
-    \underline{a_{\text{P}-1}} \rightarrow f_{\Theta_{\text{P}}}(\underline{a_{\text{P}-1}}) 
-        =\underline{a_{\text{P}}}
+    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{H}_{\text{L}}} \equiv \mathbb{R}^{\text{P}} \\
+    \underline{a_{\text{L}-1}} \rightarrow f_{\Theta_{\text{L}}}(\underline{a_{\text{L}-1}}) 
+        =\underline{a_{\text{L}}}
         =\underline{\hat{y}}
 \end{array}
 $$
@@ -175,7 +179,7 @@ We'll dig into the details of the transfer fonction a little bit more later. For
 $$
     F(\underline{x})
     =
-    f_{\Theta_{P}}(\dots (f_{\Theta_{\ell}}(\dots (f_{\Theta_2}(f_{\Theta_1}(\underline{x}))) \dots)) \dots)
+    f_{\Theta_{\text{L}}}(\dots (f_{\Theta_{\ell}}(\dots (f_{\Theta_2}(f_{\Theta_1}(\underline{x}))) \dots)) \dots)
 $$
 
 Composing functions is like chaining them. The output of the inner function becomes the input of the outer function. Given two functions $$f$$ and $$g$$, the composite function $$h$$ resulting is $$h(x) = g(f(x))$$ which is also noted as $$h(x) = (g \circ f) (x)$$. So the later wordy equation can be written in an easier way
@@ -183,22 +187,22 @@ Composing functions is like chaining them. The output of the inner function beco
 $$
     F(\underline{x})
     =
-    (f_{\Theta_{P}} \circ \cdots \circ f_{\Theta_{\ell}} \circ \cdots f_{\Theta_1})(\underline{x})
+    (f_{\Theta_{\text{L}}} \circ \cdots \circ f_{\Theta_{\ell}} \circ \cdots f_{\Theta_1})(\underline{x})
 $$
 
 > :alien: *alien says* :speech_balloon:\
-$$\text{P}$$ the number of layers of the neural network\
-$$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_k}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{P}]$$
+$$\text{L}$$ the number of layers of the neural network\
+$$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_{\ell}}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{L}]$$
 
 What we've just finished to define is the feedforward propagation. As we saw this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
 ### $$\mathcal{L}$$ *as* Loss function and $$E$$ *as* Error
-$$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. It can be the mean squared error, so for the i$$^{\text{th}}$$ sample of the dataset we have
+$$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. It can be the mean squared error, so for the $$i^{\text{th}}$$ sample of the dataset we have
 
 $$
 \forall{i} \in [1..\text{M}],
 \mathcal{L}_{\text{MSE}}(\underline{y_i}, \hat{\underline{y_i}})=
-{1 \over \text{L}} \sum_{j=1}^{\text{L}}(\hat{y_{ij}} - y_{ij})^2
+{1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
 We define the error as the sum of the losses over the dataset
@@ -210,36 +214,69 @@ $$
 Error follows by summing through the samples of the dataset
 
 $$
-E_{\text{MSE}} = {1 \over \text{M}} \sum_{i=1}^{\text{M}} {1 \over \text{L}} \sum_{j=1}^{\text{L}}(\hat{y_{ij}} - y_{ij})^2
+E_{\text{MSE}} = {1 \over \text{M}} \sum_{i=1}^{\text{M}} {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use another loss function called **cross-entropy** (comes from the *maximum likelihood principle*)
-Where does it comes from ?
+However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use another loss function called **cross-entropy**:
 
 $$
 \mathcal{L}_{\text{CE}}(\underline{y_i}, \hat{\underline{y_i}})=
--\sum_{j=1}^{\text{L}} {y_{ij}} \log(\hat{y_{ij}}) + (1 - y_{ij}) \log(1 - \hat{y_{ij}})
+-\sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}})
 $$
 
 And the error follows
 
 $$
 E_{\text{CE}}=
--{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{L}} {y_{ij}} \log(\hat{y_{ij}}) + (1 - y_{ij}) \log(1 - \hat{y_{ij}})
+-{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}}))
 $$
 
 > :alien: *alien says* :speech_balloon:\
-$$y_{ij}$$ is the j$$^{\text{th}}$$ component of the target variable in the i$$^{\text{th}}$$ sample.\
-$$\hat{y_{ij}}$$ is the j$$^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the i$$^{\text{th}}$$ sample.
+$$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^{\text{th}}$$ sample.\
+$$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
+
+The loss and the error might not be the usual definition frequently used, so be carefull with that.
 
 ### A *as* activation
-Before defining the gradient descent algorithm, we present a more detailed version of the transfer function to emphasize the role of the parameters $$\Theta$$.
+Before defining the gradient descent algorithm, we present a more detailed version of the transfer function to emphasize the role of the parameter $$\Theta$$.
 
 Remember that for the $$\ell^{\text{th}}$$ layer we have
 $$
 f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
 $$
-The transfer fonction is composed of a matrix multiplication of $$\underline{a_{\ell-1}}$$ with  $$\underline{\underline{\Theta_{\ell}}}$$, respectivly the input and the weigts of the $$\ell^{\text{th}}$$ layer, and the activation function $$g_{\ell} : \mathbb{R^{\text{H}_{\ell}}} \rightarrow \mathbb{R^{\text{H}_{\ell}}} $$
+
+Let's define another usefull notation
+
+$$
+\begin{array}{l}
+    \underline{z_{\ell}} = \underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}\\
+    f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = g_{\ell}(\underline{z_{\ell}})
+\end{array}
+$$
+
+For the first layer
+
+$$
+\begin{array}{l}
+    \underline{z_1} = \underline{\underline{\Theta_1}} \underline{x}\\
+    \underline{a_1} = f_{\Theta_1}(\underline{x}) = g_1(\underline{z_1})
+\end{array}
+$$
+
+and for the last layer
+
+$$
+\begin{array}{l}
+    \underline{z_{\text{P}}} = \underline{\underline{\Theta_{\text{P}}}} \underline{a_{\text{P-1}}}\\
+    \underline{a_{\text{P}}} = f_{\Theta_{\text{P}}}(\underline{a_{\text{P-1}}}) = g_{\text{P}}(\underline{z_{\text{P}}})
+\end{array}
+$$
+
+The transfer fonction is composed of a matrix multiplication of $$\underline{a_{\ell-1}}$$ with  $$\underline{\underline{\Theta_{\ell}}}$$, respectivly the input and the weigts of the $$\ell^{\text{th}}$$ layer, and the activation function $$g_{\ell} $$
+
+$$
+g_{\ell} : \mathbb{R^{\text{H}_{\ell}}} \rightarrow \mathbb{R^{\text{H}_{\ell}}}
+$$
 
 $$
 f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}) = \underline{a_{\ell}}
@@ -280,19 +317,19 @@ $$
 $$
 
 $$
-\forall i \in [1..\text{H}_k],
-\forall j \in [1..\text{H}_\textit{k-1}],
-\forall k \in [1..\text{P}]:
-\underline{\underline{\Theta_k}} = 
+\forall i \in [1..\text{H}_{\ell}],
+\forall j \in [1..\text{H}_{\ell-1}],
+\forall \ell \in [1..\text{P}]:
+\underline{\underline{\Theta_{\ell}}} = 
 \begin{pmatrix}
-    \theta_{k,11} & \dots  & \theta_{k,1j}  & \dots  & \theta_{k,1\text{H}_\textit{k-1}} \\
+    \theta_{\ell,11} & \dots  & \theta_{\ell,1j}  & \dots  & \theta_{\ell,1\text{H}_{\ell-1}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{k,i1} & \dots  & \theta_{k,ij}  & \dots  & \theta_{k,i\text{H}_\textit{k-1}} \\
+    \theta_{\ell,i1} & \dots  & \theta_{\ell,ij}  & \dots  & \theta_{\ell,i\text{H}_{\ell-1}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{k,\text{H}_k1} & \dots  & \theta_{k,\text{H}_kj}  & \dots  & \theta_{k,{\text{H}_k}\text{H}_\textit{k-1}}
+    \theta_{\ell,\text{H}_{\ell}1} & \dots  & \theta_{\ell,\text{H}_{\ell}j}  & \dots  & \theta_{\ell,{\text{H}_{\ell}}\text{H}_{\ell-1}}
 \end{pmatrix}
 ,
-\underline{\underline{\Theta_k}} \in \mathbb{R}^{\text{H}_k \times \text{H}_\textit{k-1}}
+\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell-1}}
 $$
 
 And the last one
@@ -320,35 +357,8 @@ $$
 $$
 
 > :alien: *alien says* :speech_balloon:\
-$$g_k$$ is the activation function of the k$$^{\text{th}}$$ hidden layer.\
+$$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.\
 $$g_{\text{P}}$$ is the output function of the last layer.
-
-Let's define another usefull notation
-
-$$
-\begin{array}{l}
-    \underline{z_k} = \underline{\underline{\Theta_k}} \underline{a_{k-1}}\\
-    \underline{a_k} = f_{\Theta_k}(\underline{a_{k-1}}) = g_k(\underline{z_k})
-\end{array}
-$$
-
-For the first layer
-
-$$
-\begin{array}{l}
-    \underline{z_1} = \underline{\underline{\Theta_1}} \underline{x}\\
-    \underline{a_1} = f_{\Theta_1}(\underline{x}) = g_1(\underline{z_1})
-\end{array}
-$$
-
-and for the last layer
-
-$$
-\begin{array}{l}
-    \underline{z_{\text{P}}} = \underline{\underline{\Theta_{\text{P}}}} \underline{a_{\text{P-1}}}\\
-    \underline{a_{\text{P}}} = f_{\Theta_{\text{P}}}(\underline{a_{\text{P-1}}}) = g_{\text{P}}(\underline{z_{\text{P}}})
-\end{array}
-$$
 
 In many neural network and in this article we will take the sigmoid function for the activation and the softmax for the output.
 
@@ -364,13 +374,13 @@ How do we minimize a fonction ? Well... with an optimization algorithm !
 In this post we will use the gradient descent. Gradient descent belong to the family of the `first-order optimization algorithms`. It enables us to minimize the error $$E_{\text{CE}}$$ using the gradient with respect to the weights $$\Theta$$, so at t$$^{\text{th}}$$ iteration
 
 $$
-\underline{\underline{\Theta_k}}^{(t+1)} = \underline{\underline{\Theta_k}}^{(t)} - \alpha{\partial E(\Theta_k^{(t)}) \over \partial\Theta_k}
+\underline{\underline{\Theta_{\ell}}}^{(t+1)} = \underline{\underline{\Theta_{\ell}}}^{(t)} - \alpha{\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}
 $$
 
 > :alien: *alien says* :speech_balloon:\
 $$\alpha$$ is the learning rate of the gradient descent algorithm\
-$$E_{\text{CE}}$$ is a non linear error function. It depends on $$\underline{\underline{X}}$$ and $$\Theta_k$$, and it must defined and differentiable in the neighborhood of $$\Theta_k^{(t)}$$\
-$${\partial E(\Theta_k^{(t)}) \over \partial\Theta_k}$$ is the partial derivative of $$E_{\text{CE}}$$ according to $$\Theta_k$$ the tuning parameter
+$$E_{\text{CE}}$$ is a non linear error function. It depends on $$\underline{\underline{X}}$$ and $$\Theta_{\ell}$$, and it must defined and differentiable in the neighborhood of $$\Theta_{\ell}^{(t)}$$\
+$${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial derivative of $$E_{\text{CE}}$$ according to $$\Theta_{\ell}$$ the tuning parameter
 
 ### J *as* Jacobian
 First things first, the last layer of the network:
@@ -436,7 +446,7 @@ $$
 $$
 
 $$
-    {\partial E_{\text{CE}} \over \partial\Theta_{l, ij}}
+    {\partial E_{\text{CE}} \over \partial\Theta_{\ell, ij}}
     =
     -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{r=1}^{\text{L}} {y_{kr}} \log(\hat{y_{kr}}) + (1 - y_{kr}) \log(1 - \hat{y_{kr}}))
 $$
