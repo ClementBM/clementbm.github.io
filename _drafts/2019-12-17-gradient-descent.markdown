@@ -104,8 +104,11 @@ $$
 > **m** the number of samples we have\
 > **l** the dimension of the target
 
+### D as dataset
+Combinations of X and Y
+
 ### $$NN$$ *as* Neural Network
-A dense neural network can be defined by a function whose parameters are $$\underline{x_i}$$ and the composite transfer fonction $$F$$, composed of functions $$f_{\Theta_{k}}$$, i.e. $$  \forall k \in [1..\text{P}]: [f_{\Theta_1}, ... , f_{\Theta_{k}}, ...,f_{\Theta_{\text{P}}}] $$
+A dense neural network can be defined by a function whose parameters are $$\underline{x_i}$$ and the composite transfer fonction $$F$$, composed of functions $$f_{\Theta_{\ell}}$$, i.e. $$  \forall \ell \in [1..\text{P}]: [f_{\Theta_1}, ... , f_{\Theta_{\ell}}, ...,f_{\Theta_{\text{P}}}] $$
 
 $$
 \begin{array}{l}
@@ -131,12 +134,12 @@ $$
 > $$\underline{\hat{y}}$$ the calculated output of the neural network. The objective is to have  $$\underline{\hat{y}}$$ as close as possible to $$\underline{y}$$.\
 $$F$$ the composite transfer fonction.
 
-For the k$$^{\text{th}}$$ layer we have
+For the $$\ell^{\text{th}}$$ layer we have
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{H}_{k-1}} \rightarrow \mathbb{R}^{\text{H}_k} \\
-    \underline{a_{k-1}} \rightarrow f_{\Theta_k}(\underline{a_{k-1}}) = \underline{a_k}
+    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_\ell} \\
+    \underline{a_{\ell-1}} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
 \end{array}
 $$
 
@@ -161,18 +164,18 @@ $$
 $$
 
 :telescope: *with* :telescope:
-> $$\text{H}_{k-1}$$ the size of the k-1$$^{\text{th}}$$ hidden layer
-$$\text{H}_{k}$$ the size of the k$$^{\text{th}}$$ hidden layer\
-$$f_{\Theta_k}$$ the transfer fonction for the k$$^{\text{th}}$$ layer\
-$$\underline{a_{k-1}}$$ the input of the k$$^{\text{th}}$$ layer\
-$$\underline{a_k}$$ the output of the k$$^{\text{th}}$$ layer
+> $$\text{H}_{\ell-1}$$ the size of the $$\ell-1^{\text{th}}$$ hidden layer
+$$\text{H}_{\ell}$$ the size of the $$\ell^{\text{th}}$$ hidden layer\
+$$f_{\Theta_{\ell}}$$ the transfer fonction for the $$\ell^{\text{th}}$$ layer\
+$$\underline{a_{\ell-1}}$$ the input of the $$\ell^{\text{th}}$$ layer\
+$$\underline{a_{\ell}}$$ the output of the $$\ell^{\text{th}}$$ layer
 
-We'll dig into the details of the transfer fonction a little bit more later. For now, we try to consider the neural network at a granular point of view. So, given the transfer fonction $$f_{\Theta_k}$$, the whole network should look like the composition of the $$\text{P}$$ transfer fonctions listed in $$F$$
+We'll dig into the details of the transfer fonction a little bit more later. For now, we try to consider the neural network at a granular point of view. So, given the transfer fonction $$f_{\Theta_{\ell}}$$, the whole network should look like the composition of the $$\text{P}$$ transfer fonctions listed in $$F$$
 
 $$
     F(\underline{x})
     =
-    f_{\Theta_{P}}(\dots (f_{\Theta_k}(\dots (f_{\Theta_2}(f_{\Theta_1}(\underline{x}))) \dots)) \dots)
+    f_{\Theta_{P}}(\dots (f_{\Theta_{\ell}}(\dots (f_{\Theta_2}(f_{\Theta_1}(\underline{x}))) \dots)) \dots)
 $$
 
 Composing functions is like chaining them. The output of the inner function becomes the input of the outer function. Given two functions $$f$$ and $$g$$, the composite function $$h$$ resulting is $$h(x) = g(f(x))$$ which is also noted as $$h(x) = (g \circ f) (x)$$. So the later wordy equation can be written in an easier way
@@ -180,12 +183,12 @@ Composing functions is like chaining them. The output of the inner function beco
 $$
     F(\underline{x})
     =
-    (f_{\Theta_{P}} \circ \cdots \circ f_{\Theta_k} \circ \cdots f_{\Theta_1})(\underline{x})
+    (f_{\Theta_{P}} \circ \cdots \circ f_{\Theta_{\ell}} \circ \cdots f_{\Theta_1})(\underline{x})
 $$
 
 > :alien: *alien says* :speech_balloon:\
 $$\text{P}$$ the number of layers of the neural network\
-$$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_k}$$ per layer, each one enables passing from layer k-1 to layer k, with $$k \in [1..\text{P}]$$
+$$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_k}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{P}]$$
 
 What we've just finished to define is the feedforward propagation. As we saw this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
@@ -210,7 +213,7 @@ $$
 E_{\text{MSE}} = {1 \over \text{M}} \sum_{i=1}^{\text{M}} {1 \over \text{L}} \sum_{j=1}^{\text{L}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use another loss function called **cross-entropy** (comes from the *maximum likelyhood principle*)
+However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use another loss function called **cross-entropy** (comes from the *maximum likelihood principle*)
 Where does it comes from ?
 
 $$
@@ -232,14 +235,14 @@ $$\hat{y_{ij}}$$ is the j$$^{\text{th}}$$ component of the predicted target vari
 ### A *as* activation
 Before defining the gradient descent algorithm, we present a more detailed version of the transfer function to emphasize the role of the parameters $$\Theta$$.
 
-Remember that for the k$$^{\text{th}}$$ layer we have
+Remember that for the $$\ell^{\text{th}}$$ layer we have
 $$
-f_{\Theta_k}(\underline{a_{k-1}}) = \underline{a_k}
+f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
 $$
-The transfer fonction is composed of a matrix multiplication of $$\underline{a_{k-1}}$$ with  $$\underline{\underline{\Theta_k}}$$, respectivly the input and the weigts of the k$$^{\text{th}}$$ layer, and the activation function $$g_k : \mathbb{R^{\text{H}_k}} \rightarrow \mathbb{R^{\text{H}_k}} $$
+The transfer fonction is composed of a matrix multiplication of $$\underline{a_{\ell-1}}$$ with  $$\underline{\underline{\Theta_{\ell}}}$$, respectivly the input and the weigts of the $$\ell^{\text{th}}$$ layer, and the activation function $$g_{\ell} : \mathbb{R^{\text{H}_{\ell}}} \rightarrow \mathbb{R^{\text{H}_{\ell}}} $$
 
 $$
-f_{\Theta_k}(\underline{a_{k-1}}) = g_k(\underline{\underline{\Theta_k}} \underline{a_{k-1}}) = \underline{a_k}
+f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}) = \underline{a_{\ell}}
 $$
 
 For the first layer
@@ -266,13 +269,13 @@ $$
 \underline{\underline{\Theta_1}} \in \mathbb{R}^{\text{H}_1 \times \text{N}}
 $$
 
-The k$$^{th}$$ layer
+The $$\ell^{th}$$ layer
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{H}_{k-1}} \rightarrow \mathbb{R}^{\text{H}_k} \\
-    \underline{a_{k-1}} \rightarrow 
-    g_k(\underline{\underline{\Theta_k}} \underline{a_{k-1}})
+    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_{\ell}} \\
+    \underline{a_{\ell-1}} \rightarrow 
+    g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}})
 \end{array}
 $$
 
