@@ -29,7 +29,7 @@ Backpropagation was first invented in the 1970s as a general optimization method
 During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope:  the demonstration and make comments when he wants to.
 
 ## Notations
-This part defined the notations that will be used in the later demonstration. It may sound verbose but I prefer to make the notations explicit so that everyone with a basic mathematic knowledge should be able to understand the article.
+This part defined the notations that will be used in the later demonstration. It may sound verbose but I prefer to make the notations explicit so that everyone with a basic mathematic knowledge should be able to understand this article.
 
 ### $$X$$ *as* the sample
 The dataset X is reprensented as $$\underline{\underline{X}}$$, an $$\text{M}$$-by-$$\text{N}$$ matrix, i.e. $$\underline{\underline{X}} \in \mathbb{R}^{\text{M} \times \text{N}}$$
@@ -151,7 +151,7 @@ For the first layer
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{N}} \equiv \mathbb{R}^{\text{H}_0} \rightarrow \mathbb{R}^{\text{H}_1} \\
+    \mathbb{R}^{\text{N}} = \mathbb{R}^{\text{H}_0} \rightarrow \mathbb{R}^{\text{H}_1} \\
     \underline{x} \rightarrow f_{\Theta_1}(\underline{x}) = \underline{a_{1}}
 \end{array}
 $$
@@ -160,7 +160,7 @@ And the last one
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{H}_{\text{L}}} \equiv \mathbb{R}^{\text{P}} \\
+    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{H}_{\text{L}}} = \mathbb{R}^{\text{P}} \\
     \underline{a_{\text{L}-1}} \rightarrow f_{\Theta_{\text{L}}}(\underline{a_{\text{L}-1}}) 
         =\underline{a_{\text{L}}}
         =\underline{\hat{y}}
@@ -197,7 +197,7 @@ $$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\T
 What we've just finished to define is the feedforward propagation. As we saw this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
 ### $$\mathcal{L}$$ *as* Loss function and $$E$$ *as* Error
-$$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. It can be the mean squared error, so for the $$i^{\text{th}}$$ sample of the dataset we have
+$$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. Historically for neural networks the loss function used was the mean squared error (MSE). For the $$i^{\text{th}}$$ sample of the dataset we have
 
 $$
 \forall{i} \in [1..\text{M}],
@@ -205,26 +205,22 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-We define the error as the sum of the losses over the dataset
-
-$$
-E = {1 \over \text{M}} \sum_{i=1}^{\text{M}} \mathcal{L}(\underline{y_i}, \hat{\underline{y_i}})
-$$
-
-Error follows by summing through the samples of the dataset
-
-$$
-E_{\text{MSE}} = {1 \over \text{M}} \sum_{i=1}^{\text{M}} {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
-$$
-
-However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use another loss function called **cross-entropy**:
+However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use the **Cross-Entropy** loss function. In our context of multiclass classification as the output $$\underline{y_i}$$ has P dimension, it's better to specificy that we are using the **Multiclass Cross-Entropy** Loss. Another name frequently used is the **Negative Log Likelihood** or LLE as we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution... ?
 
 $$
 \mathcal{L}_{\text{CE}}(\underline{y_i}, \hat{\underline{y_i}})=
 -\sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}})
 $$
 
-And the error follows
+We define the overall error as the sum of the losses over the dataset
+
+$$
+E = {1 \over \text{M}} \sum_{i=1}^{\text{M}} \mathcal{L}(\underline{y_i}, \hat{\underline{y_i}})
+$$
+
+> The loss and the error might not be the definitions frequently used, so be carefull with that.
+
+Error follows by summing through the samples of the dataset
 
 $$
 E_{\text{CE}}=
@@ -235,22 +231,30 @@ $$
 $$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^{\text{th}}$$ sample.\
 $$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
 
-The loss and the error might not be the usual definition frequently used, so be carefull with that.
-
 ### A *as* activation
-Before defining the gradient descent algorithm, we present a more detailed version of the transfer function to emphasize the role of the parameter $$\Theta$$.
+Before defining the gradient descent algorithm, we should present a more detailed version of the transfer function to show the role of the parameter $$\Theta$$ and also define the link functions for the hidden layer (activation function) and for the last layer (output function).
 
 Remember that for the $$\ell^{\text{th}}$$ layer we have
-$$
-f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
-$$
-
-Let's define another usefull notation
 
 $$
 \begin{array}{l}
-    \underline{z_{\ell}} = \underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}\\
-    f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = g_{\ell}(\underline{z_{\ell}})
+    \mathbb{R}^{\text{H}_{ \ell - 1}} \rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
+    a_{\ell-1} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
+\end{array}
+$$
+
+We define $$\underline{z_{\ell}} \in \mathbb{R}^{\text{H}_{ \ell }}$$
+as
+$$
+\underline{z_{\ell}} = \underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}
+$$
+and $$g_{\ell}: \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }}$$
+as
+
+$$
+\begin{array}{l}
+    \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
+    \underline{z_{\ell}} \rightarrow g_{\ell}(\underline{z_{\ell}}) = f_{\Theta_{\ell}}(\underline{a_{\ell-1}})
 \end{array}
 $$
 
@@ -267,8 +271,8 @@ and for the last layer
 
 $$
 \begin{array}{l}
-    \underline{z_{\text{P}}} = \underline{\underline{\Theta_{\text{P}}}} \underline{a_{\text{P-1}}}\\
-    \underline{a_{\text{P}}} = f_{\Theta_{\text{P}}}(\underline{a_{\text{P-1}}}) = g_{\text{P}}(\underline{z_{\text{P}}})
+    \underline{z_{\text{L}}} = \underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L-1}}}\\
+    \underline{a_{\text{L}}} = f_{\Theta_{\text{L}}}(\underline{a_{\text{L-1}}}) = g_{\text{L}}(\underline{z_{\text{L}}})
 \end{array}
 $$
 
@@ -319,7 +323,7 @@ $$
 $$
 \forall i \in [1..\text{H}_{\ell}],
 \forall j \in [1..\text{H}_{\ell-1}],
-\forall \ell \in [1..\text{P}]:
+\forall \ell \in [1..\text{L}]:
 \underline{\underline{\Theta_{\ell}}} = 
 \begin{pmatrix}
     \theta_{\ell,11} & \dots  & \theta_{\ell,1j}  & \dots  & \theta_{\ell,1\text{H}_{\ell-1}} \\
@@ -336,29 +340,29 @@ And the last one
 
 $$
 \begin{array}{l}
-    \mathbb{R}^{\text{H}_{\text{P}-1}} \rightarrow \mathbb{R}^{\text{L}} \\
-    \underline{a_{\text{P}-1}} \rightarrow
-    g_{\text{P}}(\underline{\underline{\Theta_{\text{P}}}} \underline{a_{\text{P}-1}})
+    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{P}} \\
+    \underline{a_{\text{L}-1}} \rightarrow
+    g_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L}-1}})
 \end{array}
 $$
 
 $$
-\forall i \in [1..\text{L}], \forall j \in [1..\text{H}_\textit{P-1}]:
-\underline{\underline{\Theta_{\text{P}}}} = 
+\forall i \in [1..\text{P}], \forall j \in [1..\text{H}_{\text{L}-1}]:
+\underline{\underline{\Theta_{\text{L}}}} = 
 \begin{pmatrix}
-    \theta_{\text{P},11} & \dots  & \theta_{\text{P},1j}  & \dots  & \theta_{\text{P},1\text{H}_\textit{P-1}} \\
+    \theta_{\text{L},11} & \dots  & \theta_{\text{L},1j}  & \dots  & \theta_{\text{L},1\text{H}_{\text{L}-1}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{\text{P},i1} & \dots  & \theta_{\text{P},ij}  & \dots  & \theta_{\text{P},i\text{H}_\textit{P-1}} \\
+    \theta_{\text{L},i1} & \dots  & \theta_{\text{L},ij}  & \dots  & \theta_{\text{L},i\text{H}_{\text{L}-1}} \\
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{\text{P},\text{L}1} & \dots  & \theta_{\text{P},\text{L}j}  & \dots  & \theta_{\text{P},{\text{L}}\text{H}_\textit{P-1}}
+    \theta_{\text{L},\text{P}1} & \dots  & \theta_{\text{L},\text{P}j}  & \dots  & \theta_{\text{L},{\text{P}}\text{H}_{\text{L}-1}}
 \end{pmatrix}
 ,
-\underline{\underline{\Theta_{\text{P}}}} \in \mathbb{R}^{\text{L} \times \text{H}_\textit{P-1}}
+\underline{\underline{\Theta_{\text{P}}}} \in \mathbb{R}^{\text{P} \times \text{H}_{\text{L}-1}}
 $$
 
 > :alien: *alien says* :speech_balloon:\
 $$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.\
-$$g_{\text{P}}$$ is the output function of the last layer.
+$$g_{\text{L}}$$ is the output function of the last layer.
 
 In many neural network and in this article we will take the sigmoid function for the activation and the softmax for the output.
 
@@ -386,35 +390,75 @@ $${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial
 First things first, the last layer of the network:
 
 $$
-    \forall i \in [1..\text{L}] \text{ and }
-    \forall j \in [1..\text{H}_{\text{P-1}}]
+    \forall i \in [1..\text{P}] \text{, }
+    \forall j \in [1..\text{H}_{\text{L-1}}] \text{ and }
+    \forall k \in [1..\text{M}]
 $$
 
 $$
-    {\partial E_{\text{CE}} \over \partial\Theta_{\text{P},ij}}
+    {\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{r=1}^{\text{L}} {y_{kr}} \log(\hat{y_{kr}}) + (1 - y_{kr}) \log(1 - \hat{y_{kr}}))
+    {\partial \over \partial\Theta_{\text{L},ij}}
+    \Big (
+    -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{i=1}^{\text{P}} {y_{ki}} \log(\hat{y_{ki}})
+    \Big )
 $$
 
-Before derivating the error let's simplify using the chain rule of derivation along with $$\underline{a_{\text{P}}}$$ and $$\underline{z_{\text{P}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{P}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{P}}$$ depends on $$z_{\text{P}}$$
+Before derivating the error let's simplify using the chain rule of derivation along with $$\underline{a_{\text{L}}}$$ and $$\underline{z_{\text{L}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{L}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{L}}$$ depends on $$z_{\text{L}}$$
 
 $$
-    {\partial E_{\text{CE}} \over \partial\Theta_{\text{P},ij}}
+    {\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    {\partial E_{\text{CE}} \over \partial a_{\text{P}}}
-    {\partial \underline{a_{\text{P}}} \over \partial z_{\text{P}}}
-    {\partial \underline{z_{\text{P}}} \over \partial \Theta_{\text{P},ij}}
+    {\partial E_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
+    {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
+    {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
+$$
+
+We continue simplifying by taking only one sample before calculate the derivative.
+The previous equation becomes
+
+$$
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    =
+    {\partial E_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
+    {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
+    {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
+$$
+
+To make the calculation of the derivative even simpler we pick scalar instead of vectors so that:
+
+$$
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    =
+    {\partial E_{\text{CE}} \over \partial a_{\text{L},i}}
+    {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+    {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}}
+$$
+
+with
+$$
+\underline{a_{\text{L}-1}} \in \mathbb{R}^{H_{\text{L}-1}}
+$$
+
+$$
+\underline{z_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
+$$
+
+$$
+\underline{a_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
 $$
 
 First
 
 $$
-{\partial E_{\text{CE}} \over \partial a_{\text{P}}}=
-{\partial \over \partial a_{\text{P}}}
+{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
+{\partial \over \partial a_{\text{L},i}}
 \Big (
-    -{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{L}} {y_{ij}} \log(\hat{y_{ij}}) + (1 - y_{ij}) \log(1 - \hat{y_{ij}})
+    - \sum_{k=1}^{\text{P}} {y_{k}} \log(\hat{y_{k}})
 \Big )
 $$
+
+
 
 Then
 
