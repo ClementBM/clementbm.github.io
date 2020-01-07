@@ -386,7 +386,7 @@ $$\alpha$$ is the learning rate of the gradient descent algorithm\
 $$E_{\text{CE}}$$ is a non linear error function. It depends on $$\underline{\underline{X}}$$ and $$\Theta_{\ell}$$, and it must defined and differentiable in the neighborhood of $$\Theta_{\ell}^{(t)}$$\
 $${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial derivative of $$E_{\text{CE}}$$ according to $$\Theta_{\ell}$$ the tuning parameter
 
-### J *as* Jacobian
+### Breaking the last layer
 First things first, the last layer of the network:
 
 $$
@@ -436,64 +436,354 @@ $$
 $$
 
 with
+
 $$
 \underline{a_{\text{L}-1}} \in \mathbb{R}^{H_{\text{L}-1}}
 $$
 
 $$
-\underline{z_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
+\underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
 $$
 
-$$
-\underline{a_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
-$$
-
-First
+**First**
 
 $$
+\begin{equation*}
 {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
 {\partial \over \partial a_{\text{L},i}}
 \Big (
     - \sum_{k=1}^{\text{P}} {y_{k}} \log(\hat{y_{k}})
+\Big )\\
+=
+{\partial \over \partial a_{\text{L},i}}
+\Big (
+    - \sum_{k=1}^{\text{P}} {y_{k}} \log(a_{\text{L},k})
+\Big )
+\end{equation*}
+$$
+
+we have
+$$
+y_k =
+\begin{cases}
+    0 & \text{if \(k \neq i\) } \\
+    1 & \text{if \(k = i\) }
+\end{cases}
+$$
+therefore when $$i = k$$, $$y_i = 1$$
+
+$$
+{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
+-
+{\partial \over \partial a_{\text{L},i}}
+\Big (
+    \log(a_{\text{L},i})
 \Big )
 $$
 
+(A une constante près à cause de la dérive du log)
 
-
-Then
-
-$$
-{\partial a_{\text{P}} \over \partial z_{\text{P}}}=
-{\partial \over \partial z_{\text{P}}}
-\Big (g_{\text{P}}(\underline{z_{\text{P}}}) \Big )=
-g_{\text{P}}(\underline{z_{\text{P}}}) \odot (1 - g_{\text{P}}(\underline{z_{\text{P}}}))=
-\underline{a_{\text{P}}} \odot (1 - \underline{a_{\text{P}}})
-$$
-
-Finally
+**Second**
 
 $$
-{\partial z_{\text{P}} \over \partial\Theta_{\text{P},ij}}=
-{\partial \over \partial\Theta_{\text{P},ij}}
+\begin{equation}
+{\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+=
+{\partial \over \partial z_{\text{L},i}}
 \Big (
-    \underline{\underline{\Theta_{\text{P},ij}}} \underline{a_{\text{P}-1}}
-\Big )=
-\underline{a_{\text{P}-1}}
+    g_{\text{L}}(z_{\text{L},i})
+\Big )
+=
+{\partial \over \partial z_{\text{L},i}}
+\Big (
+    \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{L}} \mathrm{e}^{z_{\text{L},k}}}
+\Big )\\
+=
+\frac{ \mathrm{e}^{z_{L},i} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} - \big ( \mathrm{e}^{z_{L},i} \big ) ^2}
+{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} \big ) ^ 2}
+=
+\frac{ \mathrm{e}^{z_{L},i} }
+{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
+-
+\big (
+\frac{ \mathrm{e}^{z_{L},i} }
+{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
+\big ) ^2 \\
+=
+g_{\text{L}}(z_{\text{L},i}) - g^2_{\text{L}}(z_{\text{L},i})
+\end{equation}
 $$
 
-Recursively we can write for all layers
+so that
 
 $$
-    \forall i \in [1..\text{L}],
-    \forall j \in [1..\text{H}_{\text{P-1}}],
-    \forall l \in [1..\text{P}]
+\begin{equation}
+{\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+=
+a_{\text{L},i}(1 - a_{\text{L},i})
+\end{equation}
 $$
 
+**Third**
+
 $$
-    {\partial E_{\text{CE}} \over \partial\Theta_{\ell, ij}}
+{\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
+=
+{\partial \over \partial\Theta_{\text{L},ij}}
+\Big (
+    \underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L}-1}}
+\Big )_i\\
+=
+{\partial \over \partial\Theta_{\text{L},ij}}
+\Big (
+    \sum_{k=1}^{\text{H}_{\text{L}-1}} \theta_{\text{L},ik} a_{\text{L}-1,k}
+\Big )\\
+=
+{\partial \over \partial\Theta_{\text{L},ij}}
+\Big (
+    \theta_{\text{L},i1} a_{\text{L}-1,1} + \cdots + \theta_{\text{L},ik} a_{\text{L}-1,k} + \cdots + \theta_{\text{L},iH_{\text{L}-1}} a_{\text{L}-1,H_{\text{L}-1}}
+\Big )
+$$
+
+The derivative is equal to zero when $$j \neq k$$ so for $$j = k$$
+
+$$
+{\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
+=
+a_{\text{L}-1,j}
+$$
+
+Then putting it together with the chained derivation
+
+$$
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{r=1}^{\text{L}} {y_{kr}} \log(\hat{y_{kr}}) + (1 - y_{kr}) \log(1 - \hat{y_{kr}}))
+    \underbrace{
+        {\partial E_{\text{CE}} \over \partial a_{\text{L},i}}
+        {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+    }_{\delta_{\text{L},i}}
+    {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}} \\
+    =
+    - \frac{1}{a_{\text{L},i}} a_{\text{L},i} (1 - a_{\text{L},i}) a_{\text{L}-1,j}\\
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    =
+    (a_{\text{L},i} - 1) a_{\text{L}-1,j}
 $$
+
+As $$\underline{a_{\text{L}}}$$ and $$\underline{a_{\text{L}-1}}$$ are row vectors, the previous equation can be vectorized
+
+$$
+    {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
+    =
+    (\underline{a_{\text{L}}} - 1)^{\text{T}} \underline{a_{\text{L}-1}}
+$$
+
+And sum up over the M training examples
+
+$$
+    {\partial E_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
+    =
+    \frac{1}{M} \sum_{k=1}^{M} (\underline{a_{\text{L},k}} - 1)^{\text{T}} \underline{a_{\text{L}-1,k}}
+$$
+
+### Breaking the hidden layers
+
+Given $$i \in [1..\text{H}_{\ell}]$$, $$j \in [1..\text{H}_{\ell-1}]$$ and $$\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell - 1} }$$
+
+$$
+{\partial \mathcal{L}_{\text{CE}} 
+    \over 
+\partial\Theta_{\ell,ij}}
+=
+{\partial \mathcal{L}_{CE}
+    \over 
+\partial a_{\ell,i}}
+\overbrace{
+    {\partial a_{\ell,i}
+        \over 
+    \partial z_{\ell,i}}
+}^{\text{same for all hidden layers}}
+\underbrace{
+    {\partial z_{\ell,i}
+        \over 
+    \partial\Theta_{\ell,ij}}
+}_{\text{same as the final layer}}
+$$
+
+**First**
+
+Given $$ z_{\text{L}+1}, a_{\ell+1}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ z_{\text{L}}, a_{\ell}  \in \mathbb{R}^{H_{\ell}} $$ and $$ \delta_{\ell} \in \mathbb{R}^{H_{\ell}}$$
+
+Again, we apply the chain rule of derivation
+
+$$
+{\partial \mathcal{L}_{CE}
+    \over 
+\partial a_{\ell,i}}
+=
+\sum^{H_{\ell+1}}_{k=1}
+{\partial \mathcal{L}_{CE}
+    \over 
+\partial a_{\ell+1,k}}
+{\partial a_{\ell+1,k}
+    \over 
+\partial z_{\ell+1,k}}
+{\partial z_{\ell+1,k}
+    \over 
+\partial a_{\ell,i}}
+$$
+
+We define
+
+$$
+\delta_{\ell,i}
+=
+{\partial \mathcal{L}_{CE}
+    \over 
+\partial a_{\ell,i}}
+{\partial a_{\ell,i}
+    \over 
+\partial z_{\ell,i}}
+$$
+
+**1.1** and **1.2**
+
+$$
+\big (
+{\partial \mathcal{L}_{CE}
+    \over 
+\partial a_{\ell,i}}
+{\partial a_{\ell,i}
+    \over 
+\partial z_{\ell,i}}
+\big )
+=
+\delta_{\ell+1,k}
+$$
+
+As we go backward, $$ \delta_{\ell+1,k} $$ has already been calculated.
+
+With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$
+
+**1.3**
+
+$$
+{\partial z_{\ell+1,k}
+    \over 
+\partial a_{\ell,i}}
+=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\big (
+    \underline{\underline{\Theta_{\ell + 1}}} \underline{a_{\ell}}
+\big )_k \\
+=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\big (
+    \sum^{H_{\ell}}_{c=1} \theta_{\ell + 1,kc} a_{\ell,c}
+\big ) \\
+=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\theta_{\ell + 1,k1} a_{\ell,1} + \cdots + \theta_{\ell + 1,kc} a_{\ell,c} + \cdots + \theta_{\ell + 1,kH_{\ell}} a_{\ell,H_{\ell}}
+$$
+
+the derivatives are nulls if $$ i \neq c $$ then for $$i = c$$
+
+$$
+{\partial z_{\ell+1,k}
+    \over 
+\partial a_{\ell,i}}
+=
+\theta_{\ell + 1,ki}
+$$
+
+With $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$
+
+**Second**
+
+$$
+{\partial a_{\ell,i}
+    \over 
+\partial z_{\ell,i}}
+=
+{\partial
+    \over 
+\partial z_{\ell,i}}
+\big (
+    g_{\ell}(z_{\ell,i})
+\big )\\
+=
+{\partial
+    \over 
+\partial z_{\ell,i}}
+\big (
+    \frac{1}
+    {1 + \mathrm{e}^{z_{\ell,i}}}
+\big )
+$$
+
+$$
+{\partial a_{\ell,i}
+    \over 
+\partial z_{\ell,i}}
+=
+a_{\ell,i} (1 - a_{\ell,i})
+$$
+
+**Third**
+Same as for the output layer
+
+$$
+{\partial z_{\ell,i}
+    \over 
+\partial\Theta_{\ell,ij}}
+=
+a_{\ell-1,j}
+$$
+
+**Finally**
+
+$$
+{\partial \mathcal{L}_{\text{CE}} 
+    \over 
+\partial\Theta_{\ell,ij}}
+=
+\big (
+    \sum^{H_{\ell+1}}_{k=1}
+    \delta_{\ell+1,k}
+    \theta_{\ell+1,ki}
+\big )
+a_{\ell,i}
+(1 - a_{\ell,i})
+a_{\ell-1,j}
+$$
+
+It can be vectorized as follow
+
+$$
+{\partial \mathcal{L}_{\text{CE}} 
+    \over 
+\partial \underline{\underline{\Theta_{\ell}}}}
+=
+\big (
+    \underline{\delta_{\ell+1}} \underline{\underline{\Theta_{\ell+1}}}
+\big )^{\text{T}}
+\odot
+\underline{a_{\ell}}^{\text{T}}
+\odot
+(1 - \underline{a_{\ell}})^{\text{T}}
+\underline{a_{\ell-1}}
+$$
+
+And summing up over the samples:
+
+...
+
 
 # Sources
 * https://www.wikiwand.com/fr/Algorithme_du_gradient
