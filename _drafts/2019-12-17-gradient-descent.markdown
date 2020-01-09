@@ -4,7 +4,8 @@ title:  "Gradient descent explained"
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 # Gradient Descent
 
@@ -357,7 +358,7 @@ $$
     \theta_{\text{L},\text{P}1} & \dots  & \theta_{\text{L},\text{P}j}  & \dots  & \theta_{\text{L},{\text{P}}\text{H}_{\text{L}-1}}
 \end{pmatrix}
 ,
-\underline{\underline{\Theta_{\text{P}}}} \in \mathbb{R}^{\text{P} \times \text{H}_{\text{L}-1}}
+\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
 
 > :alien: *alien says* :speech_balloon:\
@@ -420,7 +421,7 @@ The previous equation becomes
 $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    {\partial E_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
     {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
     {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
 $$
@@ -430,7 +431,7 @@ To make the calculation of the derivative even simpler we pick scalar instead of
 $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    {\partial E_{\text{CE}} \over \partial a_{\text{L},i}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
     {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
     {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}}
 $$
@@ -442,24 +443,29 @@ $$
 $$
 
 $$
-\underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{H_{\text{P}}}
+\underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{\text{P}}
+$$
+
+$$
+\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
 
 **First**
 
 $$
-\begin{equation*}
-{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
+\begin{align*}
+{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
+&=
 {\partial \over \partial a_{\text{L},i}}
 \Big (
     - \sum_{k=1}^{\text{P}} {y_{k}} \log(\hat{y_{k}})
 \Big )\\
-=
+&=
 {\partial \over \partial a_{\text{L},i}}
 \Big (
     - \sum_{k=1}^{\text{P}} {y_{k}} \log(a_{\text{L},k})
 \Big )
-\end{equation*}
+\end{align*}
 $$
 
 we have
@@ -470,7 +476,7 @@ y_k =
     1 & \text{if \(k = i\) }
 \end{cases}
 $$
-therefore when $$i = k$$, $$y_i = 1$$
+therefore when $$k = i$$, $$y_k = 1$$
 
 $$
 {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
@@ -481,27 +487,34 @@ $$
 \Big )
 $$
 
+So
+
+$$
+{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
+- \frac{1}{a_{\text{L},i}}
+$$
+
 (A une constante près à cause de la dérive du log)
 
 **Second**
 
 $$
-\begin{equation}
+\begin{align}
 {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
-=
+&=
 {\partial \over \partial z_{\text{L},i}}
 \Big (
     g_{\text{L}}(z_{\text{L},i})
-\Big )
-=
+\Big )\\
+&=
 {\partial \over \partial z_{\text{L},i}}
 \Big (
     \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{L}} \mathrm{e}^{z_{\text{L},k}}}
 \Big )\\
-=
+&=
 \frac{ \mathrm{e}^{z_{L},i} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} - \big ( \mathrm{e}^{z_{L},i} \big ) ^2}
-{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} \big ) ^ 2}
-=
+{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} \big ) ^ 2} \\
+&=
 \frac{ \mathrm{e}^{z_{L},i} }
 { \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
 -
@@ -509,9 +522,9 @@ $$
 \frac{ \mathrm{e}^{z_{L},i} }
 { \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
 \big ) ^2 \\
-=
+&=
 g_{\text{L}}(z_{\text{L},i}) - g^2_{\text{L}}(z_{\text{L},i})
-\end{equation}
+\end{align}
 $$
 
 so that
@@ -527,22 +540,24 @@ $$
 **Third**
 
 $$
+\begin{align}
 {\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
-=
+&=
 {\partial \over \partial\Theta_{\text{L},ij}}
 \Big (
     \underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L}-1}}
 \Big )_i\\
-=
+&=
 {\partial \over \partial\Theta_{\text{L},ij}}
 \Big (
     \sum_{k=1}^{\text{H}_{\text{L}-1}} \theta_{\text{L},ik} a_{\text{L}-1,k}
 \Big )\\
-=
+&=
 {\partial \over \partial\Theta_{\text{L},ij}}
 \Big (
     \theta_{\text{L},i1} a_{\text{L}-1,1} + \cdots + \theta_{\text{L},ik} a_{\text{L}-1,k} + \cdots + \theta_{\text{L},iH_{\text{L}-1}} a_{\text{L}-1,H_{\text{L}-1}}
 \Big )
+\end{align}
 $$
 
 The derivative is equal to zero when $$j \neq k$$ so for $$j = k$$
@@ -556,18 +571,25 @@ $$
 Then putting it together with the chained derivation
 
 $$
+\begin{align}
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
-    =
+    &=
     \underbrace{
         {\partial E_{\text{CE}} \over \partial a_{\text{L},i}}
         {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
     }_{\delta_{\text{L},i}}
     {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}} \\
-    =
-    - \frac{1}{a_{\text{L},i}} a_{\text{L},i} (1 - a_{\text{L},i}) a_{\text{L}-1,j}\\
+    &=
+    - \frac{1}{a_{\text{L},i}} a_{\text{L},i} (1 - a_{\text{L},i}) a_{\text{L}-1,j}
+\end{align}
+$$
+
+$$
+\begin{equation}
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
     (a_{\text{L},i} - 1) a_{\text{L}-1,j}
+\end{equation}
 $$
 
 As $$\underline{a_{\text{L}}}$$ and $$\underline{a_{\text{L}-1}}$$ are row vectors, the previous equation can be vectorized
@@ -578,7 +600,7 @@ $$
     (\underline{a_{\text{L}}} - 1)^{\text{T}} \underline{a_{\text{L}-1}}
 $$
 
-And sum up over the M training examples
+.. and summed up over the M training examples
 
 $$
     {\partial E_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
@@ -649,47 +671,51 @@ $$
 **1.1** and **1.2**
 
 $$
-\big (
+\Big (
 {\partial \mathcal{L}_{CE}
     \over 
 \partial a_{\ell,i}}
 {\partial a_{\ell,i}
     \over 
 \partial z_{\ell,i}}
-\big )
+\Big )
 =
 \delta_{\ell+1,k}
 $$
 
-As we go backward, $$ \delta_{\ell+1,k} $$ has already been calculated.
+As we go backward, $$ \underline{\delta_{\ell+1}} $$ has already been calculated.
 
 With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$
 
 **1.3**
 
 $$
+\begin{align}
 {\partial z_{\ell+1,k}
     \over 
 \partial a_{\ell,i}}
-=
+&=
 {\partial
     \over 
 \partial a_{\ell,i}}
 \big (
     \underline{\underline{\Theta_{\ell + 1}}} \underline{a_{\ell}}
 \big )_k \\
-=
+&=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\Big (
+    \sum^{H_{\ell}}_{c=1} \theta_{\ell + 1,kc} a_{\ell,c}
+\Big ) \\
+&=
 {\partial
     \over 
 \partial a_{\ell,i}}
 \big (
-    \sum^{H_{\ell}}_{c=1} \theta_{\ell + 1,kc} a_{\ell,c}
-\big ) \\
-=
-{\partial
-    \over 
-\partial a_{\ell,i}}
-\theta_{\ell + 1,k1} a_{\ell,1} + \cdots + \theta_{\ell + 1,kc} a_{\ell,c} + \cdots + \theta_{\ell + 1,kH_{\ell}} a_{\ell,H_{\ell}}
+    \theta_{\ell + 1,k1} a_{\ell,1} + \cdots + \theta_{\ell + 1,kc} a_{\ell,c} + \cdots + \theta_{\ell + 1,kH_{\ell}} a_{\ell,H_{\ell}}
+\big )
+\end{align}
 $$
 
 the derivatives are nulls if $$ i \neq c $$ then for $$i = c$$
@@ -707,24 +733,26 @@ With $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \ti
 **Second**
 
 $$
-{\partial a_{\ell,i}
-    \over 
-\partial z_{\ell,i}}
-=
-{\partial
-    \over 
-\partial z_{\ell,i}}
-\big (
-    g_{\ell}(z_{\ell,i})
-\big )\\
-=
-{\partial
-    \over 
-\partial z_{\ell,i}}
-\big (
-    \frac{1}
-    {1 + \mathrm{e}^{z_{\ell,i}}}
-\big )
+\begin{align}
+    {\partial a_{\ell,i}
+        \over 
+    \partial z_{\ell,i}}
+    &=
+    {\partial
+        \over 
+    \partial z_{\ell,i}}
+    \big (
+        g_{\ell}(z_{\ell,i})
+    \big )\\
+    &=
+    {\partial
+        \over 
+    \partial z_{\ell,i}}
+    \big (
+        \frac{1}
+        {1 + \mathrm{e}^{z_{\ell,i}}}
+    \big )
+\end{align}
 $$
 
 $$
@@ -780,7 +808,7 @@ $$
 \underline{a_{\ell-1}}
 $$
 
-And summing up over the samples:
+And summing up over the samples: 
 
 ...
 
