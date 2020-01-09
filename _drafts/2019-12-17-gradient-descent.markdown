@@ -1,36 +1,22 @@
 ---
 layout: post
-title:  "Gradient descent explained"
+title:  "The math behind neural networks"
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-# Gradient Descent
+It aims to give you the main theory about how it works, starting from scratch, and it could show you hopefully on a different angle how things linked together.
 
 This article doesn't go through the details of how to implement a neural network.
-It aims to give you the main theory about how it works, and it could show you hopefully on a different angle how things linked together.
 
-Gradient is obtained by using the back propagation algorithm, indeed back propagation is a differentiation algorithm.
-
-An important aspect of the design of a deep neural networks is the choice of the cost function. Cost functions for neural networks are quasi same as those for oher parametric models such as linear models.
-In most cases, our parametric model defines a distribution $$p(y|x;\theta)$$ and we simply use the principle of maximum likelihood? This means we use the cross entropy between the training data and the model's prediction as the cost function.
-
-> Learning Conditional Distributions with Maximum likelihood.
-
-Most modern neural network are trained using maximum likelihood. This means that the cost function is simply the negative log-likelihood, equivalently described as the cross-entropy between the training data and the model distribution.
-
-## Introduction
-Backpropagation, for "backward propagationn of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weight.
-It is a generalization of the delta rule for perceptrons to multilayer feedforward neural networks.
-Backpropagation was first invented in the 1970s as a general optimization method for performing automatic differentiation of complex nested functions.
+This article is especially focused around Gradient Descent.
 
 > Presentation
-During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope:  the demonstration and make comments when he wants to.
+During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
 
-## Notations
-This part defined the notations that will be used in the later demonstration. It may sound verbose but I prefer to make the notations explicit so that everyone with a basic mathematic knowledge should be able to understand this article.
+We'll define all the notation usefull such as the dataset, the neural network function. This notations that will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that everyone with a basic mathematic knowledge should be able to understand this article.
 
 ### $$X$$ *as* the sample
 The dataset X is reprensented as $$\underline{\underline{X}}$$, an $$\text{M}$$-by-$$\text{N}$$ matrix, i.e. $$\underline{\underline{X}} \in \mathbb{R}^{\text{M} \times \text{N}}$$
@@ -198,6 +184,11 @@ $$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\T
 What we've just finished to define is the feedforward propagation. As we saw this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
 ### $$\mathcal{L}$$ *as* Loss function and $$E$$ *as* Error
+
+An important aspect of the design of a deep neural networks is the choice of the cost function. Cost functions for neural networks are quasi same as those for oher parametric models such as linear models.
+In most cases, our parametric model defines a distribution $$p(y|x;\theta)$$ and we simply use the principle of maximum likelihood? This means we use the cross entropy between the training data and the model's prediction as the cost function.
+
+> Learning Conditional Distributions with Maximum likelihood.
 $$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. Historically for neural networks the loss function used was the mean squared error (MSE). For the $$i^{\text{th}}$$ sample of the dataset we have
 
 $$
@@ -206,6 +197,7 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
+Most modern neural network are trained using maximum likelihood. This means that the cost function is simply the negative log-likelihood, equivalently described as the cross-entropy between the training data and the model distribution.
 However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use the **Cross-Entropy** loss function. In our context of multiclass classification as the output $$\underline{y_i}$$ has P dimension, it's better to specificy that we are using the **Multiclass Cross-Entropy** Loss. Another name frequently used is the **Negative Log Likelihood** or LLE as we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution... ?
 
 $$
@@ -369,6 +361,10 @@ In many neural network and in this article we will take the sigmoid function for
 
 
 ### Gradient Descent *as* the Optimization Algorithm
+Backpropagation, for "backward propagationn of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weight.
+It is a generalization of the delta rule for perceptrons to multilayer feedforward neural networks.
+Backpropagation was first invented in the 1970s as a general optimization method for performing automatic differentiation of complex nested functions.
+
 Up to now, we defined the datasets composed of $$\underline{\underline{X}}$$ and $$\underline{\underline{Y}}$$, the forward propagation algorithm which calculates an estimation of the target $$\underline{\underline{\hat{Y}}}$$, and an error function $$E_{\text{CE}}$$. Recall that we want $$\underline{\underline{\hat{Y}}}$$ to be as close as possible to $${\underline{\underline{Y}}}$$. The error function $$E_{\text{CE}}$$ comes in handy by giving us a metric to quantify as far are we from the ground truth $${\underline{\underline{Y}}}$$. And so, "as close as possible" can be mathematically translated into "minimizing the error function $$E_{\text{CE}}$$"
 
 $$
@@ -381,6 +377,8 @@ In this post we will use the gradient descent. Gradient descent belong to the fa
 $$
 \underline{\underline{\Theta_{\ell}}}^{(t+1)} = \underline{\underline{\Theta_{\ell}}}^{(t)} - \alpha{\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}
 $$
+
+Gradient is obtained by using the back propagation algorithm, indeed back propagation is a differentiation algorithm.
 
 > :alien: *alien says* :speech_balloon:\
 $$\alpha$$ is the learning rate of the gradient descent algorithm\
@@ -609,7 +607,6 @@ $$
 $$
 
 ### Breaking the hidden layers
-
 Given $$i \in [1..\text{H}_{\ell}]$$, $$j \in [1..\text{H}_{\ell-1}]$$ and $$\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell - 1} }$$
 
 $$
