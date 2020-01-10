@@ -7,17 +7,18 @@ categories: [gradient descent, neural network]
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-It aims to give you the main theory about how it works, starting from scratch, and it could show you hopefully on a different angle how things linked together.
+This post will guide you trough the main theory behind one basic  neural network. Starting from scratch, I hope it will show you how things linked together.
 
-This article doesn't go through the details of how to implement a neural network.
+However, this article doesn't go through the details of how to implement a neural network.
 
-This article is especially focused around Gradient Descent.
+Even though this article describes all the necessary details to understand a basic neural network, the main part is taken by backpropagation and gradient descent as it is the most mathematic demanding.
 
-> Presentation
-During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
+In the first part, we'll define all the notation usefull such as the dataset, the neural network function. This notations will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that everyone with a mathematic knowledge should be able to understand this article.
 
-We'll define all the notation usefull such as the dataset, the neural network function. This notations that will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that everyone with a basic mathematic knowledge should be able to understand this article.
+> Presentation \
+> During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
 
+## Notations
 ### $$X$$ *as* the sample
 The dataset X is reprensented as $$\underline{\underline{X}}$$, an $$\text{M}$$-by-$$\text{N}$$ matrix, i.e. $$\underline{\underline{X}} \in \mathbb{R}^{\text{M} \times \text{N}}$$
 
@@ -125,7 +126,9 @@ $$
 > $$\underline{\hat{y}}$$ the calculated output of the neural network. The objective is to have  $$\underline{\hat{y}}$$ as close as possible to $$\underline{y}$$.\
 $$F$$ the composite transfer fonction.
 
-For the $$\ell^{\text{th}}$$ layer we have
+## Feedforward propagation
+
+Going from the $${\ell\text{-}1}^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer 
 
 $$
 \begin{array}{l}
@@ -181,14 +184,12 @@ $$
 $$\text{L}$$ the number of layers of the neural network\
 $$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_{\ell}}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{L}]$$
 
-What we've just finished to define is the feedforward propagation. As we saw this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
+What we've just finished to define is the feedforward propagation. As we saw, this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
 ### $$\mathcal{L}$$ *as* Loss function and $$E$$ *as* Error
 
-An important aspect of the design of a deep neural networks is the choice of the cost function. Cost functions for neural networks are quasi same as those for oher parametric models such as linear models.
-In most cases, our parametric model defines a distribution $$p(y|x;\theta)$$ and we simply use the principle of maximum likelihood? This means we use the cross entropy between the training data and the model's prediction as the cost function.
+An important aspect of the design of a deep neural networks is the choice of the cost function. Cost functions for neural networks are equally the same as those for other parametric models such as linear models.
 
-> Learning Conditional Distributions with Maximum likelihood.
 $$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. Historically for neural networks the loss function used was the mean squared error (MSE). For the $$i^{\text{th}}$$ sample of the dataset we have
 
 $$
@@ -197,12 +198,20 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
+In most cases, our parametric model defines a distribution
+ $$p(y|x;\theta)$$
+and we simply use the principle of maximum likelihood? This means we use the cross entropy between the training data and the model's prediction as the cost function.
+
+> Learning Conditional Distributions with Maximum likelihood.
+
 Most modern neural network are trained using maximum likelihood. This means that the cost function is simply the negative log-likelihood, equivalently described as the cross-entropy between the training data and the model distribution.
 However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use the **Cross-Entropy** loss function. In our context of multiclass classification as the output $$\underline{y_i}$$ has P dimension, it's better to specificy that we are using the **Multiclass Cross-Entropy** Loss. Another name frequently used is the **Negative Log Likelihood** or LLE as we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution... ?
 
 $$
-\mathcal{L}_{\text{CE}}(\underline{y_i}, \hat{\underline{y_i}})=
--\sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}})
+\boxed{
+    \mathcal{L}_{\text{CE}}(\underline{y_i}, \hat{\underline{y_i}})=
+    -\sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}})
+}
 $$
 
 We define the overall error as the sum of the losses over the dataset
@@ -216,8 +225,10 @@ $$
 Error follows by summing through the samples of the dataset
 
 $$
-E_{\text{CE}}=
--{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}}))
+\boxed{
+    E_{\text{CE}}=
+    -{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}}))
+}
 $$
 
 > :alien: *alien says* :speech_balloon:\
@@ -225,9 +236,11 @@ $$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^
 $$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
 
 ### A *as* activation
+We'll take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because, the softmax function give us a way to transform the output of the second last layer into probability of class appearence, with a sum of 1.
+
 Before defining the gradient descent algorithm, we should present a more detailed version of the transfer function to show the role of the parameter $$\Theta$$ and also define the link functions for the hidden layer (activation function) and for the last layer (output function).
 
-Remember that for the $$\ell^{\text{th}}$$ layer we have
+Remember from the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer we have
 
 $$
 \begin{array}{l}
@@ -302,8 +315,8 @@ $$
 ,
 \underline{\underline{\Theta_1}} \in \mathbb{R}^{\text{H}_1 \times \text{N}}
 $$
-
-The $$\ell^{th}$$ layer
+s
+From the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer
 
 $$
 \begin{array}{l}
@@ -359,7 +372,7 @@ $$g_{\text{L}}$$ is the output function of the last layer.
 
 In many neural network and in this article we will take the sigmoid function for the activation and the softmax for the output.
 
-
+## Backpropagation and gradient descent
 ### Gradient Descent *as* the Optimization Algorithm
 Backpropagation, for "backward propagationn of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weight.
 It is a generalization of the delta rule for perceptrons to multilayer feedforward neural networks.
@@ -375,7 +388,12 @@ How do we minimize a fonction ? Well... with an optimization algorithm !
 In this post we will use the gradient descent. Gradient descent belong to the family of the `first-order optimization algorithms`. It enables us to minimize the error $$E_{\text{CE}}$$ using the gradient with respect to the weights $$\Theta$$, so at t$$^{\text{th}}$$ iteration
 
 $$
-\underline{\underline{\Theta_{\ell}}}^{(t+1)} = \underline{\underline{\Theta_{\ell}}}^{(t)} - \alpha{\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}
+\begin{equation}
+\boxed{
+    \forall \ell \in [1..\text{L}],
+    \underline{\underline{\Theta_{\ell}}}^{(t+1)} = \underline{\underline{\Theta_{\ell}}}^{(t)} - \alpha{\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}
+}
+\end{equation}
 $$
 
 Gradient is obtained by using the back propagation algorithm, indeed back propagation is a differentiation algorithm.
@@ -389,21 +407,20 @@ $${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial
 First things first, the last layer of the network:
 
 $$
-    \forall i \in [1..\text{P}] \text{, }
+\begin{align}
+    &\forall i \in [1..\text{P}] \text{, }
     \forall j \in [1..\text{H}_{\text{L-1}}] \text{ and }
-    \forall k \in [1..\text{M}]
-$$
-
-$$
-    {\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    \forall k \in [1..\text{M}]\\
+    &{\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
     {\partial \over \partial\Theta_{\text{L},ij}}
     \Big (
     -{1 \over \text{M}} \sum_{k=1}^{\text{M}} \sum_{i=1}^{\text{P}} {y_{ki}} \log(\hat{y_{ki}})
     \Big )
+\end{align}
 $$
 
-Before derivating the error let's simplify using the chain rule of derivation along with $$\underline{a_{\text{L}}}$$ and $$\underline{z_{\text{L}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{L}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{L}}$$ depends on $$z_{\text{L}}$$
+Before derivating, let's simplify using the chain rule of derivation along with $$\underline{a_{\text{L}}}$$ and $$\underline{z_{\text{L}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{L}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{L}}$$ depends on $$z_{\text{L}}$$
 
 $$
     {\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
@@ -413,8 +430,7 @@ $$
     {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
 $$
 
-We continue simplifying by taking only one sample before calculate the derivative.
-The previous equation becomes
+We continue simplifying by taking only one sample so the previous equation becomes
 
 $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
@@ -424,21 +440,21 @@ $$
     {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
 $$
 
-To make the calculation of the derivative even simpler we pick scalar instead of vectors so that:
+To make the calculation of the derivative even simpler we pick scalars instead of vectors so that
 
 $$
+\begin{equation}
+\boxed{
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
     {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
     {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
     {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}}
+}
+\end{equation}
 $$
 
 with
-
-$$
-\underline{a_{\text{L}-1}} \in \mathbb{R}^{H_{\text{L}-1}}
-$$
 
 $$
 \underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{\text{P}}
@@ -448,7 +464,7 @@ $$
 \underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
 
-**First**
+Let's take the **first** component of the previous equation
 
 $$
 \begin{align*}
@@ -488,13 +504,15 @@ $$
 So
 
 $$
-{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
-- \frac{1}{a_{\text{L},i}}
+\boxed{
+    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
+    - \frac{1}{a_{\text{L},i}}
+}
 $$
 
 (A une constante près à cause de la dérive du log)
 
-**Second**
+Then we take the **second** component
 
 $$
 \begin{align}
@@ -529,13 +547,15 @@ so that
 
 $$
 \begin{equation}
-{\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
-=
-a_{\text{L},i}(1 - a_{\text{L},i})
+\boxed{
+    {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+    =
+    a_{\text{L},i}(1 - a_{\text{L},i})
+}
 \end{equation}
 $$
 
-**Third**
+And the for the **third** component
 
 $$
 \begin{align}
@@ -561,9 +581,11 @@ $$
 The derivative is equal to zero when $$j \neq k$$ so for $$j = k$$
 
 $$
-{\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
-=
-a_{\text{L}-1,j}
+\boxed{
+    {\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
+    =
+    a_{\text{L}-1,j}
+}
 $$
 
 Then putting it together with the chained derivation
@@ -584,9 +606,11 @@ $$
 
 $$
 \begin{equation}
+\boxed{
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
     (a_{\text{L},i} - 1) a_{\text{L}-1,j}
+}
 \end{equation}
 $$
 
@@ -607,84 +631,92 @@ $$
 $$
 
 ### Breaking the hidden layers
+We've just finished breaking the last layer, then we can get the derivative of the penultimate one and recursivly of all the hidden layers until we reach the inputs.
+
 Given $$i \in [1..\text{H}_{\ell}]$$, $$j \in [1..\text{H}_{\ell-1}]$$ and $$\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell - 1} }$$
 
 $$
-{\partial \mathcal{L}_{\text{CE}} 
-    \over 
-\partial\Theta_{\ell,ij}}
-=
-{\partial \mathcal{L}_{CE}
-    \over 
-\partial a_{\ell,i}}
-\overbrace{
+\begin{equation}
+\boxed{
+    {\partial \mathcal{L}_{\text{CE}} 
+        \over 
+    \partial\Theta_{\ell,ij}}
+    =
+    {\partial \mathcal{L}_{CE}
+        \over 
+    \partial a_{\ell,i}}
     {\partial a_{\ell,i}
         \over 
     \partial z_{\ell,i}}
-}^{\text{same for all hidden layers}}
-\underbrace{
     {\partial z_{\ell,i}
         \over 
     \partial\Theta_{\ell,ij}}
-}_{\text{same as the final layer}}
+}
+\end{equation}
 $$
 
-**First**
+Let's take the **first** component
 
 Given $$ z_{\text{L}+1}, a_{\ell+1}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ z_{\text{L}}, a_{\ell}  \in \mathbb{R}^{H_{\ell}} $$ and $$ \delta_{\ell} \in \mathbb{R}^{H_{\ell}}$$
 
 Again, we apply the chain rule of derivation
 
 $$
-{\partial \mathcal{L}_{CE}
-    \over 
-\partial a_{\ell,i}}
-=
-\sum^{H_{\ell+1}}_{k=1}
-{\partial \mathcal{L}_{CE}
-    \over 
-\partial a_{\ell+1,k}}
-{\partial a_{\ell+1,k}
-    \over 
-\partial z_{\ell+1,k}}
-{\partial z_{\ell+1,k}
-    \over 
-\partial a_{\ell,i}}
+\begin{equation}
+\boxed{
+    {\partial \mathcal{L}_{CE}
+        \over 
+    \partial a_{\ell,i}}
+    =
+    \sum^{H_{\ell+1}}_{k=1}
+    {\partial \mathcal{L}_{CE}
+        \over 
+    \partial a_{\ell+1,k}}
+    {\partial a_{\ell+1,k}
+        \over 
+    \partial z_{\ell+1,k}}
+    {\partial z_{\ell+1,k}
+        \over 
+    \partial a_{\ell,i}}
+}
+\end{equation}
 $$
 
 We define
 
 $$
-\delta_{\ell,i}
-=
-{\partial \mathcal{L}_{CE}
-    \over 
-\partial a_{\ell,i}}
-{\partial a_{\ell,i}
-    \over 
-\partial z_{\ell,i}}
+\boxed{
+    \delta_{\ell,i}
+    =
+    {\partial \mathcal{L}_{CE}
+        \over 
+    \partial a_{\ell,i}}
+    {\partial a_{\ell,i}
+        \over 
+    \partial z_{\ell,i}}
+}
 $$
 
-**1.1** and **1.2**
+With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$,the **first two** components are equals to
 
 $$
-\Big (
-{\partial \mathcal{L}_{CE}
-    \over 
-\partial a_{\ell,i}}
-{\partial a_{\ell,i}
-    \over 
-\partial z_{\ell,i}}
-\Big )
-=
-\delta_{\ell+1,k}
+\boxed{
+    \Big (
+    {\partial \mathcal{L}_{CE}
+        \over 
+    \partial a_{\ell,i}}
+    {\partial a_{\ell,i}
+        \over 
+    \partial z_{\ell,i}}
+    \Big )
+    =
+    \delta_{\ell+1,k}
+}
 $$
 
 As we go backward, $$ \underline{\delta_{\ell+1}} $$ has already been calculated.
 
-With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$
-
-**1.3**
+And for the **last** one
 
 $$
 \begin{align}
@@ -718,16 +750,20 @@ $$
 the derivatives are nulls if $$ i \neq c $$ then for $$i = c$$
 
 $$
-{\partial z_{\ell+1,k}
-    \over 
-\partial a_{\ell,i}}
-=
-\theta_{\ell + 1,ki}
+\begin{equation}
+\boxed{
+    {\partial z_{\ell+1,k}
+        \over 
+    \partial a_{\ell,i}}
+    =
+    \theta_{\ell + 1,ki}
+}
+\end{equation}
 $$
 
 With $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$
 
-**Second**
+Then for the **second** component, which is the same for all hidden layers
 
 $$
 \begin{align}
@@ -753,39 +789,49 @@ $$
 $$
 
 $$
-{\partial a_{\ell,i}
-    \over 
-\partial z_{\ell,i}}
-=
-a_{\ell,i} (1 - a_{\ell,i})
+\begin{equation}
+\boxed{
+    {\partial a_{\ell,i}
+        \over 
+    \partial z_{\ell,i}}
+    =
+    a_{\ell,i} (1 - a_{\ell,i})
+}
+\end{equation}
 $$
 
-**Third**
-Same as for the output layer
+And for the **third** component, which is the same as for the final/output layer
 
 $$
-{\partial z_{\ell,i}
-    \over 
-\partial\Theta_{\ell,ij}}
-=
-a_{\ell-1,j}
+\begin{equation}
+\boxed{
+    {\partial z_{\ell,i}
+        \over 
+    \partial\Theta_{\ell,ij}}
+    =
+    a_{\ell-1,j}
+}
+\end{equation}
 $$
 
 **Finally**
 
 $$
-{\partial \mathcal{L}_{\text{CE}} 
-    \over 
-\partial\Theta_{\ell,ij}}
-=
-\big (
-    \sum^{H_{\ell+1}}_{k=1}
-    \delta_{\ell+1,k}
-    \theta_{\ell+1,ki}
-\big )
-a_{\ell,i}
-(1 - a_{\ell,i})
-a_{\ell-1,j}
+\begin{equation}
+\boxed{
+    {\partial \mathcal{L}_{\text{CE}} 
+        \over 
+    \partial\Theta_{\ell,ij}}
+    =
+    \big (
+        \sum^{H_{\ell+1}}_{k=1}
+        \delta_{\ell+1,k}
+        \theta_{\ell+1,ki}
+    \big )
+    a_{\ell,i}
+    (1 - a_{\ell,i})
+    a_{\ell-1,j}
+}
 $$
 
 It can be vectorized as follow
