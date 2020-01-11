@@ -315,7 +315,7 @@ $$
 ,
 \underline{\underline{\Theta_1}} \in \mathbb{R}^{\text{H}_1 \times \text{N}}
 $$
-s
+
 From the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer
 
 $$
@@ -373,7 +373,7 @@ $$g_{\text{L}}$$ is the output function of the last layer.
 In many neural network and in this article we will take the sigmoid function for the activation and the softmax for the output.
 
 ## Backpropagation and gradient descent
-### Gradient Descent *as* the Optimization Algorithm
+### Picking gradient descent as the optimization algorithm
 Backpropagation, for "backward propagationn of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weight.
 It is a generalization of the delta rule for perceptrons to multilayer feedforward neural networks.
 Backpropagation was first invented in the 1970s as a general optimization method for performing automatic differentiation of complex nested functions.
@@ -595,7 +595,7 @@ $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     &=
     \underbrace{
-        {\partial E_{\text{CE}} \over \partial a_{\text{L},i}}
+        {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
         {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
     }_{\delta_{\text{L},i}}
     {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}} \\
@@ -655,11 +655,9 @@ $$
 \end{equation}
 $$
 
-Let's take the **first** component
+Let's take the **first** component and apply the chain rule of derivation.
 
 Given $$ z_{\text{L}+1}, a_{\ell+1}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ z_{\text{L}}, a_{\ell}  \in \mathbb{R}^{H_{\ell}} $$ and $$ \delta_{\ell} \in \mathbb{R}^{H_{\ell}}$$
-
-Again, we apply the chain rule of derivation
 
 $$
 \begin{equation}
@@ -697,7 +695,7 @@ $$
 }
 $$
 
-With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$,the **first two** components are equals to
+With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$, the **first two** components are equals to
 
 $$
 \boxed{
@@ -714,7 +712,91 @@ $$
 }
 $$
 
-As we go backward, $$ \underline{\delta_{\ell+1}} $$ has already been calculated.
+As we go backward, $$ \underline{\delta_{\ell+1}} $$ has already been calculated, so we have:
+
+* For
+$$\ell = \text{L}: \boxed{\delta_{\text{L},i} = a_{\text{L},i} - 1}$$
+
+* For $$ \ell \neq \text{L}:$$
+$$
+\begin{equation}
+    \delta_{\ell,i}
+    =
+    -\frac{1}{a_{\ell,i}}
+    { 
+        \partial a_{\ell,i}
+        \over
+        \partial z_{\ell, i}
+    }
+    =
+    -\frac{1}{a_{\text{L},i}}
+    { 
+        \partial
+        \over
+        \partial z_{\ell, i}
+    }
+    \big (
+        g_{\ell}(z_{\ell,i})
+    \big )
+\end{equation}
+$$
+
+We took the sigmoid function as the activation function for the hidden layers
+
+$$
+\begin{align}
+    { 
+        \partial
+        \over
+        \partial z_{\ell, i}
+    }
+    \big (
+        g_{\ell}(z_{\ell,i})
+    \big )
+    &=
+    { 
+        \partial
+        \over
+        \partial z_{\ell, i}
+    }
+    \Big (
+        \frac{1}{1+e^{-z_{\ell, i}}}
+    \Big )
+    \\&=
+    \frac{e^{-z_{\ell, i}}}{(1+e^{-z_{\ell, i}})^2}
+    \\&=
+    \frac{1}{1+e^{-z_{\ell, i}}}\frac{-1+1+e^{-z_{\ell, i}}}{1+e^{-z_{\ell, i}}}
+    \\&=
+    \frac{1}{1+e^{-z_{\ell, i}}}(1-\frac{1}{1+e^{-z_{\ell, i}}})
+\end{align}
+$$
+
+So
+
+$$
+{ 
+    \partial
+    \over
+    \partial z_{\ell, i}
+}
+\big (
+    g_{\ell}(z_{\ell,i})
+\big )
+=
+a_{\ell,i} ( 1 - a_{\ell,i})
+$$
+
+And
+
+$$
+\begin{equation}
+\boxed{
+    \delta_{\ell,i}
+    =
+    a_{\ell,i} - 1
+}
+\end{equation}
+$$
 
 And for the **last** one
 
@@ -747,7 +829,7 @@ $$
 \end{align}
 $$
 
-the derivatives are nulls if $$ i \neq c $$ then for $$i = c$$
+The derivatives are nulls if $$ i \neq c $$. Then for $$i = c$$
 
 $$
 \begin{equation}
@@ -832,6 +914,7 @@ $$
     (1 - a_{\ell,i})
     a_{\ell-1,j}
 }
+\end{equation}
 $$
 
 It can be vectorized as follow
@@ -855,6 +938,12 @@ And summing up over the samples:
 
 ...
 
+
+> $$\odot$$ represents the element wise product, or Adamart product ?
+
+## All together
+
+Resumé ...
 
 # Sources
 * https://www.wikiwand.com/fr/Algorithme_du_gradient
