@@ -15,7 +15,7 @@ Even though this article describes all the necessary details to understand a bas
 
 In the first part, we'll define all the notation usefull such as the dataset, the neural network function. This notations will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that more readers will be able to read this article.
 
-> **Presentation** \
+> **Presentation**
 > During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
 
 ## Notations
@@ -51,11 +51,11 @@ $$
 \end{pmatrix}
 $$
 
-> :alien: *alien says* :speech_balloon:\
-M the number of samples we have\
-N the dimension of the input, or the number of explanatory variables\
-**Vectors** are underlined like this: $$\underline{x}$$\
-**Matrices** are double-underlined like this: $$\underline{\underline{X}}$$
+> :alien: *alien says* :speech_balloon:
+> M the number of samples we have
+> N the dimension of the input, or the number of explanatory variables
+> **Vectors** are underlined like this: $$\underline{x}$$
+> **Matrices** are double-underlined like this: $$\underline{\underline{X}}$$
 
 ### $$Y$$ *as* the target
 The variable to be predicted or the dependant variable is defined as $$\underline{\underline{Y}}$$, an $$\text{M}$$-by-$$\text{P}$$ matrix, i.e. $$\underline{\underline{Y}} \in \mathbb{R}^{\text{M} \times \text{P}}$$
