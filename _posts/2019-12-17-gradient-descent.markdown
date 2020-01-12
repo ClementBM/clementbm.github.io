@@ -51,10 +51,10 @@ $$
 \end{pmatrix}
 $$
 
-> :alien: *alien says* :speech_balloon:
-> M the number of samples we have
-> N the dimension of the input, or the number of explanatory variables
-> **Vectors** are underlined like this: $$\underline{x}$$
+> :alien: *alien says* :speech_balloon:<br>
+> M the number of samples we have<br>
+> N the dimension of the input, or the number of explanatory variables<br>
+> **Vectors** are underlined like this: $$\underline{x}$$<br>
 > **Matrices** are double-underlined like this: $$\underline{\underline{X}}$$
 
 ### $$Y$$ *as* the target
@@ -90,8 +90,8 @@ $$
 \end{pmatrix}
 $$
 
-> :alien: *alien says* :speech_balloon:\
-> M the number of samples we have\
+> :alien: *alien says* :speech_balloon:<br>
+> M the number of samples we have<br>
 > P the dimension of the target
 
 ### $$\mathcal{D}$$ as dataset
@@ -105,28 +105,28 @@ $$
 A dense neural network can be defined by a composite transfer fonction $$F$$ composed of functions $$f_{\Theta_{\ell}}$$, $$ \forall \ell \in [1..\text{L}]: \big [ f_{\Theta_1}, ... , f_{\Theta_{\ell}}, ...,f_{\Theta_{\text{L}}} \big ] $$ and input parameters $$\underline{x_i}$$:
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{P}} \\
-    \underline{x_i} \rightarrow F(\underline{x_i}) = \underline{\hat{y_i}}
-\end{array}
+\begin{align}
+    \mathbb{R}^{\text{N}} &\rightarrow \mathbb{R}^{\text{P}} \\
+    \underline{x_i} &\rightarrow F(\underline{x_i}) = \underline{\hat{y_i}}
+\end{align}
 $$
 
 :triangular_flag_on_post: *to simplify* :triangular_flag_on_post:
-> $$\underline{x_i}$$ is written $$\underline{x}$$\
-$$\underline{\hat{y_i}}$$ is written $$\underline{\hat{y}}$$
+> $$\underline{x_i}$$ is written $$\underline{x}$$<br>
+> $$\underline{\hat{y_i}}$$ is written $$\underline{\hat{y}}$$
 
 so we can write
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{P}} \\
-    \underline{x} \rightarrow F(\underline{x}) = \underline{\hat{y}}
-\end{array}
+\begin{align}
+    \mathbb{R}^{\text{N}} &\rightarrow \mathbb{R}^{\text{P}} \\
+    \underline{x} &\rightarrow F(\underline{x}) = \underline{\hat{y}}
+\end{align}
 $$
 
 :telescope: *with* :telescope:
-> $$\underline{\hat{y}}$$ the calculated output of the neural network. The objective is to have  $$\underline{\hat{y}}$$ as close as possible to $$\underline{y}$$.\
-$$F$$ the composite transfer fonction.
+> $$\underline{\hat{y}}$$ the calculated output of the neural network. The objective is to have  $$\underline{\hat{y}}$$ as close as possible to $$\underline{y}$$.<br>
+> $$F$$ the composite transfer fonction.
 
 ## Feed-forward propagation
 The neural network studied here is "Feed-Forward", so that one layer is fully connected to the next layer.
@@ -134,38 +134,38 @@ The neural network studied here is "Feed-Forward", so that one layer is fully co
 Starting from input $$\underline{x}$$, the first layer
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{N}} = \mathbb{R}^{\text{H}_0} \rightarrow \mathbb{R}^{\text{H}_1} \\
-    \underline{x} \rightarrow f_{\Theta_1}(\underline{x}) = \underline{a_{1}}
-\end{array}
+\begin{align}
+    \mathbb{R}^{\text{N}} = \mathbb{R}^{\text{H}_0} &\rightarrow \mathbb{R}^{\text{H}_1} \\
+    \underline{x} &\rightarrow f_{\Theta_1}(\underline{x}) = \underline{a_{1}}
+\end{align}
 $$
 
 Then going from the $${\ell\text{-}1}^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer 
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_\ell} \\
-    \underline{a_{\ell-1}} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
-\end{array}
+\begin{align}
+    \mathbb{R}^{\text{H}_{\ell-1}} &\rightarrow \mathbb{R}^{\text{H}_\ell} \\
+    \underline{a_{\ell-1}} &\rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
+\end{align}
 $$
 
 And for the last one, to the output $$\underline{\hat{y}}$$
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{H}_{\text{L}}} = \mathbb{R}^{\text{P}} \\
-    \underline{a_{\text{L}-1}} \rightarrow f_{\Theta_{\text{L}}}(\underline{a_{\text{L}-1}}) 
+\begin{align}
+    \mathbb{R}^{\text{H}_{\text{L}-1}} &\rightarrow \mathbb{R}^{\text{H}_{\text{L}}} = \mathbb{R}^{\text{P}} \\
+    \underline{a_{\text{L}-1}} &\rightarrow f_{\Theta_{\text{L}}}(\underline{a_{\text{L}-1}}) 
         =\underline{a_{\text{L}}}
         =\underline{\hat{y}}
-\end{array}
+\end{align}
 $$
 
 :telescope: *with* :telescope:
-> $$\text{H}_{\ell-1}$$ the size of the $$\ell-1^{\text{th}}$$ hidden layer
-$$\text{H}_{\ell}$$ the size of the $$\ell^{\text{th}}$$ hidden layer\
-$$f_{\Theta_{\ell}}$$ the transfer fonction for the $$\ell^{\text{th}}$$ layer\
-$$\underline{a_{\ell-1}}$$ the input of the $$\ell^{\text{th}}$$ layer\
-$$\underline{a_{\ell}}$$ the output of the $$\ell^{\text{th}}$$ layer
+> $$\text{H}_{\ell-1}$$ the size of the $$\ell-1^{\text{th}}$$ hidden layer<br>
+> $$\text{H}_{\ell}$$ the size of the $$\ell^{\text{th}}$$ hidden layer<br>
+> $$f_{\Theta_{\ell}}$$ the transfer fonction for the $$\ell^{\text{th}}$$ layer<br>
+> $$\underline{a_{\ell-1}}$$ the input of the $$\ell^{\text{th}}$$ layer<br>
+> $$\underline{a_{\ell}}$$ the output of the $$\ell^{\text{th}}$$ layer
 
 We'll dig into the details of the transfer fonction a little bit more later. For now, we try to consider the neural network at a granular point of view. So, given the transfer fonction $$f_{\Theta_{\ell}}$$, the whole network should look like the composition of the $$\text{L}$$ transfer fonctions listed in $$F$$
 
@@ -183,9 +183,9 @@ $$
     (f_{\Theta_{\text{L}}} \circ \cdots \circ f_{\Theta_{\ell}} \circ \cdots f_{\Theta_1})(\underline{x})
 $$
 
-> :alien: *alien says* :speech_balloon:\
-$$\text{L}$$ the number of layers of the neural network\
-$$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_{\ell}}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{L}]$$
+> :alien: *alien says* :speech_balloon:<br>
+> $$\text{L}$$ the number of layers of the neural network<br>
+> $$F$$ is the composite transfer fonction. There is one transfer fonction $$f_{\Theta_{\ell}}$$ per layer, each one enables passing from layer $$\ell$$-1 to layer $$\ell$$, with $$\ell \in [1..\text{L}]$$
 
 What we've just finished to define is the feedforward propagation. As we saw, this algorithm passes the inputs from one layer to the other thanks to the transfer fonctions of each layer of the neural network.
 
@@ -231,9 +231,9 @@ $$
 }
 $$
 
-> :alien: *alien says* :speech_balloon:\
-$$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^{\text{th}}$$ sample.\
-$$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
+> :alien: *alien says* :speech_balloon:<br>
+> $$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^{\text{th}}$$ sample.<br>
+> $$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
 
 ### A *as* activation
 We take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because the softmax function give us a way to transform the output of the second last layer into probabilities of class appearence, with a sum of 1.
@@ -359,9 +359,9 @@ $$
 \end{pmatrix}
 $$
 
-> :alien: *alien says* :speech_balloon:\
-$$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.\
-$$g_{\text{L}}$$ is the output function of the last layer.
+> :alien: *alien says* :speech_balloon:<br>
+> $$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.<br>
+> $$g_{\text{L}}$$ is the output function of the last layer.
 
 In this article we will take the sigmoid function for the activation and the softmax for the output:
 
@@ -401,10 +401,10 @@ $$
 
 Gradient is obtained by using the back propagation algorithm, indeed back propagation is a differentiation algorithm.
 
-> :alien: *alien says* :speech_balloon:\
-$$\alpha$$ is the learning rate of the gradient descent algorithm\
-$$E_{\text{CE}}$$ is a non linear error function. It depends on $$\underline{\underline{X}}$$ and $$\Theta_{\ell}$$, and it must defined and differentiable in the neighborhood of $$\Theta_{\ell}^{(t)}$$\
-$${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial derivative of $$E_{\text{CE}}$$ according to $$\Theta_{\ell}$$ the tuning parameter
+> :alien: *alien says* :speech_balloon:<br>
+> $$\alpha$$ is the learning rate of the gradient descent algorithm<br>
+> $$E_{\text{CE}}$$ is a non linear error function. It depends on $$\underline{\underline{X}}$$ and $$\Theta_{\ell}$$, and it must defined and differentiable in the neighborhood of $$\Theta_{\ell}^{(t)}$$<br>
+> $${\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}$$ is the partial derivative of $$E_{\text{CE}}$$ according to $$\Theta_{\ell}$$ the tuning parameter
 
 ### Breaking the last layer
 First things first, the last layer of the network:
@@ -572,8 +572,8 @@ $$
 }
 $$
 
-> :alien: *alien says* :speech_balloon:\
-Having said that we omit a constant during the logarithm derivative calculation
+> :alien: *alien says* :speech_balloon:<br>
+> Having said that we omit a constant during the logarithm derivative calculation
 
 Then we take the **second** component
 
@@ -997,8 +997,8 @@ $$
 \underline{a_{\ell-1}}
 $$
 
-> :alien: *alien says* :speech_balloon:\
-$$\odot$$ represents the element wise product, or the Hadamart product.
+> :alien: *alien says* :speech_balloon:<br>
+> $$\odot$$ represents the element wise product, or the Hadamart product.
 
 And summing up over the samples: 
 
