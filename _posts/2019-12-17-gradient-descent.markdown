@@ -15,7 +15,7 @@ Even though this article describes all the necessary details to understand a bas
 
 In the first part, we'll define all the notation usefull such as the dataset, the neural network function. This notations will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that more readers will be able to read this article.
 
-> **Presentation**
+> **Presentation**<br>
 > During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
 
 ## Notations
