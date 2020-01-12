@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "The math behind neural networks"
+title:  "The (detailled) mathematics behind neural networks"
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
@@ -9,18 +9,18 @@ categories: [gradient descent, neural network]
 
 This post will guide you trough the main theory behind one basic  neural network. Starting from scratch, I hope it will show you how things linked together.
 
-However, this article doesn't go through the details of how to implement a neural network.
+This article doesn't go through the details of how to implement a neural network.
 
-Even though this article describes all the necessary details to understand a basic neural network, the main part is taken by backpropagation and gradient descent as it is the most mathematic demanding.
+Even though this article describes all the necessary details to understand a basic neural network (except the bias unit), the main part is taken by backpropagation and gradient descent as it is the most mathematic demanding.
 
-In the first part, we'll define all the notation usefull such as the dataset, the neural network function. This notations will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that everyone with a mathematic knowledge should be able to understand this article.
+In the first part, we'll define all the notation usefull such as the dataset, the neural network function. This notations will be used in the later demonstration. It may sometimes sound verbose but I prefer to make the notations explicit so that more readers will be able to read this article.
 
-> Presentation \
+> **Presentation** \
 > During the lecture of this post, mister *legal* alien :alien: will take a look at :telescope: the demonstration and make comments when he wants to.
 
 ## Notations
 ### $$X$$ *as* the sample
-The dataset X is reprensented as $$\underline{\underline{X}}$$, an $$\text{M}$$-by-$$\text{N}$$ matrix, i.e. $$\underline{\underline{X}} \in \mathbb{R}^{\text{M} \times \text{N}}$$
+The dataset X is represented as $$\underline{\underline{X}}$$, an $$\text{M}$$-by-$$\text{N}$$ matrix, i.e. $$\underline{\underline{X}} \in \mathbb{R}^{\text{M} \times \text{N}}$$
 
 $$
 \underline{\underline{X}} =
@@ -59,6 +59,7 @@ N the dimension of the input, or the number of explanatory variables\
 
 ### $$Y$$ *as* the target
 The variable to be predicted or the dependant variable is defined as $$\underline{\underline{Y}}$$, an $$\text{M}$$-by-$$\text{P}$$ matrix, i.e. $$\underline{\underline{Y}} \in \mathbb{R}^{\text{M} \times \text{P}}$$
+
 $$
 \underline{\underline{Y}} = 
 \begin{pmatrix}
@@ -76,6 +77,7 @@ $$\underline{y_i}$$ is the $$i^{\text{th}}$$ sample of the output target, i.e. $
     y_{i1} & \dots  & y_{ij}  & \dots  & y_{i\text{P}} \\
 \end{pmatrix}
 $$
+
 $$\underline{Y_j}$$ is the expression of the $$j^{\text{th}}$$ dependant variable, i.e. : 
 $$
 \underline{Y_j} = 
@@ -110,8 +112,8 @@ $$
 $$
 
 :triangular_flag_on_post: *to simplify* :triangular_flag_on_post:
-> $$\underline{x}$$ is equivalent to $$\underline{x_i}$$\
-$$\underline{\hat{y}}$$ is equivalent to $$\underline{\hat{y_i}}$$
+> $$\underline{x_i}$$ is written $$\underline{x}$$\
+$$\underline{\hat{y_i}}$$ is written $$\underline{\hat{y}}$$
 
 so we can write
 
@@ -126,18 +128,10 @@ $$
 > $$\underline{\hat{y}}$$ the calculated output of the neural network. The objective is to have  $$\underline{\hat{y}}$$ as close as possible to $$\underline{y}$$.\
 $$F$$ the composite transfer fonction.
 
-## Feedforward propagation
+## Feed-forward propagation
+The neural network studied here is "Feed-Forward", so that one layer is fully connected to the next layer.
 
-Going from the $${\ell\text{-}1}^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer 
-
-$$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_\ell} \\
-    \underline{a_{\ell-1}} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
-\end{array}
-$$
-
-For the first layer
+Starting from input $$\underline{x}$$, the first layer
 
 $$
 \begin{array}{l}
@@ -146,7 +140,16 @@ $$
 \end{array}
 $$
 
-And the last one
+Then going from the $${\ell\text{-}1}^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer 
+
+$$
+\begin{array}{l}
+    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_\ell} \\
+    \underline{a_{\ell-1}} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
+\end{array}
+$$
+
+And for the last one, to the output $$\underline{\hat{y}}$$
 
 $$
 \begin{array}{l}
@@ -164,7 +167,7 @@ $$f_{\Theta_{\ell}}$$ the transfer fonction for the $$\ell^{\text{th}}$$ layer\
 $$\underline{a_{\ell-1}}$$ the input of the $$\ell^{\text{th}}$$ layer\
 $$\underline{a_{\ell}}$$ the output of the $$\ell^{\text{th}}$$ layer
 
-We'll dig into the details of the transfer fonction a little bit more later. For now, we try to consider the neural network at a granular point of view. So, given the transfer fonction $$f_{\Theta_{\ell}}$$, the whole network should look like the composition of the $$\text{P}$$ transfer fonctions listed in $$F$$
+We'll dig into the details of the transfer fonction a little bit more later. For now, we try to consider the neural network at a granular point of view. So, given the transfer fonction $$f_{\Theta_{\ell}}$$, the whole network should look like the composition of the $$\text{L}$$ transfer fonctions listed in $$F$$
 
 $$
     F(\underline{x})
@@ -188,9 +191,9 @@ What we've just finished to define is the feedforward propagation. As we saw, th
 
 ### $$\mathcal{L}$$ *as* Loss function and $$E$$ *as* Error
 
-An important aspect of the design of a deep neural networks is the choice of the cost function. Cost functions for neural networks are equally the same as those for other parametric models such as linear models.
+An important aspect of the design of a deep neural networks is the choice of the cost function.
 
-$$\mathcal{L}$$ is a function of output $$y$$ and of the predicted output $$\hat{y}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. Historically for neural networks the loss function used was the mean squared error (MSE). For the $$i^{\text{th}}$$ sample of the dataset we have
+The loss $$\mathcal{L}$$ is a function of the ground truth $$\underline{y_i}$$ and of the predicted output $$\underline{\hat{y_i}}$$. It represents a kind of difference between the expected and the actual output. There are many ways to define a loss function. Historically for neural networks the loss function used was the mean squared error (MSE). For the $$i^{\text{th}}$$ sample of the dataset we have
 
 $$
 \forall{i} \in [1..\text{M}],
@@ -198,14 +201,11 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-In most cases, our parametric model defines a distribution
- $$p(y|x;\theta)$$
-and we simply use the principle of maximum likelihood? This means we use the cross entropy between the training data and the model's prediction as the cost function.
+However, the MSE function (mean squared error) is not convex for neural networks.
 
-> Learning Conditional Distributions with Maximum likelihood.
-
-Most modern neural network are trained using maximum likelihood. This means that the cost function is simply the negative log-likelihood, equivalently described as the cross-entropy between the training data and the model distribution.
-However, as the MSE function (mean squared error) is not convex for neural networks, we usually prefer to use the **Cross-Entropy** loss function. In our context of multiclass classification as the output $$\underline{y_i}$$ has P dimension, it's better to specificy that we are using the **Multiclass Cross-Entropy** Loss. Another name frequently used is the **Negative Log Likelihood** or LLE as we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution... ?
+In this case, our parametric model defines a distribution
+$$p(\underline{y_i}|\underline{x_i};\Theta)$$
+and we use the principle of maximum likelihood. This means we use the **Negative Log Likelihood** (LLE) cost function. As we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution, it's better to specificy we are using the **Multiclass Cross-Entropy** Loss between the training data and the model distribution/model's prediction.
 
 $$
 \boxed{
@@ -236,94 +236,51 @@ $$y_{ij}$$ is the $$j^{\text{th}}$$ component of the target variable in the $$i^
 $$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
 
 ### A *as* activation
-We'll take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because, the softmax function give us a way to transform the output of the second last layer into probability of class appearence, with a sum of 1.
+We take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because the softmax function give us a way to transform the output of the second last layer into probabilities of class appearence, with a sum of 1.
 
-Before defining the gradient descent algorithm, we should present a more detailed version of the transfer function to show the role of the parameter $$\Theta$$ and also define the link functions for the hidden layer (activation function) and for the last layer (output function).
+Before defining the gradient descent algorithm, we need to define a more detailed version of the transfer function to show the role of the parameter $$\Theta$$ and also define the link functions for the hidden layers (activation functions) and for the last layer (output function).
 
-Remember from the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer we have
-
-$$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{ \ell - 1}} \rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
-    a_{\ell-1} \rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
-\end{array}
-$$
-
-We define $$\underline{z_{\ell}} \in \mathbb{R}^{\text{H}_{ \ell }}$$
-as
-$$
-\underline{z_{\ell}} = \underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}
-$$
-and $$g_{\ell}: \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }}$$
-as
+Remember that to pass from the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer we have
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
-    \underline{z_{\ell}} \rightarrow g_{\ell}(\underline{z_{\ell}}) = f_{\Theta_{\ell}}(\underline{a_{\ell-1}})
-\end{array}
+\begin{align}
+    \mathbb{R}^{\text{H}_{ \ell - 1}} &\rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
+    a_{\ell-1} &\rightarrow f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = \underline{a_{\ell}}
+\end{align}
 $$
 
-For the first layer
+The transfer fonction is composed of:
+* a matrix multiplication such as
+$$
+\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}} = \underline{z_{\ell}}
+$$
+, respectivly the weigts with the input of the $$\ell^{\text{th}}$$ layer, given $$\underline{z_{\ell}} \in \mathbb{R}^{\text{H}_{ \ell }}$$
+* an activation function $$g_{\ell}: \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }}$$ such as
 
 $$
-\begin{array}{l}
-    \underline{z_1} = \underline{\underline{\Theta_1}} \underline{x}\\
-    \underline{a_1} = f_{\Theta_1}(\underline{x}) = g_1(\underline{z_1})
-\end{array}
-$$
-
-and for the last layer
-
-$$
-\begin{array}{l}
-    \underline{z_{\text{L}}} = \underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L-1}}}\\
-    \underline{a_{\text{L}}} = f_{\Theta_{\text{L}}}(\underline{a_{\text{L-1}}}) = g_{\text{L}}(\underline{z_{\text{L}}})
-\end{array}
-$$
-
-The transfer fonction is composed of a matrix multiplication of $$\underline{a_{\ell-1}}$$ with  $$\underline{\underline{\Theta_{\ell}}}$$, respectivly the input and the weigts of the $$\ell^{\text{th}}$$ layer, and the activation function $$g_{\ell} $$
-
-$$
-g_{\ell} : \mathbb{R^{\text{H}_{\ell}}} \rightarrow \mathbb{R^{\text{H}_{\ell}}}
-$$
-
-$$
-f_{\Theta_{\ell}}(\underline{a_{\ell-1}}) = g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}}) = \underline{a_{\ell}}
-$$
-
-For the first layer
-
-$$
-\begin{array}{l}
-    \mathbb{R}^{\text{N}} \rightarrow \mathbb{R}^{\text{H}_1} \\
-    \underline{x} \rightarrow 
-    g_1(\underline{\underline{\Theta_1}} \underline{x})
-\end{array}
-$$
-
-$$
-\forall i \in [1..\text{H}_1], \forall j \in [1..\text{N}]:
-\underline{\underline{\Theta_1}} = 
-\begin{pmatrix}
-    \theta_{1, 11} & \dots  & \theta_{1, 1j}  & \dots  & \theta_{1, 1\text{N}} \\
-    \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{1, i1} & \dots  & \theta_{1, ij}  & \dots  & \theta_{1, i\text{N}} \\
-    \vdots & \ddots &  \vdots & \ddots & \vdots \\
-    \theta_{1, \text{H}_11} & \dots  & \theta_{1, \text{H}_1j}  & \dots  & \theta_{1, {\text{H}_1}\text{N}}
-\end{pmatrix}
-,
-\underline{\underline{\Theta_1}} \in \mathbb{R}^{\text{H}_1 \times \text{N}}
-$$
-
-From the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer
-
-$$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{\ell-1}} \rightarrow \mathbb{R}^{\text{H}_{\ell}} \\
-    \underline{a_{\ell-1}} \rightarrow 
+\begin{align}
+    \mathbb{R}^{\text{H}_{ \ell }} &\rightarrow \mathbb{R}^{\text{H}_{ \ell }} \\
+    \underline{z_{\ell}} &\rightarrow g_{\ell}(\underline{z_{\ell}})
+    =
     g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}})
-\end{array}
+    =
+    f_{\Theta_{\ell}}(\underline{a_{\ell-1}})
+    =
+    \underline{a_{\ell}}
+\end{align}
+$$
+
+From the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer, given 
+$$
+\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell-1}}
+$$ we can write
+
+$$
+\begin{align}
+    \mathbb{R}^{\text{H}_{\ell-1}} &\rightarrow \mathbb{R}^{\text{H}_{\ell}} \\
+    \underline{a_{\ell-1}} &\rightarrow 
+    g_{\ell}(\underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}})
+\end{align}
 $$
 
 $$
@@ -338,18 +295,56 @@ $$
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
     \theta_{\ell,\text{H}_{\ell}1} & \dots  & \theta_{\ell,\text{H}_{\ell}j}  & \dots  & \theta_{\ell,{\text{H}_{\ell}}\text{H}_{\ell-1}}
 \end{pmatrix}
-,
-\underline{\underline{\Theta_{\ell}}} \in \mathbb{R}^{\text{H}_{\ell} \times \text{H}_{\ell-1}}
 $$
 
-And the last one
+For example, the **first layer** can be written like this, given 
+$$
+\underline{\underline{\Theta_1}} \in \mathbb{R}^{\text{H}_1 \times \text{N}}
+$$
 
 $$
-\begin{array}{l}
-    \mathbb{R}^{\text{H}_{\text{L}-1}} \rightarrow \mathbb{R}^{\text{P}} \\
-    \underline{a_{\text{L}-1}} \rightarrow
+\begin{align}
+    \mathbb{R}^{\text{N}} &\rightarrow \mathbb{R}^{\text{H}_1} \\
+    \underline{x} &\rightarrow 
+    f_{\Theta_1}(\underline{x})
+    =
+    g_1(\underline{\underline{\Theta_1}} \underline{x})
+    =
+    g_1(\underline{z_1})
+    =
+    \underline{a_1}
+\end{align}
+$$
+
+$$
+\forall i \in [1..\text{H}_1], \forall j \in [1..\text{N}]:
+\underline{\underline{\Theta_1}} = 
+\begin{pmatrix}
+    \theta_{1, 11} & \dots  & \theta_{1, 1j}  & \dots  & \theta_{1, 1\text{N}} \\
+    \vdots & \ddots &  \vdots & \ddots & \vdots \\
+    \theta_{1, i1} & \dots  & \theta_{1, ij}  & \dots  & \theta_{1, i\text{N}} \\
+    \vdots & \ddots &  \vdots & \ddots & \vdots \\
+    \theta_{1, \text{H}_11} & \dots  & \theta_{1, \text{H}_1j}  & \dots  & \theta_{1, {\text{H}_1}\text{N}}
+\end{pmatrix}
+$$
+
+And for the **last layer**, given 
+$$
+\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
+$$
+
+$$
+\begin{align}
+    \mathbb{R}^{\text{H}_{\text{L}-1}} &\rightarrow \mathbb{R}^{\text{P}} \\
+    \underline{a_{\text{L}-1}} &\rightarrow
+    f_{\Theta_{\text{L}}}(\underline{a_{\text{L-1}}})
+    =
     g_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L}-1}})
-\end{array}
+    =
+    g_{\text{L}}(\underline{z_{\text{L}}})
+    =
+    \underline{a_{\text{L}}}
+\end{align}
 $$
 
 $$
@@ -362,15 +357,23 @@ $$
     \vdots & \ddots &  \vdots & \ddots & \vdots \\
     \theta_{\text{L},\text{P}1} & \dots  & \theta_{\text{L},\text{P}j}  & \dots  & \theta_{\text{L},{\text{P}}\text{H}_{\text{L}-1}}
 \end{pmatrix}
-,
-\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
 
 > :alien: *alien says* :speech_balloon:\
 $$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.\
 $$g_{\text{L}}$$ is the output function of the last layer.
 
-In many neural network and in this article we will take the sigmoid function for the activation and the softmax for the output.
+In this article we will take the sigmoid function for the activation and the softmax for the output:
+
+* the sigmoid function
+$$
+g_{\ell}(z_{\ell, i}) = \frac{1}{1+e^{-z_{\ell, i}}}
+$$
+
+* and the softmax function
+$$
+g_{\text{L}}(z_{\text{L}, i}) = \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{L}} \mathrm{e}^{z_{\text{L},k}}}
+$$
 
 ## Backpropagation and gradient descent
 ### Picking gradient descent as the optimization algorithm
@@ -420,24 +423,84 @@ $$
 \end{align}
 $$
 
-Before derivating, let's simplify using the chain rule of derivation along with $$\underline{a_{\text{L}}}$$ and $$\underline{z_{\text{L}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{L}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{L}}$$ depends on $$z_{\text{L}}$$
+Before derivating, let's simplify using the chain rule of derivation along with $$\underline{a_{\text{L}}}$$ and $$\underline{z_{\text{L}}}$$, because $$E_{\text{CE}}$$ depends on $$a_{\text{L}}$$ which is equals to $$\hat{y}$$, and $$a_{\text{L}}$$ depends on $$z_{\text{L}}$$. It can be written as
 
 $$
-    {\partial E_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+\begin{align}
+    E_{CE}(\underline{a_{\text{L}}}) &= \dots \\
+    g_{\text{L}}(\underline{z_{\text{L}}}) &= \underline{a_{\text{L}}}\\
+    h_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}}) &= \underline{z_{\text{L}}}
+\end{align}
+$$
+
+We can write the error for the $$t^{\text{th}}$$ iteration
+
+$$
+E_{\text{CE}}(g_{\text{L}}(h_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}}^{(t)})))
+=
+E_{\text{CE}} \circ g_{\text{L}} \circ h_{\text{L}} (\underline{\underline{\Theta_{\text{L}}}}^{(t)})
+$$
+
+Applying the chain rule of derivation gives
+
+$$
+\begin{equation}
+    { \partial 
+        (
+            E_{CE} \circ g_{\text{L}} \circ h_{\text{L}}
+        )
+      \over
+      \partial \underline{\underline{\Theta_{\text{L}}}}
+    }
+    \big (
+        \underline{\underline{\Theta_{\text{L}}}}^{(t)}
+    \big )
+    =
+    { 
+        \partial E_{CE}
+        \over
+        \partial \underline{a_{\text{L}}}
+    }
+    \big (
+        g_{\text{L}}(h_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}}^{(t)}))
+    \big )
+    { 
+        \partial g_{\text{L}}
+        \over
+        \partial \underline{z_{\text{L}}}
+    }
+    \big (
+        h_{\text{L}}(\underline{\underline{\Theta_{\text{L}}}}^{(t)})
+    \big )
+    { 
+        \partial h_{\text{L}}
+        \over
+        \partial \underline{\underline{\Theta_{\text{L}}}}
+    }
+    \big (
+        \underline{\underline{\Theta_{\text{L}}}}^{(t)}
+    \big )
+\end{equation}
+$$
+
+Which is commonly written more or less is the following form
+
+$$
+    {\partial E_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
     =
     {\partial E_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
     {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
-    {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
+    {\partial \underline{z_{\text{L}}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
 $$
 
 We continue simplifying by taking only one sample so the previous equation becomes
 
 $$
-    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
     =
     {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
     {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
-    {\partial \underline{z_{\text{L}}} \over \partial \Theta_{\text{L},ij}}
+    {\partial \underline{z_{\text{L}}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
 $$
 
 To make the calculation of the derivative even simpler we pick scalars instead of vectors so that
@@ -455,11 +518,10 @@ $$
 $$
 
 with
-
 $$
 \underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{\text{P}}
 $$
-
+and
 $$
 \underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
@@ -510,7 +572,8 @@ $$
 }
 $$
 
-(A une constante près à cause de la dérive du log)
+> :alien: *alien says* :speech_balloon:\
+Having said that we omit a constant during the logarithm derivative calculation
 
 Then we take the **second** component
 
@@ -741,7 +804,7 @@ $$
 \end{equation}
 $$
 
-We took the sigmoid function as the activation function for the hidden layers
+For the hidden layers, we took the sigmoid function as the activation function $$g_{\ell}$$
 
 $$
 \begin{align}
@@ -843,7 +906,7 @@ $$
 \end{equation}
 $$
 
-With $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$
+with $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$.
 
 Then for the **second** component, which is the same for all hidden layers
 
@@ -934,60 +997,30 @@ $$
 \underline{a_{\ell-1}}
 $$
 
+> :alien: *alien says* :speech_balloon:\
+$$\odot$$ represents the element wise product, or the Hadamart product.
+
 And summing up over the samples: 
 
-...
-
-
-> $$\odot$$ represents the element wise product, or Adamart product ?
-
-## All together
-
-Resumé ...
+$$
+{\partial E_{\text{CE}} 
+    \over 
+\partial \underline{\underline{\Theta_{\ell}}}}
+=
+\frac{1}{M} \sum_{k=1}^{M}
+\big (
+    \underline{\delta_{\ell+1,k}} \underline{\underline{\Theta_{\ell+1}}}
+\big )^{\text{T}}
+\odot
+\underline{a_{\ell,k}}^{\text{T}}
+\odot
+(1 - \underline{a_{\ell,k}})^{\text{T}}
+\underline{a_{\ell-1,k}}
+$$
 
 # Sources
-* https://www.wikiwand.com/fr/Algorithme_du_gradient
-* https://bigtheta.io/2016/02/27/the-math-behind-backpropagation.html
-* https://brilliant.org/wiki/backpropagation/
-* https://en.wikipedia.org/wiki/Function_of_several_real_variables
-* https://gombru.github.io/2018/05/23/cross_entropy_loss/
-* https://ml-cheatsheet.readthedocs.io/en/latest/loss_functions.html
-* https://stats.stackexchange.com/questions/323896/explanation-for-mse-formula-for-vector-comparison-with-euclidean-distance
-* https://fr.wikipedia.org/wiki/Th%C3%A9or%C3%A8me_de_d%C3%A9rivation_des_fonctions_compos%C3%A9es
-* https://en.wikipedia.org/wiki/Function_composition
-* https://en.wikipedia.org/wiki/Mathematical_optimization
-* https://en.wikipedia.org/wiki/Gradient_descent
-
-**important**
-* https://www.youtube.com/watch?v=-p1ldISb90Q
 * http://www.cs.cornell.edu/courses/cs5740/2016sp/resources/backprop.pdf
-* http://www.math.hkbu.edu.hk/~mhyipa/nndl/chap2.pdf
-* https://www.cs.swarthmore.edu/~meeden/cs81/s10/BackPropDeriv.pdf
-* https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/pdfs/40%20LogisticRegression.pdf
-* https://math.stackexchange.com/questions/137936/log-likelihood-gradient-and-hessian
-* http://cs231n.github.io/neural-networks-case-study
-
-**stuttgart**
 * https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/06/ML_NeuralNetworks_SS18.pdf
-* https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/04/ML_Intro_SS18.pdf
-* https://ipvs.informatik.uni-stuttgart.de/mlr/teaching/machine-learning-ss-18/
-* https://ipvs.informatik.uni-stuttgart.de/mlr/marc/teaching/13-Optimization/
-
-**log likelihood**
 * https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf
-
-**Andrew NG**
-* https://www.youtube.com/watch?v=x_Eamf8MHwU
-
-**second order optimization**
-* https://ipvs.informatik.uni-stuttgart.de/mlr/marc/teaching/13-Optimization/04-secondOrderOpt.pdf
-
-**logistic regression**
-* https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf
-
-**derivative**
-* http://cs231n.stanford.edu/vecDerivs.pdf
-
-**softmax**
-* https://ljvmiranda921.github.io/notebook/2017/08/13/softmax-and-the-negative-log-likelihood/
-* https://developers.google.com/machine-learning/crash-course/multi-class-neural-networks/softmax
+* https://math.libretexts.org/Bookshelves/Calculus/Book%3A_Calculus_(OpenStax)/14%3A_Differentiation_of_Functions_of_Several_Variables/14.5%3A_The_Chain_Rule_for_Multivariable_Functions
+* https://fr.wikipedia.org/wiki/Th%C3%A9or%C3%A8me_de_d%C3%A9rivation_des_fonctions_compos%C3%A9es
