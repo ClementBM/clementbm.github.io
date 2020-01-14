@@ -236,8 +236,6 @@ $$
 > $$\hat{y_{ij}}$$ is the $$j^{\text{th}}$$ component of the predicted target variable (estimated by the neural network) in the $$i^{\text{th}}$$ sample.
 
 ### A *as* activation
-We take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because the softmax function give us a way to transform the output of the second last layer into probabilities of class appearence, with a sum of 1.
-
 Before defining the gradient descent algorithm, we need to define a more detailed version of the transfer function to show the role of the parameter $$\Theta$$ and also define the link functions for the hidden layers (activation functions) and for the last layer (output function).
 
 Remember that to pass from the $$\ell\text{-}1^{\text{th}}$$ to the $$\ell^{\text{th}}$$ layer we have
@@ -363,7 +361,7 @@ $$
 > $$g_{\ell}$$ is the activation function of the $$\ell^{\text{th}}$$ hidden layer.<br>
 > $$g_{\text{L}}$$ is the output function of the last layer.
 
-In this article we will take the sigmoid function for the activation and the softmax for the output:
+In this article we take the softmax function for the last layer and the sigmoid function for all hidden layers. In this particular case when the last layer has a softmax function, the second last layer has the same number of nodes then the last layer. It's because the softmax function give us a way to transform the output of the second last layer into probabilities of class appearence, with a sum of 1.
 
 * the sigmoid function
 $$
