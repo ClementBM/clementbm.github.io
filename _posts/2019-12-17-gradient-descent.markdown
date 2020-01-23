@@ -201,7 +201,7 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-However, the MSE function (mean squared error) is not convex for neural networks.
+However, the MSE function (mean squared error) is not convex for multiclass classification neural networks, is it an advantage to have a convex function for the loss ?
 
 In this case, our parametric model defines a distribution
 $$p(\underline{y_i}|\underline{x_i};\Theta)$$
@@ -375,11 +375,11 @@ $$
 
 ## Backpropagation and gradient descent
 ### Picking gradient descent as the optimization algorithm
-Backpropagation, for "backward propagationn of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weight.
+Backpropagation, for "backward propagation of errors" is an algorithm for supervised learning of artificial neural networks using gradient descent. Given an artificial neural network and an error function, the method calculates the gradient of the error function with respect to the neural network's weights.
 It is a generalization of the delta rule for perceptrons to multilayer feedforward neural networks.
 Backpropagation was first invented in the 1970s as a general optimization method for performing automatic differentiation of complex nested functions.
 
-Up to now, we defined the datasets composed of $$\underline{\underline{X}}$$ and $$\underline{\underline{Y}}$$, the forward propagation algorithm which calculates an estimation of the target $$\underline{\underline{\hat{Y}}}$$, and an error function $$E_{\text{CE}}$$. Recall that we want $$\underline{\underline{\hat{Y}}}$$ to be as close as possible to $${\underline{\underline{Y}}}$$. The error function $$E_{\text{CE}}$$ comes in handy by giving us a metric to quantify as far are we from the ground truth $${\underline{\underline{Y}}}$$. And so, "as close as possible" can be mathematically translated into "minimizing the error function $$E_{\text{CE}}$$"
+Up to now, we defined the datasets composed of $$\underline{\underline{X}}$$ and $$\underline{\underline{Y}}$$, the forward propagation algorithm which calculates an estimation of the target $$\underline{\underline{\hat{Y}}}$$, and an error function $$E_{\text{CE}}$$. Recall that we want $$\underline{\underline{\hat{Y}}}$$ to be as close as possible to $${\underline{\underline{Y}}}$$. The error function $$E_{\text{CE}}$$ comes in handy by giving us a metric to quantify as far is the prediction from the ground truth $${\underline{\underline{Y}}}$$. And so, "as close as possible" can be mathematically translated into "minimizing the error function $$E_{\text{CE}}$$"
 
 $$
 \arg \min_{\Theta} E_{\text{CE}}(\Theta)
@@ -505,12 +505,29 @@ To make the calculation of the derivative even simpler we pick scalars instead o
 
 $$
 \begin{equation}
+    {
+        \partial \mathcal{L}_{\text{CE}} 
+        \over
+        \partial z_{\text{L},k}
+    }
+    =
+    \sum_{k=1}^{\text{P}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},k}}
+    {\partial a_{\text{L},k} \over \partial z_{\text{L},k}}
+\end{equation}
+$$
+
+
+
+$$
+\begin{equation}
 \boxed{
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
-    {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
-    {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}}
+    \sum_{k=1}^{\text{P}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},k}}
+    {\partial a_{\text{L},k} \over \partial z_{\text{L},k}}
+    {\partial z_{\text{L},k} \over \partial \Theta_{\text{L},ij}}
 }
 \end{equation}
 $$
@@ -542,31 +559,31 @@ $$
 \end{align*}
 $$
 
-we have
+For the c class we have
 $$
 y_k =
 \begin{cases}
-    0 & \text{if \(k \neq i\) } \\
-    1 & \text{if \(k = i\) }
+    0 & \text{if \(k \neq c\) } \\
+    1 & \text{if \(k = c\) }
 \end{cases}
 $$
-therefore when $$k = i$$, $$y_k = 1$$
 
 $$
 {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
 -
 {\partial \over \partial a_{\text{L},i}}
 \Big (
-    \log(a_{\text{L},i})
+    y_c
+    \log(a_{\text{L},c})
 \Big )
 $$
 
-So
+So given the class c
 
 $$
 \boxed{
     {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
-    - \frac{1}{a_{\text{L},i}}
+    - \frac{1}{a_{\text{L},c}}
 }
 $$
 
@@ -670,12 +687,15 @@ $$
 \boxed{
     {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
     =
-    (a_{\text{L},i} - 1) a_{\text{L}-1,j}
+    \sum_{i=k}^{\text{P}}
+    (a_{\text{L},k} - 1) a_{\text{L}-1,j}
 }
 \end{equation}
 $$
 
 As $$\underline{a_{\text{L}}}$$ and $$\underline{a_{\text{L}-1}}$$ are row vectors, the previous equation can be vectorized
+
+!!!!!!!!!!
 
 $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
@@ -703,13 +723,14 @@ $$
         \over 
     \partial\Theta_{\ell,ij}}
     =
+    \sum_{k=1}^{\text{H}_{\ell}}
     {\partial \mathcal{L}_{CE}
         \over 
-    \partial a_{\ell,i}}
-    {\partial a_{\ell,i}
+    \partial a_{\ell,k}}
+    {\partial a_{\ell,k}
         \over 
-    \partial z_{\ell,i}}
-    {\partial z_{\ell,i}
+    \partial z_{\ell,k}}
+    {\partial z_{\ell,k}
         \over 
     \partial\Theta_{\ell,ij}}
 }
@@ -966,6 +987,7 @@ $$
         \over 
     \partial\Theta_{\ell,ij}}
     =
+    \sum_{i=1}^{\text{H}_{\ell}}
     \big (
         \sum^{H_{\ell+1}}_{k=1}
         \delta_{\ell+1,k}
