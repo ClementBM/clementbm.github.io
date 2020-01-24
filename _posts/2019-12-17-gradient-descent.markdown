@@ -494,42 +494,29 @@ $$
 We continue simplifying by taking only one sample so the previous equation becomes
 
 $$
-    {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
-    =
-    {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{a_{\text{L}}}}
-    {\partial \underline{a_{\text{L}}} \over \partial \underline{z_{\text{L}}}}
-    {\partial \underline{z_{\text{L}}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
-$$
-
-To make the calculation of the derivative even simpler we pick scalars instead of vectors so that
-
-$$
-\begin{equation}
-    {
-        \partial \mathcal{L}_{\text{CE}} 
-        \over
-        \partial z_{\text{L},k}
-    }
-    =
-    \sum_{k=1}^{\text{P}}
-    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},k}}
-    {\partial a_{\text{L},k} \over \partial z_{\text{L},k}}
-\end{equation}
-$$
-
-
-
-$$
-\begin{equation}
-\boxed{
-    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
-    =
-    \sum_{k=1}^{\text{P}}
-    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},k}}
-    {\partial a_{\text{L},k} \over \partial z_{\text{L},k}}
-    {\partial z_{\text{L},k} \over \partial \Theta_{\text{L},ij}}
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial \underline{\underline{\Theta_{\text{L}}}}
 }
-\end{equation}
+=
+\underbrace{
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial \underline{a_{\text{L}}}
+    }
+    {
+        \partial \underline{a_{\text{L}}}
+        \over
+        \partial \underline{z_{\text{L}}}
+    }
+}_{\underline{\delta_{\text{L}}}}
+{
+    \partial \underline{z_{\text{L}}}
+    \over
+    \partial \underline{\underline{\Theta_{\text{L}}}}
+}
 $$
 
 with
@@ -541,30 +528,94 @@ $$
 \underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
 $$
 
-Let's take the **first** component of the previous equation
+We break the chained derivation in two parts. First we define
+
+$$
+\underline{\delta_{\text{L}}}
+=
+{
+    \partial \mathcal{L}_{\text{CE}} 
+    \over
+    \partial \underline{z_{\text{L}}}
+}
+=
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \underline{\partial a_{\text{L}}}
+}
+{
+    \partial a_{\text{L}}
+    \over
+    \underline{\partial z_{\text{L}}}
+}
+$$
+
+To make the calculation of the derivative simpler we pick scalars instead of vectors so that
+
+$$
+\begin{equation}
+    \delta_{\text{L},i}
+    =
+    {
+        \partial \mathcal{L}_{\text{CE}} 
+        \over
+        \partial z_{\text{L},i}
+    }
+    =
+    \sum_{k=1}^{\text{P}}
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial a_{\text{L},k}
+    }
+    {
+        \partial a_{\text{L},k} 
+        \over
+        \partial z_{\text{L},i}
+    }
+\end{equation}
+$$
+
+given $$i, k \in [1..\text{P}]$$
+
+
+Let's take the **first** component
 
 $$
 \begin{align*}
-{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial a_{\text{L},k}
+}
 &=
-{\partial \over \partial a_{\text{L},i}}
+{
+    \partial
+    \over
+    \partial a_{\text{L},k}
+}
 \Big (
-    - \sum_{k=1}^{\text{P}} {y_{k}} \log(\hat{y_{k}})
+    - \sum_{p=1}^{\text{P}} {y_{p}} \log(\hat{y_{p}})
 \Big )\\
 &=
-{\partial \over \partial a_{\text{L},i}}
+{
+    \partial
+    \over
+    \partial a_{\text{L},k}
+}
 \Big (
-    - \sum_{k=1}^{\text{P}} {y_{k}} \log(a_{\text{L},k})
+    - \sum_{p=1}^{\text{P}} {y_{p}} \log(a_{\text{L},p})
 \Big )
 \end{align*}
 $$
 
 For the c class we have
 $$
-y_k =
+y_p =
 \begin{cases}
-    0 & \text{if \(k \neq c\) } \\
-    1 & \text{if \(k = c\) }
+    0 & \text{if \(p \neq c\) } \\
+    1 & \text{if \(p = c\) }
 \end{cases}
 $$
 
@@ -603,18 +654,18 @@ $$
 &=
 {\partial \over \partial z_{\text{L},i}}
 \Big (
-    \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{L}} \mathrm{e}^{z_{\text{L},k}}}
+    \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}}}
 \Big )\\
 &=
-\frac{ \mathrm{e}^{z_{L},i} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} - \big ( \mathrm{e}^{z_{L},i} \big ) ^2}
-{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},k} \big ) ^ 2} \\
+\frac{ \mathrm{e}^{z_{\text{L},i}} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}} - \big ( \mathrm{e}^{z_{\text{L},i}} \big ) ^2}
+{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}} \big ) ^ 2} \\
 &=
-\frac{ \mathrm{e}^{z_{L},i} }
-{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
+\frac{ \mathrm{e}^{z_{\text{L},i}} }
+{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},i}} }
 -
 \big (
-\frac{ \mathrm{e}^{z_{L},i} }
-{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{L},i} }
+\frac{ \mathrm{e}^{z_{\text{L},i}} }
+{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},i}} }
 \big ) ^2 \\
 &=
 g_{\text{L}}(z_{\text{L},i}) - g^2_{\text{L}}(z_{\text{L},i})
