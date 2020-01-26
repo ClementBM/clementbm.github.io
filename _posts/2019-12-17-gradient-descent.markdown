@@ -94,6 +94,16 @@ $$
 > M the number of samples we have<br>
 > P the dimension of the target
 
+In this post, we explore multiclass classification. The target has a form of a one hot vector. Giving the $$i^{th}$$ sample has the $$c$$ class, we have
+
+$$
+y_{ij} =
+\begin{cases}
+    0 & \text{if \(j \neq c\) } \\
+    1 & \text{if \(j = c\) }
+\end{cases}
+$$
+
 ### $$\mathcal{D}$$ as dataset
 The dataset is just the combinations of X and Y, that is
 
@@ -491,7 +501,15 @@ $$
     {\partial \underline{z_{\text{L}}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
 $$
 
-We continue simplifying by taking only one sample so the previous equation becomes
+We continue simplifying by taking only one sample so the previous equation becomes, 
+with
+$$
+\underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{\text{P}}
+$$
+and
+$$
+\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
+$$
 
 $$
 {
@@ -519,15 +537,6 @@ $$
 }
 $$
 
-with
-$$
-\underline{z_{\text{L}}}, \underline{a_{\text{L}}} \in \mathbb{R}^{\text{P}}
-$$
-and
-$$
-\underline{\underline{\Theta_{\text{L}}}} \in \mathbb{R}^{\text{P} \times H_{\text{L}-1}}
-$$
-
 We break the chained derivation in two parts. First we define
 
 $$
@@ -542,16 +551,16 @@ $$
 {
     \partial \mathcal{L}_{\text{CE}}
     \over
-    \underline{\partial a_{\text{L}}}
+    \partial \underline{a_{\text{L}}}
 }
 {
-    \partial a_{\text{L}}
+    \partial \underline{a_{\text{L}}}
     \over
     \underline{\partial z_{\text{L}}}
 }
 $$
 
-To make the calculation of the derivative simpler we pick scalars instead of vectors so that
+To make the calculation of the derivative simpler we explicit the equation with scalars instead of vectors so that, given $$i, k \in [1..\text{P}]$$
 
 $$
 \begin{equation}
@@ -577,10 +586,7 @@ $$
 \end{equation}
 $$
 
-given $$i, k \in [1..\text{P}]$$
-
-
-Let's take the **first** component
+Unrolling the **first** component
 
 $$
 \begin{align*}
@@ -619,53 +625,110 @@ y_p =
 \end{cases}
 $$
 
-$$
-{\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
--
-{\partial \over \partial a_{\text{L},i}}
-\Big (
-    y_c
-    \log(a_{\text{L},c})
-\Big )
-$$
-
-So given the class c
+All the sum elements are equal to zero except when $$p = c$$
 
 $$
-\boxed{
-    {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}=
-    - \frac{1}{a_{\text{L},c}}
+\begin{align*}
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial a_{\text{L},k}
 }
+&=
+{
+    \partial
+    \over
+    \partial a_{\text{L},k}
+}
+\Big (
+    - \log(\hat{y_{c}})
+\Big )
+\end{align*}
+$$
+
+And then
+
+$$
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial a_{\text{L},k}
+}
+=
+\begin{cases}
+    0 & \text{if \(k \neq c\) } \\
+    - {1 \over a_{\text{L},c}} & \text{if \(k = c\) }
+\end{cases}
 $$
 
 > :alien: *alien says* :speech_balloon:<br>
 > Having said that we omit a constant during the logarithm derivative calculation
 
+So for all $$k \in [1..\text{P}]$$
+
+$$
+\boxed{
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial a_{\text{L},k}}
+        =
+        - y_k \frac{1}{a_{\text{L},k}
+    }
+}
+$$
+
 Then we take the **second** component
 
 $$
 \begin{align}
-{\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
+{
+    \partial a_{\text{L},k}
+    \over\partial z_{\text{L},i}
+}
 &=
-{\partial \over \partial z_{\text{L},i}}
+{
+    \partial
+    \over
+    \partial z_{\text{L},i}
+}
 \Big (
-    g_{\text{L}}(z_{\text{L},i})
+    g_{\text{L}}(z_{\text{L},k})
 \Big )\\
 &=
-{\partial \over \partial z_{\text{L},i}}
+{
+    \partial
+    \over
+    \partial z_{\text{L},i}
+}
 \Big (
-    \frac{\mathrm{e}^{z_{\text{L},i}}}{\sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}}}
-\Big )\\
+    \frac{
+        \mathrm{e}^{z_{\text{L},k}}}
+        {\sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}}}
+\Big )
+\end{align}
+$$
+
+Taking the case when $$k = i$$
+
+$$
+\begin{align}
+{
+    \partial a_{\text{L},i}
+    \over\partial z_{\text{L},i}
+}
 &=
-\frac{ \mathrm{e}^{z_{\text{L},i}} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}} - \big ( \mathrm{e}^{z_{\text{L},i}} \big ) ^2}
-{ \big ( \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},k}} \big ) ^ 2} \\
+\frac{
+    \mathrm{e}^{z_{\text{L},i}} \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},i}} - \big ( \mathrm{e}^{z_{\text{L},i}} \big ) ^2}
+    {\big ( \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}} \big ) ^ 2} \\
 &=
-\frac{ \mathrm{e}^{z_{\text{L},i}} }
-{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},i}} }
+\frac{
+    \mathrm{e}^{z_{\text{L},i}}}
+    { \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}} }
 -
 \big (
-\frac{ \mathrm{e}^{z_{\text{L},i}} }
-{ \sum_{k=1}^{\text{P}} \mathrm{e}^{z_{\text{L},i}} }
+    \frac{ \mathrm{e}^{z_{\text{L},i}} }
+    { \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}} }
 \big ) ^2 \\
 &=
 g_{\text{L}}(z_{\text{L},i}) - g^2_{\text{L}}(z_{\text{L},i})
@@ -684,82 +747,246 @@ $$
 \end{equation}
 $$
 
-And the for the **third** component
+Taking the other case when $$k \neq i$$
 
 $$
 \begin{align}
-{\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
+{
+    \partial a_{\text{L},k}
+    \over\partial z_{\text{L},i}
+}
 &=
-{\partial \over \partial\Theta_{\text{L},ij}}
+{
+    \partial
+    \over
+    \partial z_{\text{L},i}
+}
+\Big (
+    \frac{
+        \mathrm{e}^{z_{\text{L},k}}}
+        {\sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}}}
+\Big )\\
+&=
+-
+{
+    \mathrm{e}^{z_{\text{L},i}}
+    \over
+    \big (
+        \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}}
+    \big ) ^2
+}
+\mathrm{e}^{z_{\text{L},k}}\\
+&=
+{
+    \mathrm{e}^{z_{\text{L},i}}
+    \over
+    \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}}
+}
+{
+    \mathrm{e}^{z_{\text{L},k}}
+    \over
+    \sum_{p=1}^{\text{P}} \mathrm{e}^{z_{\text{L},p}} 
+}
+\end{align}
+$$
+
+so
+
+$$
+\begin{align}
+\boxed{
+    {
+        \partial a_{\text{L},k}
+        \over\partial z_{\text{L},i}
+    }
+    =
+    - a_{\text{L},k} a_{\text{L},i}
+}
+\end{align}
+$$
+
+summing up
+
+$$
+\begin{align}
+\boxed{
+    {
+        \partial a_{\text{L},k}
+        \over\partial z_{\text{L},i}
+    }
+    =
+    \begin{cases}
+    - a_{\text{L},k} a_{\text{L},i} & \text{if \(i \neq k\) } \\
+    a_{\text{L},i}(1 - a_{\text{L},i}) & \text{if \(i = k\) }
+    \end{cases}
+}
+\end{align}
+$$
+
+Putting it together
+
+$$
+\begin{align}
+    \delta_{\text{L},i}
+    &=
+    - y_i {1 \over a_{\text{L},i}} a_{\text{L},i} (1 - a_{\text{L},i})\\
+    &+ \sum_{k \neq i}^{\text{P}} y_k {1 \over a_{\text{L},k}} a_{\text{L},i} a_{\text{L},k}\\
+    &=
+    - y_i (1 - a_{\text{L},i}) + \sum_{k \neq i}^{\text{P}} y_k a_{\text{L},i}\\
+    &=
+    - y_i + a_{\text{L},i} y_i + a_{\text{L},i} \sum_{k \neq i}^{\text{P}} y_k\\
+    &=
+    - y_i + a_{\text{L},i} \sum_{k = 1}^{\text{P}} y_k
+\end{align}
+$$
+
+So that
+
+$$
+\boxed{
+\begin{align}
+    \delta_{\text{L},i}
+    &=
+    a_{\text{L},i} - y_i
+\end{align}
+}
+$$
+
+Coming back to the first expression
+
+$$
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial \underline{\underline{\Theta_{\text{L}}}}
+}
+=
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial \underline{z_{\text{L}}}
+}
+{
+    \partial \underline{z_{\text{L}}}
+    \over
+    \partial \underline{\underline{\Theta_{\text{L}}}}
+}
+$$
+
+and taking the scalar
+
+$$
+\begin{align}
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial \theta_{\text{L},ij}
+}
+&=
+\sum_{k=1}^{\text{P}}
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial z_{\text{L},k}
+}
+{
+    \partial z_{\text{L},k}
+    \over
+    \partial \theta_{\text{L},ij}
+}\\
+&=
+\sum_{k=1}^{\text{P}}
+\delta_{\text{L},k}
+{
+    \partial z_{\text{L},k}
+    \over
+    \partial \theta_{\text{L},ij}
+}
+\end{align}
+$$
+
+We then take the second part of the sum
+
+$$
+\begin{align}
+{
+    \partial z_{\text{L},k}
+    \over
+    \partial\theta_{\text{L},ij}
+}
+&=
+{
+    \partial
+    \over
+    \partial\theta_{\text{L},ij}
+}
 \Big (
     \underline{\underline{\Theta_{\text{L}}}} \underline{a_{\text{L}-1}}
-\Big )_i\\
+\Big )_k\\
 &=
 {\partial \over \partial\Theta_{\text{L},ij}}
 \Big (
-    \sum_{k=1}^{\text{H}_{\text{L}-1}} \theta_{\text{L},ik} a_{\text{L}-1,k}
+    \sum_{h=1}^{\text{H}_{\text{L}-1}} \theta_{\text{L},kh} a_{\text{L}-1,h}
 \Big )\\
 &=
 {\partial \over \partial\Theta_{\text{L},ij}}
 \Big (
-    \theta_{\text{L},i1} a_{\text{L}-1,1} + \cdots + \theta_{\text{L},ik} a_{\text{L}-1,k} + \cdots + \theta_{\text{L},iH_{\text{L}-1}} a_{\text{L}-1,H_{\text{L}-1}}
+    \theta_{\text{L},k1} a_{\text{L}-1,1} + \cdots + \theta_{\text{L},kh} a_{\text{L}-1,h} + \cdots + \theta_{\text{L},kH_{\text{L}-1}} a_{\text{L}-1,H_{\text{L}-1}}
 \Big )
 \end{align}
 $$
 
-The derivative is equal to zero when $$j \neq k$$ so for $$j = k$$
+So
 
 $$
 \boxed{
-    {\partial z_{\text{L},i} \over \partial\Theta_{\text{L},ij}}
+    {\partial z_{\text{L},i} \over \partial\theta_{\text{L},ij}}
     =
-    a_{\text{L}-1,j}
+    \begin{cases}
+        a_{\text{L}-1,j} & \text{if \(i = k\) and \(j = h\) } \\
+        0 & \text{else}
+    \end{cases}
 }
 $$
 
-Then putting it together with the chained derivation
+and finally
 
 $$
 \begin{align}
-    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\theta_{\text{L},ij}}
     &=
-    \underbrace{
-        {\partial \mathcal{L}_{\text{CE}} \over \partial a_{\text{L},i}}
-        {\partial a_{\text{L},i} \over \partial z_{\text{L},i}}
-    }_{\delta_{\text{L},i}}
-    {\partial z_{\text{L},i} \over \partial \Theta_{\text{L},ij}} \\
+    {\partial \mathcal{L}_{\text{CE}} \over \partial z_{\text{L},i}}
+    {\partial z_{\text{L},i} \over \partial \theta_{\text{L},ij}} \\
     &=
-    - \frac{1}{a_{\text{L},i}} a_{\text{L},i} (1 - a_{\text{L},i}) a_{\text{L}-1,j}
+    \sum_{k \neq i}^{\text{P}} \delta_{\text{L},k} \times 0
+    + \delta_{\text{L},i} (a_{\text{L}-1,j})
 \end{align}
 $$
 
 $$
 \begin{equation}
-\boxed{
-    {\partial \mathcal{L}_{\text{CE}} \over \partial\Theta_{\text{L},ij}}
+\boxed{\boxed{
+    {\partial \mathcal{L}_{\text{CE}} \over \partial\theta_{\text{L},ij}}
     =
-    \sum_{i=k}^{\text{P}}
-    (a_{\text{L},k} - 1) a_{\text{L}-1,j}
-}
+    (a_{\text{L},i} - y_i) a_{\text{L-1},j}
+}}
 \end{equation}
 $$
 
-As $$\underline{a_{\text{L}}}$$ and $$\underline{a_{\text{L}-1}}$$ are row vectors, the previous equation can be vectorized
-
-!!!!!!!!!!
+As $$\underline{a_{\text{L}}}$$, $$\underline{a_{\text{L}-1}}$$ and $$\underline{y}$$ are row vectors, the previous equation can be vectorized
 
 $$
     {\partial \mathcal{L}_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
     =
-    (\underline{a_{\text{L}}} - 1)^{\text{T}} \underline{a_{\text{L}-1}}
+    (\underline{a_{\text{L}}} - \underline{y})^{\text{T}} \underline{a_{\text{L}-1}}
 $$
 
-.. and summed up over the M training examples
+.. and summing it over the M training examples
 
 $$
     {\partial E_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
     =
-    \frac{1}{M} \sum_{k=1}^{M} (\underline{a_{\text{L},k}} - 1)^{\text{T}} \underline{a_{\text{L}-1,k}}
+    \frac{1}{M} \sum_{k=1}^{M} (\underline{a_{\text{L},k}} - \underline{y_k})^{\text{T}} \underline{a_{\text{L}-1,k}}
 $$
 
 ### Breaking the hidden layers
@@ -770,111 +997,272 @@ Given $$i \in [1..\text{H}_{\ell}]$$, $$j \in [1..\text{H}_{\ell-1}]$$ and $$\un
 $$
 \begin{equation}
 \boxed{
-    {\partial \mathcal{L}_{\text{CE}} 
-        \over 
-    \partial\Theta_{\ell,ij}}
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial \underline{\underline{\Theta_{\ell}}}
+    }
     =
-    \sum_{k=1}^{\text{H}_{\ell}}
-    {\partial \mathcal{L}_{CE}
+    \underbrace{
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial \underline{a_{\ell}}
+    }
+    {
+        \partial \underline{a_{\ell}}
+        \over
+        \partial \underline{z_{\ell}}
+    }}_{\underline{\delta_{\ell}}}
+    {
+        \partial \underline{z_{\ell}}
         \over 
-    \partial a_{\ell,k}}
-    {\partial a_{\ell,k}
-        \over 
-    \partial z_{\ell,k}}
-    {\partial z_{\ell,k}
-        \over 
-    \partial\Theta_{\ell,ij}}
+        \partial \underline{\underline{\Theta_{\ell}}}
+    }
 }
 \end{equation}
 $$
 
-Let's take the **first** component and apply the chain rule of derivation.
-
+We first take the $$ \underline{\delta_{\ell}}$$ and unroll it.
 Given $$ z_{\text{L}+1}, a_{\ell+1}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ z_{\text{L}}, a_{\ell}  \in \mathbb{R}^{H_{\ell}} $$ and $$ \delta_{\ell} \in \mathbb{R}^{H_{\ell}}$$
 
 $$
+\begin{align}
+    \underline{\delta_{\ell}}
+    &=
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial \underline{z_{\ell}}
+    }\\
+    &=
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial \underline{a_{\ell}}
+    }
+    {
+        \partial \underline{a_{\ell}}
+        \over
+        \partial \underline{z_{\ell}}
+    }\\
+    &=
+    \underbrace{
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial \underline{a_{\ell+1}}
+    }
+    {
+        \partial \underline{a_{\ell+1}}
+        \over
+        \partial \underline{z_{\ell+1}}
+    }}_{\delta_{\ell+1}}
+    {
+        \partial \underline{z_{\ell+1}}
+        \over
+        \partial \underline{a_{\ell}}
+    }
+    {
+        \partial \underline{a_{\ell}}
+        \over
+        \partial \underline{z_{\ell}}
+    }
+\end{align}
+$$
+
+So for $$\ell \in [1..\text{L-}1]$$, with $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$
+
+$$
+\begin{align}
+\underline{\delta_{\ell}}
+=
+\underline{\delta_{\ell+1}}
+{
+    \partial \underline{z_{\ell+1}}
+    \over
+    \partial \underline{a_{\ell}}
+}
+{
+    \partial \underline{a_{\ell}}
+    \over
+    \partial \underline{z_{\ell}}
+}
+\end{align}
+$$
+
+We then calculate
+
+$$
+\begin{align}
+{
+    \partial \mathcal{L}_{CE}
+    \over
+    \partial \underline{a_{\ell}}
+}
+=
+\underline{\delta_{\ell + 1}}
+{
+    \partial \underline{z_{\ell+1}}
+    \over
+    \partial \underline{a_{\ell}}
+}
+\end{align}
+$$
+
+Picking scalar elements, $$\forall i \in [1..H_{\ell}]$$ and $$\forall k \in [1..H_{\ell+1}]$$
+
+$$
+\begin{align}
+{
+    \partial \mathcal{L}_{CE}
+    \over
+    \partial a_{\ell,i}
+}
+=
+\sum_{k=1}^{H_{\ell+1}}
+\delta_{\ell + 1, k}
+{
+    \partial z_{\ell+1,k}
+    \over
+    \partial a_{\ell,i}
+}
+\end{align}
+$$
+
+and then the second element of the sum is
+
+$$
+\begin{align}
+{\partial z_{\ell+1,k}
+    \over 
+\partial a_{\ell,i}}
+&=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\big (
+    \underline{\underline{\Theta_{\ell + 1}}} \underline{a_{\ell}}
+\big )_k \\
+&=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\Big (
+    \sum^{H_{\ell}}_{h=1} \theta_{\ell + 1,kh} a_{\ell,h}
+\Big ) \\
+&=
+{\partial
+    \over 
+\partial a_{\ell,i}}
+\big (
+    \theta_{\ell + 1,k1} a_{\ell,1} + \cdots + \theta_{\ell + 1,kh} a_{\ell,h} + \cdots + \theta_{\ell + 1,kH_{\ell}} a_{\ell,H_{\ell}}
+\big )
+\end{align}
+$$
+
+Derivatives are nulls if $$ i \neq h $$, with $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$, we have
+
+$$
 \begin{equation}
 \boxed{
-    {\partial \mathcal{L}_{CE}
-        \over 
-    \partial a_{\ell,i}}
-    =
-    \sum^{H_{\ell+1}}_{k=1}
-    {\partial \mathcal{L}_{CE}
-        \over 
-    \partial a_{\ell+1,k}}
-    {\partial a_{\ell+1,k}
-        \over 
-    \partial z_{\ell+1,k}}
     {\partial z_{\ell+1,k}
         \over 
     \partial a_{\ell,i}}
+    =
+    \theta_{\ell + 1,ki}
 }
 \end{equation}
 $$
 
-We define
+Finally
 
 $$
-\boxed{
-    \delta_{\ell,i}
-    =
-    {\partial \mathcal{L}_{CE}
-        \over 
-    \partial a_{\ell,i}}
-    {\partial a_{\ell,i}
-        \over 
-    \partial z_{\ell,i}}
-}
-$$
-
-With $$ \underline{\delta_{\ell + 1}} \in \mathbb{R}^{H_{\ell+1}} $$, the **first two** components are equals to
-
-$$
-\boxed{
-    \Big (
-    {\partial \mathcal{L}_{CE}
-        \over 
-    \partial a_{\ell,i}}
-    {\partial a_{\ell,i}
-        \over 
-    \partial z_{\ell,i}}
-    \Big )
-    =
-    \delta_{\ell+1,k}
-}
-$$
-
-As we go backward, $$ \underline{\delta_{\ell+1}} $$ has already been calculated, so we have:
-
-* For
-$$\ell = \text{L}: \boxed{\delta_{\text{L},i} = a_{\text{L},i} - 1}$$
-
-* For $$ \ell \neq \text{L}:$$
-$$
-\begin{equation}
-    \delta_{\ell,i}
-    =
-    -\frac{1}{a_{\ell,i}}
-    { 
+\begin{align}
+\boxed
+{
+    {
+        \partial \mathcal{L}_{CE}
+        \over
         \partial a_{\ell,i}
-        \over
-        \partial z_{\ell, i}
     }
     =
-    -\frac{1}{a_{\text{L},i}}
-    { 
-        \partial
-        \over
-        \partial z_{\ell, i}
-    }
-    \big (
-        g_{\ell}(z_{\ell,i})
-    \big )
-\end{equation}
+    \sum_{k=1}^{H_{\ell+1}}
+    \delta_{\ell + 1, k}
+    \theta_{\ell + 1,ki}
+}
+\end{align}
 $$
 
-For the hidden layers, we took the sigmoid function as the activation function $$g_{\ell}$$
+We come back to the expression of $$\underline{\delta_{\ell}}$$
+
+$$
+\underline{\delta_{\ell}}
+=
+{
+    \partial \mathcal{L}_{CE}
+    \over
+    \partial \underline{a_{\ell}}
+}
+{
+    \partial \underline{a_{\ell}}
+    \over
+    \partial \underline{z_{\ell}}
+}
+$$
+
+once again, writing the formula for a single scalar element
+
+$$
+\begin{align}
+    \delta_{\ell,i}
+    &=
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial z_{\ell,i}
+    }\\
+    &=
+    \sum_{k=1}^{\text{H}_{\ell}}
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial a_{\ell,k}
+    }
+    {
+        \partial a_{\ell,k}
+        \over
+        \partial z_{\ell,i}
+    }
+\end{align}
+$$
+
+The first element of the sum has already been calculated, let's focus on the second. As we took the sigmoid function as the activation function $$g_{\ell}$$ for hidden layers, we have for all $$\ell \in [1..\text{L-}1]$$
+
+$$
+\begin{align}
+    {\partial a_{\ell,k}
+        \over 
+    \partial z_{\ell,i}}
+    &=
+    {\partial
+        \over 
+    \partial z_{\ell,i}}
+    \big (
+        g_{\ell}(z_{\ell,k})
+    \big )\\
+    &=
+    {\partial
+        \over 
+    \partial z_{\ell,i}}
+    \big (
+        \frac{1}
+        {1 + \mathrm{e}^{-z_{\ell,k}}}
+    \big )
+\end{align}
+$$
+
+When $$k=i$$
 
 $$
 \begin{align}
@@ -901,153 +1289,194 @@ $$
     \frac{1}{1+e^{-z_{\ell, i}}}\frac{-1+1+e^{-z_{\ell, i}}}{1+e^{-z_{\ell, i}}}
     \\&=
     \frac{1}{1+e^{-z_{\ell, i}}}(1-\frac{1}{1+e^{-z_{\ell, i}}})
+    \\&=
+    a_{\ell,i} ( 1 - a_{\ell,i})
 \end{align}
 $$
 
 So
 
 $$
-{ 
-    \partial
-    \over
-    \partial z_{\ell, i}
+\begin{align}
+\boxed{
+    {
+        \partial a_{\ell,k}
+        \over
+        \partial z_{\ell,i}
+    }
+    =
+    \begin{cases}
+        a_{\ell,i} (1 - a_{\ell,i}) & \text{if \(k = i\)} \\
+        0 & \text{if \(k \neq i\)}
+    \end{cases}
 }
-\big (
-    g_{\ell}(z_{\ell,i})
-\big )
-=
-a_{\ell,i} ( 1 - a_{\ell,i})
+\end{align}
 $$
 
-And
+Summing up
+
+$$
+\begin{align}
+    \delta_{\ell,i}
+    &=
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial z_{\ell,i}
+    }\\
+    &=
+    \sum_{k \neq i}^{\text{H}_{\ell}}
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial a_{\ell,k}
+    }
+    \times 0
+    +
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial a_{\ell,i}
+    }
+    a_{\ell,i} (1 - a_{\ell,i})
+\end{align}
+$$
 
 $$
 \begin{equation}
-\boxed{
+\boxed{\boxed{
     \delta_{\ell,i}
     =
-    a_{\ell,i} - 1
-}
-\end{equation}
-$$
-
-And for the **last** one
-
-$$
-\begin{align}
-{\partial z_{\ell+1,k}
-    \over 
-\partial a_{\ell,i}}
-&=
-{\partial
-    \over 
-\partial a_{\ell,i}}
-\big (
-    \underline{\underline{\Theta_{\ell + 1}}} \underline{a_{\ell}}
-\big )_k \\
-&=
-{\partial
-    \over 
-\partial a_{\ell,i}}
-\Big (
-    \sum^{H_{\ell}}_{c=1} \theta_{\ell + 1,kc} a_{\ell,c}
-\Big ) \\
-&=
-{\partial
-    \over 
-\partial a_{\ell,i}}
-\big (
-    \theta_{\ell + 1,k1} a_{\ell,1} + \cdots + \theta_{\ell + 1,kc} a_{\ell,c} + \cdots + \theta_{\ell + 1,kH_{\ell}} a_{\ell,H_{\ell}}
-\big )
-\end{align}
-$$
-
-The derivatives are nulls if $$ i \neq c $$. Then for $$i = c$$
-
-$$
-\begin{equation}
-\boxed{
-    {\partial z_{\ell+1,k}
-        \over 
-    \partial a_{\ell,i}}
-    =
-    \theta_{\ell + 1,ki}
-}
-\end{equation}
-$$
-
-with $$ \underline{\underline{\Theta_{\ell + 1}}} \in \mathbb{R}^{H_{\ell+1} \times H_{\ell}} $$.
-
-Then for the **second** component, which is the same for all hidden layers
-
-$$
-\begin{align}
-    {\partial a_{\ell,i}
-        \over 
-    \partial z_{\ell,i}}
-    &=
-    {\partial
-        \over 
-    \partial z_{\ell,i}}
-    \big (
-        g_{\ell}(z_{\ell,i})
-    \big )\\
-    &=
-    {\partial
-        \over 
-    \partial z_{\ell,i}}
-    \big (
-        \frac{1}
-        {1 + \mathrm{e}^{z_{\ell,i}}}
-    \big )
-\end{align}
-$$
-
-$$
-\begin{equation}
-\boxed{
-    {\partial a_{\ell,i}
-        \over 
-    \partial z_{\ell,i}}
-    =
+    \Big (
+        \sum_{k=1}^{H_{\ell+1}}
+        \delta_{\ell + 1, k}
+        \theta_{\ell + 1,ki}
+    \Big )
     a_{\ell,i} (1 - a_{\ell,i})
-}
+}}
 \end{equation}
 $$
 
-And for the **third** component, which is the same as for the final/output layer
+Coming back to the expression of the derivative of the loss in regards to the weights
 
 $$
-\begin{equation}
-\boxed{
-    {\partial z_{\ell,i}
+\begin{align}
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial \underline{\underline{\Theta_{\ell}}}
+    }
+    &=
+    {
+        \partial \mathcal{L}_{CE}
+        \over
+        \partial \underline{z_{\ell}}
+    }
+    {
+        \partial \underline{z_{\ell}}
         \over 
-    \partial\Theta_{\ell,ij}}
-    =
-    a_{\ell-1,j}
+        \partial \underline{\underline{\Theta_{\ell}}}
+    } \\
+    &=
+    \underline{\delta_{\ell}}
+    {
+        \partial \underline{z_{\ell}}
+        \over 
+        \partial \underline{\underline{\Theta_{\ell}}}
+    }
+\end{align}
+$$
+
+Expliciting with scalars
+
+$$
+{
+    \partial \mathcal{L}_{\text{CE}}
+    \over
+    \partial \theta_{\ell,ij}
 }
-\end{equation}
+=
+\sum_{k=1}^{\text{H}_{\ell}}
+\delta_{\ell,k}
+{
+    \partial z_{\ell,k}
+    \over 
+    \partial \theta_{\ell,ij}
+}
+$$
+
+Taking the second element of the sum
+
+$$
+\begin{align}
+{
+    \partial z_{\ell,k}
+    \over
+    \partial\theta_{\ell,ij}
+}
+&=
+{
+    \partial
+    \over
+    \partial\theta_{\ell,ij}
+}
+\Big (
+    \underline{\underline{\theta_{\ell}}} \underline{a_{\ell-1}}
+\Big )_k\\
+&=
+{\partial \over \partial\theta_{\ell,ij}}
+\Big (
+    \sum_{h=1}^{\text{H}_{\ell-1}} \theta_{\ell,kh} a_{\ell-1,h}
+\Big )
+\end{align}
+$$
+
+So
+
+$$
+\boxed{
+    {\partial z_{\ell,i} \over \partial \theta_{\ell,ij}}
+    =
+    \begin{cases}
+        a_{\ell-1,j} & \text{if \(i = k\) and \(j = h\) } \\
+        0 & \text{else}
+    \end{cases}
+}
 $$
 
 **Finally**
 
 $$
+\begin{align}
+    {
+        \partial \mathcal{L}_{\text{CE}}
+        \over
+        \partial \theta_{\ell,ij}
+    }
+    &=
+    \sum_{k \neq i}^{\text{H}_{\ell}}
+    \delta_{\ell,k} \times 0
+    + \delta_{\ell,i} a_{\ell-1,j} \\
+    &=
+    \delta_{\ell,i} a_{\ell-1,j}
+\end{align}
+$$
+
+$$
 \begin{equation}
-\boxed{
+\boxed{\boxed{
     {\partial \mathcal{L}_{\text{CE}} 
         \over 
-    \partial\Theta_{\ell,ij}}
+    \partial \theta_{\ell,ij}}
     =
-    \sum_{i=1}^{\text{H}_{\ell}}
-    \big (
-        \sum^{H_{\ell+1}}_{k=1}
-        \delta_{\ell+1,k}
-        \theta_{\ell+1,ki}
-    \big )
-    a_{\ell,i}
-    (1 - a_{\ell,i})
+    \Big (
+        \sum_{k=1}^{H_{\ell+1}}
+        \delta_{\ell + 1, k}
+        \theta_{\ell + 1,ki}
+    \Big )
+    a_{\ell,i} (1 - a_{\ell,i})
     a_{\ell-1,j}
-}
+}}
 \end{equation}
 $$
 
@@ -1071,7 +1500,7 @@ $$
 > :alien: *alien says* :speech_balloon:<br>
 > $$\odot$$ represents the element wise product, or the Hadamart product.
 
-And summing up over the samples: 
+and summed over the samples: 
 
 $$
 {\partial E_{\text{CE}} 
@@ -1089,9 +1518,10 @@ $$
 \underline{a_{\ell-1,k}}
 $$
 
-# Sources
-* http://www.cs.cornell.edu/courses/cs5740/2016sp/resources/backprop.pdf
-* https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/06/ML_NeuralNetworks_SS18.pdf
-* https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf
-* https://math.libretexts.org/Bookshelves/Calculus/Book%3A_Calculus_(OpenStax)/14%3A_Differentiation_of_Functions_of_Several_Variables/14.5%3A_The_Chain_Rule_for_Multivariable_Functions
-* https://fr.wikipedia.org/wiki/Th%C3%A9or%C3%A8me_de_d%C3%A9rivation_des_fonctions_compos%C3%A9es
+And *that's it* !
+
+Writing this article, I found this sources really useful
+* [Backpropagation by J.G. Makin](http://www.cs.cornell.edu/courses/cs5740/2016sp/resources/backprop.pdf)
+* [Machine Learning course from University of Stuttgart](https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/06/ML_NeuralNetworks_SS18.pdf)
+* [Logistic Regression by Will Monroe](https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf)
+* [The Chain Rule for Multivariable Functions](https://math.libretexts.org/Bookshelves/Calculus/Book%3A_Calculus_(OpenStax)/14%3A_Differentiation_of_Functions_of_Several_Variables/14.5%3A_The_Chain_Rule_for_Multivariable_Functions)
