@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Simple tensorflow 2.0 optimization"
+excerpt: "Understanding function optimization with tensorflow 2.0"
 date:   2019-11-03
 categories: [tensorflow2.0, tf.keras.optimizers]
 ---

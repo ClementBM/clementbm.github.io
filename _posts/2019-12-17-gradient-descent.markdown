@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "The (detailled) mathematics behind neural networks"
+title:  "The (detailed) mathematics behind neural networks"
+excerpt: "A mathematic demonstration of a neural network optimization for multiclass classification"
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
