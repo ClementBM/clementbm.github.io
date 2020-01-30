@@ -1,6 +1,7 @@
 ---
 layout: post
-title:  "The (detailled) mathematics behind neural networks"
+title:  "The (detailed) mathematics behind neural networks"
+excerpt: "A mathematic demonstration of a neural network optimization for multiclass classification"
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
@@ -780,6 +781,7 @@ $$
 }
 \mathrm{e}^{z_{\text{L},k}}\\
 &=
+-
 {
     \mathrm{e}^{z_{\text{L},i}}
     \over
@@ -1027,7 +1029,7 @@ $$
 $$
 
 We first take the $$ \underline{\delta_{\ell}}$$ and unroll it.
-Given $$ z_{\text{L}+1}, a_{\ell+1}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ z_{\text{L}}, a_{\ell}  \in \mathbb{R}^{H_{\ell}} $$ and $$ \delta_{\ell} \in \mathbb{R}^{H_{\ell}}$$
+Given $$ \underline{z_{\text{L}+1}}, \underline{a_{\ell+1}}  \in \mathbb{R}^{H_{\ell+1}} $$ and $$ \underline{z_{\text{L}}}, \underline{a_{\ell}}, \underline{\delta_{\ell}}  \in \mathbb{R}^{H_{\ell}}$$
 
 $$
 \begin{align}
@@ -1060,7 +1062,7 @@ $$
         \partial \underline{a_{\ell+1}}
         \over
         \partial \underline{z_{\ell+1}}
-    }}_{\delta_{\ell+1}}
+    }}_{\underline{\delta_{\ell+1}}}
     {
         \partial \underline{z_{\ell+1}}
         \over
@@ -1523,7 +1525,97 @@ $$
 
 And *that's it* !
 
-Writing this article, I found this sources really useful
+## Summing things up
+
+Giving a dataset
+
+$$
+\mathcal{D} = \big \{(\underline{x_i}, \underline{y_i}) \big \}, \forall i \in [1..\text{M}]
+$$
+
+we define a neural network for multiclass classification as the function $$F$$
+
+$$
+\begin{align}
+    \mathbb{R}^{\text{N}} &\rightarrow \mathbb{R}^{\text{P}} \\
+    F:
+    \underline{x_i}
+    &\rightarrow
+    (f_{\Theta_{\text{L}}} \circ \cdots \circ f_{\Theta_{\ell}} \circ \cdots f_{\Theta_1})(\underline{x_i})
+    =
+    \underline{\hat{y_i}}
+\end{align}
+$$
+
+with sigmoid function for hidden layers
+
+$$
+g_{\ell}(\underline{z_{\ell, i}})
+=
+\frac{1}{1+e^{-\underline{z_{\ell, i}}}}
+$$
+
+and softmax for the final one
+
+$$
+g_{\text{L}}(\underline{z_{\text{L}, i}})
+=
+\frac{\mathrm{e}^{\underline{z_{\text{L},i}}}}{\sum_{k=1}^{\text{L}} \mathrm{e}^{z_{\text{L},ik}}}
+$$
+
+Using the cross entropy loss function 
+
+$$
+\begin{equation}
+    E_{\text{CE}}=
+    -{1 \over \text{M}} \sum_{i=1}^{\text{M}} \sum_{j=1}^{\text{P}} {y_{ij}} \log(\hat{y_{ij}}))
+\end{equation}
+$$
+
+we minimize the loss with a generalization of the "delta rule"
+
+$$
+\begin{equation}
+    \forall \ell \in [1..\text{L}],
+    \underline{\underline{\Theta_{\ell}}}^{(t+1)} = \underline{\underline{\Theta_{\ell}}}^{(t)} - \alpha{\partial E(\Theta_{\ell}^{(t)}) \over \partial\Theta_{\ell}}
+\end{equation}
+$$
+
+... backpropagating the error from the last layer to the hidden layers
+
+$$
+\begin{equation}
+    {
+        \partial E_{\text{CE}}
+        \over
+        \partial \underline{\underline{\Theta_{\ell}}}
+    }
+    =
+    \frac{1}{M} \sum_{k=1}^{M} \underline{\delta_{\ell,k}}^{\text{T}} \underline{a_{\ell-1,k}}
+\end{equation}
+$$
+
+with delta as
+
+$$
+\begin{equation}
+\underline{\delta_{\ell,k}}
+=
+\begin{cases}
+    \underline{a_{\ell,k}} - \underline{y_k} & \text{if \(\ell = \text{L}\) } \\
+    \underline{\delta_{\ell + 1, k}}
+    \underline{\underline{\Theta_{\ell + 1}}}
+    \odot
+    \underline{a_{\ell,k}}
+    \odot
+    (1 - \underline{a_{\ell,k}}) & \text{if \(\ell \in [1..\text{L-}1]\) }
+\end{cases}
+\end{equation}
+$$
+
+Thanks for reading !
+
+Writing this article, I found this resources really useful
 * [Backpropagation by J.G. Makin](http://www.cs.cornell.edu/courses/cs5740/2016sp/resources/backprop.pdf)
 * [Machine Learning course from University of Stuttgart](https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/06/ML_NeuralNetworks_SS18.pdf)
 * [Logistic Regression by Will Monroe](https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/220-logistic-regression.pdf)
