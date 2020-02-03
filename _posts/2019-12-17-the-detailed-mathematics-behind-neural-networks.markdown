@@ -212,11 +212,14 @@ $$
 {1 \over \text{P}} \sum_{j=1}^{\text{P}}(\hat{y_{ij}} - y_{ij})^2
 $$
 
-However, the MSE function (mean squared error) is not convex for multiclass classification neural networks, is it an advantage to have a convex function for the loss ?
+However, the MSE function (mean squared error) is not convex for a multiclass classification neural networks.
 
-In this case, our parametric model defines a distribution
+> :alien: *alien says* :speech_balloon:<br>
+> Is it an advantage to have a convex function for the loss ?
+
+As our parametric model defines a distribution
 $$p(\underline{y_i}|\underline{x_i};\Theta)$$
-and we use the principle of maximum likelihood. This means we use the **Negative Log Likelihood** (LLE) cost function. As we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution, it's better to specificy we are using the **Multiclass Cross-Entropy** Loss between the training data and the model distribution/model's prediction.
+, we can use the principle of maximum likelihood. This means we take the **Negative Log Likelihood** (LLE) cost function. As we'd like to predict the probability of a sample to be in one of P classes, given a multinomial distribution, it's better to specificy we are using the **Multiclass Cross-Entropy** Loss between the training data and the model distribution/model's prediction.
 
 $$
 \boxed{
