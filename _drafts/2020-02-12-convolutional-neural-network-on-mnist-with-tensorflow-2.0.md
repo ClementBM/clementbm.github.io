@@ -9,6 +9,8 @@ categories: [tensorflow2.0, tf.keras.optimizers]
 
 In this post we'll try tensorflow 2.0 custom model and custom loop on the famous MNIST dataset.
 We'll perform a multiclass classification, with a simple convolutional neural network.
+> The MNIST database of handwritten digits has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image. <br>
+> It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.
 
 ## Load useful packages
 ```python
@@ -21,10 +23,6 @@ import matplotlib.pyplot as plt
 ```
 
 ## Load the dataset
-> The MNIST database of handwritten digits has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image.
-> It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.
-
-Sourced from [here](http://yann.lecun.com/exdb/mnist/)
 
 ```python
 # Load
@@ -36,64 +34,129 @@ mnist_dataset = tf.keras.datasets.mnist.load_data()
 print('Train X shape ', x_train.shape)
 print('Train Y shape ', y_train.shape)
 
+#=> Train X shape  (60000, 28, 28)
+#=> Train Y shape  (60000,)
+
 # Test dataset shapes
 print('Test X shape ', x_test.shape)
 print('Test Y shape ', y_test.shape)
+
+#=> Test X shape  (10000, 28, 28)
+#=> Test Y shape  (10000,)
 ```
 
-{% highlight python %}
-#=> <tf.Variable 'UnreadVariable' shape=() dtype=int64, numpy=1000>
-#=> -2.9999943
-{% endhighlight %}
-
-### Explore
+### Explore images
 ```python
 valueCount = len(np.unique(x_train))
 minValue = np.min(x_train)
 maxValue = np.max(x_train)
-std = np.std(x_train)
-mean = np.mean(x_train)
-print("minValue:", minValue, ", maxValue:", maxValue, ", std:", std, ", mean:", mean)
+
+print("pixel unique values:", valueCount,
+      "\nminValue:", minValue,
+      "\nmaxValue:", maxValue)
+
+#=> pixel unique values: 256 
+#=> minValue: 0 
+#=> maxValue: 255 
 ```
 
-**Distribution** in the training and test sets
+### Explore labels
+```python
+labelCount = len(np.unique(y_train))
+minValue = np.min(y_train)
+maxValue = np.max(y_train)
+
+print("unique labels:", labelCount,
+      "\nminValue:", minValue,
+      "\nmaxValue:", maxValue)
+
+#=> unique labels: 10
+#=> minValue: 0
+#=> maxValue: 9
+```
+
+### Inspect density probability distribution over the training/test sets
+
 
 ```python
-H, edges = np.histogram(y_train)
+y_train_df = pd.DataFrame({'label': y_train})
+y_test_df = pd.DataFrame({'label': y_test})
+
+train = y_train_df.groupby(["label"], as_index=False)["label"].size() * 100 / mTrain
+test = y_test_df.groupby(["label"], as_index=False)["label"].size()* 100 / mTest
+
+traintest = pd.DataFrame({'train': train, 'test': test})
+print(traintest)
+
+#=>            train   test
+#=> label                  
+#=> 0       9.871667   9.80
+#=> 1      11.236667  11.35
+#=> 2       9.930000  10.32
+#=> 3      10.218333  10.10
+#=> 4       9.736667   9.82
+#=> 5       9.035000   8.92
+#=> 6       9.863333   9.58
+#=> 7      10.441667  10.28
+#=> 8       9.751667   9.74
+#=> 9       9.915000  10.09
 ```
 
 ```python
-plt.hist(y_train)
-plt.gca().set(title='Training set', ylabel='Frequency')
-plt.show()
+labels = np.arange(0,10)  # the x locations
+width = 0.35  # the width of the bars
 
-plt.hist(y_test)
-plt.gca().set(title='Test set', ylabel='Frequency')
+fig, ax = plt.subplots(figsize = (14,10))
+ax.bar(labels - width / 2, traintest['train'], width, label='train')
+ax.bar(labels + width / 2, traintest['test'], width, label='test')
+
+ax.set_ylabel('%')
+ax.set_xlabel('Label')
+ax.set_xticks(labels)
+ax.set_xticklabels(labels)
+ax.legend(loc='lower right')
+ax.set_title('Probability density on training and test set')
+
 plt.show()
 ```
+
+![Training set and test set density probability](/assets/2020-02-12/density-probabilty.png)
+
 We can see that probability distribution for the training set and the test set are pretty close. Then we can perform the test phase without skewed classes.
 
 ### Show image
 ```python
-showImage = x_train[0]
-showImage = showImage.reshape(28,28)
-plt.imshow(showImage, cmap=plt.get_cmap('gray_r'))
-plt.show()
+def show_image(image_number):
+  showImage = x_train[image_number]
+  showImage = showImage.reshape(28,28)
+  plt.imshow(showImage, cmap=plt.get_cmap('gray_r'))
+  plt.show()
 ```
 
-### Gather and prepare
 ```python
-# Get the data
+show_image(0)
+```
+![Number 5](/assets/2020-02-12/number-5.png)
+
+### Gather and prepare
+
+Reduce the samples from integers 0-255 to floating-point numbers 0.0-1.0
+
+Prepare for conv layer
+Add one dimension, because the first convolutional layer except 4D tensor [batch, in_height, in_width, in_channels]
+See https://www.tensorflow.org/api_docs/python/tf/nn/conv2d for more details
+
+```python
 def prepare_mnist_dataset(mnist_dataset):
   """
   Format MNIST dataset
   http://yann.lecun.com/exdb/mnist/
   """
   (x_train, y_train), (x_test, y_test) = mnist_dataset
-  # Reduce the samples from integers 0-255 to floating-point numbers 0.0-1.0
+  # Reduce the samples
   x_train, x_test = x_train / np.float32(255), x_test / np.float32(255)
   y_train, y_test = y_train.astype(np.int64), y_test.astype(np.int64)
-  # Prepare for convolutional layer
+  # Prepare for conv layer
   mTrain = x_train.shape[0]
   mTest = x_test.shape[0]
   x_train = x_train.reshape(mTrain, 28, 28, 1)
@@ -102,8 +165,9 @@ def prepare_mnist_dataset(mnist_dataset):
 ```
 **Prepare for conv layer**: Add one dimension, because the first convolutional layer except 4D tensor [batch, in_height, in_width, in_channels]. See https://www.tensorflow.org/api_docs/python/tf/nn/conv2d for more details.
 
+For perfect shuffling, a buffer size greater than or equal to the full size of the dataset is required.
+
 ```python
-# Shuffle the data
 def shuffle_batch_dataset(train_dataset, take_count, shuffle_count, batch_count):
   """
   Use tf.data to batch and shuffle the datasets
@@ -117,8 +181,10 @@ For perfect shuffling, a buffer size greater than or equal to the full size of t
 ## Define the model
 
 ```python
-# Define custom model
 class SimpleConvModel(Model):
+  """
+  Define custom model
+  """
   def __init__(self):
     super(SimpleConvModel, self).__init__()
 
@@ -154,18 +220,51 @@ while maintaining the content of the features that were highlighted
 by the convolution. \
 By specifying (2,2) for the MaxPooling, the effect is to quarter the size of the image.
 
+### Optimizer
+```python
+optimizerFunction = tf.keras.optimizers.Adam()
+```
+`tf.keras.optimizers.Adam()`
+
+Define loss function, optimizer, and metrics to measure model loss and accuracy\
+ADAM optimizer for (Adaptive Moment Estimation)\
+ADAM computes first and seconde order gradients
+
 ### Loss
-`tf.keras.losses.SparseCategoricalCrossentropy()`
-
-Computes the crossentropy loss between the labels and predictions.\
-https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy
-
 ```python
 trainLoss = tf.keras.losses.SparseCategoricalCrossentropy()
 # @tf.function
 def compute_loss(labels, logits):
   return trainLoss(labels, logits)
 ```
+
+`tf.keras.losses.SparseCategoricalCrossentropy()`
+
+Computes the crossentropy loss between the labels and predictions.\
+https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy
+
+### Accuracy
+```python
+# @tf.function
+def compute_accuracy(labels, logits):
+  predictions = tf.math.argmax(logits, axis=1)
+  return tf.math.reduce_mean(tf.cast(tf.math.equal(predictions, labels), tf.float32))
+```
+`tf.math.argmax`
+
+Returns the index with the largest value across axes of a tensor.
+
+`tf.math.reduce_mean`
+
+Computes the mean of elements across dimensions of a tensor.
+
+`tf.cast`
+
+Casts a tensor to a new type.
+
+`tf.math.equal`
+
+Returns the truth value of (x == y) element-wise.
 
 ## Action
 
@@ -175,6 +274,27 @@ def compute_loss(labels, logits):
 model = SimpleConvModel()
 model.build(input_shape=(None, 28, 28, 1))
 model.summary()
+```
+
+```python
+#=> Model: "simple_conv_model"
+#=> _________________________________________________________________
+#=> Layer (type)                 Output Shape              Param #   
+#=> =================================================================
+#=> conv2d (Conv2D)              multiple                  320       
+#=> _________________________________________________________________
+#=> max_pooling2d (MaxPooling2D) multiple                  0         
+#=> _________________________________________________________________
+#=> flatten (Flatten)            multiple                  0         
+#=> _________________________________________________________________
+#=> dense (Dense)                multiple                  692352    
+#=> _________________________________________________________________
+#=> dense_1 (Dense)              multiple                  1290      
+#=> =================================================================
+#=> Total params: 693,962
+#=> Trainable params: 693,962
+#=> Non-trainable params: 0
+#=> _________________________________________________________________
 ```
 
 ### Get the data prepared
@@ -187,22 +307,12 @@ model.summary()
 train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
 train_dataset_batch = shuffle_batch_dataset(train_dataset,
                         take_count = 60000,
-                        shuffle_count = 10000,
+                        shuffle_count = 60000,
                         batch_count = 64)
 
 # Test
 test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test))
 test_dataset_batch = test_dataset.batch(100)
-```
-
-### Optimizer
-`tf.keras.optimizers.Adam()`
-
-Define loss function, optimizer, and metrics to measure model loss and accuracy\
-ADAM optimizer for (Adaptive Moment Estimation)\
-ADAM computes first and seconde order gradients
-```python
-optimizerFunction = tf.keras.optimizers.Adam()
 ```
 
 ## Loop
@@ -231,8 +341,7 @@ for epoch in range(EPOCHS):
       
     # calculate gradients from model definition and loss
     gradients = tape.gradient(loss, model.trainable_variables)
-    # update model from gradients, apply_gradients(grads_and_vars, name=None)
-    # grads_and_vars: List of (gradient, variable) pairs.
+    # update model from gradients
     optimizerFunction.apply_gradients(zip(gradients, model.trainable_variables))
 
     trainLossAggregate(loss)
@@ -257,7 +366,23 @@ for epoch in range(EPOCHS):
         'train accuracy', train_accurarcies[-1],
         'test loss', test_losses[-1],
         'test accuracy', test_accurarcies[-1])
+  
+  signature_dict = {'model': tf.function(model, input_signature=[tf.TensorSpec(shape=[None, 28, 28, 1], dtype=tf.float32, name='prev_img')])}
+  saved_model_dir = 'mnist/epoch/{0}'.format(epoch)
+  tf.saved_model.save(model, saved_model_dir, signature_dict)
 ```
+
+Aggregation loss function
+
+`tf.keras.metrics.Mean`\
+https://www.tensorflow.org/api_docs/python/tf/keras/metrics/Mean
+
+Accuracy function
+
+`tf.keras.metrics.SparseCategoricalAccuracy(name="train_accuracy")`
+
+Calculates how often predictions matches integer labels.\
+https://www.tensorflow.org/api_docs/python/tf/keras/metrics/SparseCategoricalAccuracy
 
 ### Save
 ```python
@@ -320,3 +445,4 @@ Build the tf.keras model using the Keras model subclassing API
 * https://www.tensorflow.org/guide/keras#model_subclassing
 * https://matplotlib.org/3.1.0/gallery/lines_bars_and_markers/barchart.html#sphx-glr-gallery-lines-bars-and-markers-barchart-py
 * https://www.tensorflow.org/
+* [MNIST Database](http://yann.lecun.com/exdb/mnist/)
