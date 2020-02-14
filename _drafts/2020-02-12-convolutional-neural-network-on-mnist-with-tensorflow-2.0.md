@@ -7,10 +7,15 @@ categories: [tensorflow2.0, tf.keras.optimizers]
 ---
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-In this post we'll try tensorflow 2.0 custom model and custom loop on the famous MNIST dataset.
-We'll perform a multiclass classification, with a simple convolutional neural network.
+In this post we use tensorflow 2.0 custom model and custom loop on the famous MNIST dataset.
+We perform a multiclass classification with a simple convolutional neural network.
+
+Here is a brief presentation from the offical website
 > The MNIST database of handwritten digits has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image. <br>
 > It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data while spending minimal efforts on preprocessing and formatting.
+
+MNIST dataset however only contains 10 classes and it’s images are in the grayscale (1-channel). 
+Color images have three 3 channels, one for Red, Green, Blue
 
 ## Load useful packages
 ```python
@@ -20,6 +25,9 @@ from tensorflow.keras import Model
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 ```
 
 ## Load the dataset
@@ -77,15 +85,26 @@ print("unique labels:", labelCount,
 
 ### Inspect density probability distribution over the training/test sets
 
+```python
+def datasets_distribution(trainingset, testset):
+  """
+  Get distributions of the training and test set in one dataframe
+  :param trainingset: 
+  :param testset:
+  :return: dataframe containing distribution of the training and test set in percent
+  """
+  trainingset_df = pd.DataFrame({'label': trainingset})
+  testset_df = pd.DataFrame({'label': testset})
+
+  train = trainingset_df.groupby(["label"], as_index=False)["label"].size() * 100 / mTrain
+  test = testset_df.groupby(["label"], as_index=False)["label"].size()* 100 / mTest
+
+  traintest = pd.DataFrame({'train': train, 'test': test})
+  return traintest
+```
 
 ```python
-y_train_df = pd.DataFrame({'label': y_train})
-y_test_df = pd.DataFrame({'label': y_test})
-
-train = y_train_df.groupby(["label"], as_index=False)["label"].size() * 100 / mTrain
-test = y_test_df.groupby(["label"], as_index=False)["label"].size()* 100 / mTest
-
-traintest = pd.DataFrame({'train': train, 'test': test})
+traintest = datasets_distribution(y_train, y_test)
 print(traintest)
 
 #=>            train   test
@@ -101,6 +120,8 @@ print(traintest)
 #=> 8       9.751667   9.74
 #=> 9       9.915000  10.09
 ```
+
+We then want to plot an histogram of the distribution to see how balanced are the labels among samples, and among the training and test set.
 
 ```python
 labels = np.arange(0,10)  # the x locations
@@ -124,10 +145,15 @@ plt.show()
 
 We can see that probability distribution for the training set and the test set are pretty close. Then we can perform the test phase without skewed classes.
 
-### Show image
+### Show me an image
 ```python
-def show_image(image_number):
-  showImage = x_train[image_number]
+def show_image(dataset, image_index):
+  """
+  Args:
+    dataset (Tensor): MNIST dataset of dimension (None, 28, 28, 1)
+    image_index (integer): 
+  """
+  showImage = dataset[image_index]
   showImage = showImage.reshape(28,28)
   plt.imshow(showImage, cmap=plt.get_cmap('gray_r'))
   plt.show()
@@ -183,27 +209,29 @@ For perfect shuffling, a buffer size greater than or equal to the full size of t
 ```python
 class SimpleConvModel(Model):
   """
-  Define custom model
+  Custom convolutional model
   """
   def __init__(self):
     super(SimpleConvModel, self).__init__()
 
-    self.convLayer = Conv2D(32, (3,3), input_shape=(28, 28, 1), activation="relu")
-    self.maxPoolingLayer = MaxPooling2D(2, 2)
+    # Define sequential layers
+    self.convolution = Conv2D(32, (3,3), input_shape=(28, 28, 1), activation="relu")
+    self.max_pooling = MaxPooling2D(2, 2)
     self.flatten = Flatten()
-    self.denseLayer1 = Dense(128, activation="relu")
-    self.denseLayer2 = Dense(10, activation="softmax")
-    self.convolutionalLayerOutput = tf.constant(0)
+    self.dense = Dense(128, activation="relu")
+    self.softmax = Dense(10, activation="softmax")
+
+    # Save convolutional layer output as property
+    self.convolutional_output = tf.constant(0)
+    # Input signature for tf.saved_model.save()
+    self.input_signature = tf.TensorSpec(shape=[None, 28, 28, 1], dtype=tf.float32, name='prev_img')
 
   def call(self, inputs):
-    self.convolutionalLayerOutput = self.convLayer(inputs)
-    x = self.maxPoolingLayer(self.convolutionalLayerOutput)
+    self.convolutional_output = self.convolution(inputs)
+    x = self.max_pooling(self.convolutional_output)
     x = self.flatten(x)
-    x = self.denseLayer1(x)
-    return self.denseLayer2(x)
-  
-  def convolutionalLayerOutput():
-    return self.convolutionalLayerOutput
+    x = self.dense(x)
+    return self.softmax(x)
 ```
 
 `Conv2D(32, (3,3), input_shape=(28, 28, 1), activation="relu")`
@@ -315,6 +343,17 @@ test_dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test))
 test_dataset_batch = test_dataset.batch(100)
 ```
 
+### Save
+```python
+def save(model, epoch):
+  """
+  export saved model
+  """
+  signature_dict = {'model': tf.function(model, input_signature = [model.input_signature])}
+  saved_model_dir = 'mnist/epoch/{0}'.format(epoch)
+  tf.saved_model.save(model, saved_model_dir, signature_dict)
+```
+
 ## Loop
 
 ```python
@@ -367,9 +406,31 @@ for epoch in range(EPOCHS):
         'test loss', test_losses[-1],
         'test accuracy', test_accurarcies[-1])
   
-  signature_dict = {'model': tf.function(model, input_signature=[tf.TensorSpec(shape=[None, 28, 28, 1], dtype=tf.float32, name='prev_img')])}
-  saved_model_dir = 'mnist/epoch/{0}'.format(epoch)
-  tf.saved_model.save(model, saved_model_dir, signature_dict)
+  save(model, epoch)
+
+```
+
+```python
+#=> epoch 0 train loss 0.20436248 train accuracy 94.03333067893982 test loss 0.07500681 test accuracy 97.68999814987183
+#=> INFO:tensorflow:Assets written to: mnist/epoch/0/assets
+#=> epoch 1 train loss 0.06440167 train accuracy 98.0983316898346 test loss 0.05907348 test accuracy 98.03000092506409
+#=> INFO:tensorflow:Assets written to: mnist/epoch/1/assets
+#=> epoch 2 train loss 0.04284174 train accuracy 98.73666763305664 test loss 0.052099597 test accuracy 98.32000136375427
+#=> INFO:tensorflow:Assets written to: mnist/epoch/2/assets
+#=> epoch 3 train loss 0.031010678 train accuracy 99.05333518981934 test loss 0.040207263 test accuracy 98.69999885559082
+#=> INFO:tensorflow:Assets written to: mnist/epoch/3/assets
+#=> epoch 4 train loss 0.022623235 train accuracy 99.3066668510437 test loss 0.045790948 test accuracy 98.51999878883362
+#=> INFO:tensorflow:Assets written to: mnist/epoch/4/assets
+#=> epoch 5 train loss 0.016978111 train accuracy 99.49833154678345 test loss 0.03954892 test accuracy 98.71000051498413
+#=> INFO:tensorflow:Assets written to: mnist/epoch/5/assets
+#=> epoch 6 train loss 0.01201544 train accuracy 99.66166615486145 test loss 0.043141313 test accuracy 98.64000082015991
+#=> INFO:tensorflow:Assets written to: mnist/epoch/6/assets
+#=> epoch 7 train loss 0.009675883 train accuracy 99.71500039100647 test loss 0.038950354 test accuracy 98.72000217437744
+#=> INFO:tensorflow:Assets written to: mnist/epoch/7/assets
+#=> epoch 8 train loss 0.008462262 train accuracy 99.74166750907898 test loss 0.043463036 test accuracy 98.65999817848206
+#=> INFO:tensorflow:Assets written to: mnist/epoch/8/assets
+#=> epoch 9 train loss 0.0055311522 train accuracy 99.85166788101196 test loss 0.049176537 test accuracy 98.66999983787537
+#=> INFO:tensorflow:Assets written to: mnist/epoch/9/assets
 ```
 
 Aggregation loss function
@@ -384,13 +445,6 @@ Accuracy function
 Calculates how often predictions matches integer labels.\
 https://www.tensorflow.org/api_docs/python/tf/keras/metrics/SparseCategoricalAccuracy
 
-### Save
-```python
-"""
-export saved model
-"""
-tf.saved_model.save(model, 'mnist/1')
-```
 
 ### Plot losses and accuracies
 ```python
@@ -399,6 +453,7 @@ plt.plot(train_losses)
 plt.plot(test_losses)
 plt.show()
 ```
+![Losses](/assets/2020-02-12/losses.jpg)
 
 ```python
 # Train/Test accuracies
@@ -406,8 +461,65 @@ plt.plot(train_accurarcies)
 plt.plot(test_accurarcies)
 plt.show()
 ```
+![Accuracies](/assets/2020-02-12/accuracies.jpg)
 
-### Show me the convolutions
+### Confusion matrix, accuracies, precisions and recalls
+
+The accuracy is the percentage of predictions that are correct
+
+$$
+accuracy =
+$$
+
+The precision is
+
+$$
+precision = {
+  tp
+  \over
+  tp + fp
+}
+$$
+
+The recall is
+
+$$
+recall = {
+  tp
+  \over
+  tp + fn
+}
+$$
+
+```python
+def print_confusion(model, images, labels):
+  test_predictions = model(images.reshape(mTest, 28, 28, 1))
+  confusion = confusion_matrix(labels, np.argmax(test_predictions,axis=1))
+  confusion = confusion.astype('float64')
+
+  recalls = np.diagonal(confusion) / np.sum(confusion, axis=0)
+  precisions = np.diagonal(confusion) / np.sum(confusion, axis=1)
+  accuracy = compute_accuracy(labels, test_predictions)
+  precisions = np.append(precisions, accuracy.numpy())
+
+  accuracies = np.diagonal(confusion) / np.sum(confusion, axis=1)
+
+  confusion = np.round(confusion * 10000 / confusion.sum(axis=1)[:, np.newaxis])
+  np.fill_diagonal(confusion, accuracies)
+
+  confusion = np.vstack((confusion, recalls))
+  confusion = np.column_stack((confusion, precisions))
+  
+  fig = plt.figure(figsize = (14,10))
+  heatmap = sns.heatmap(confusion, annot=True, cbar=False, fmt='g', vmin=0, vmax=300)
+  heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize=14)
+  heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize=14)
+  plt.ylabel('True label')
+  plt.xlabel('Predicted label')
+  plt.plot()
+```
+
+### Show me what the networks see
 ```python
 VALUE_INDEX = 10
 
@@ -429,6 +541,9 @@ for convolutionIndex in range(0,model.convolutionalLayerOutput.shape[-1] - 1):
   plt.imshow(convolutionLayer, cmap=plt.get_cmap('gray_r'))
   plt.show()
 ```
+
+### Error analysis
+
 
 ## Autograph
 https://towardsdatascience.com/tensorflow-2-0-tf-function-and-autograph-af2b974cf4f7
