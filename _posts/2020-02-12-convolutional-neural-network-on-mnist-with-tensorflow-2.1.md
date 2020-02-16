@@ -8,7 +8,7 @@ categories: [tensorflow 2.1, confusion matrix, convolutional neural network]
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
-In this post we use tensorflow 2.0 custom model and custom loop on the famous MNIST dataset.
+In this post we use tensorflow 2.1 custom model and custom loop on the famous MNIST dataset.
 We perform a multiclass classification with a basic convolutional neural network.
 
 According to offical website, MNIST dataset is a database of handwritten digits. It contains a training and a test set. The digits have been size-normalized and centered in a fixed-size image. <br>
