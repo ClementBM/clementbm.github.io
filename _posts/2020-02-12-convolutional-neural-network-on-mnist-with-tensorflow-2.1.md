@@ -131,7 +131,7 @@ show_image(x_train, 0)
 ### Gather and prepare
 *see code ref:* [`prepare_mnist_dataset`](https://github.com/ClementBM/Experiment_DeepLearning_Convolutional_MNIST/blob/742cf88d908b1c101728828885382bc9f1bf2509/src/MnistUtils.py#L20)
 
-Here, we prepare the samples by converting them from integers (0-255) to floating-point numbers (0.0-1.0). Then we have to reshape the samples to fit the convolutional layer. Thus, we add one dimension, because the first convolutional layer except 4D tensor ([batch, in_height, in_width, in_channels]).
+Here, we prepare the samples by converting them from integers (0-255) to floating-point numbers (0.0-1.0). Then we have to reshape the samples to fit in the convolutional layer. Thus, we add one dimension, because the first convolutional layer expect a 4D tensor ([batch, in_height, in_width, in_channels]).
 
 ```python
 def prepare_mnist_dataset(mnist_dataset):
