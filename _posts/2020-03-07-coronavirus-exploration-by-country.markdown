@@ -77,6 +77,8 @@ This time, we remove the first useless data points from Italy. So be carefull re
 Let's now print the confirmed cases of Hubei and Italy with a 36 days (28 + 8) delay.
 ![Synchrony between Italy and France](/assets/2020-03-07/hubei-italy-lagged.png)
 
+It would be interesting to bring more factual data to interpret these plots. For instance, events, like date when China hardened its quarantine policy, or when the diagnostic method changed and leads to an increase of discovered cases.
+
 # Sources
 * [Coronavirus data](https://github.com/CSSEGISandData/COVID-19.git)
 * [Correlation and synchrony](https://towardsdatascience.com/four-ways-to-quantify-synchrony-between-time-series-data-b99136c4a9c9)
