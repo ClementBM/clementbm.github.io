@@ -62,7 +62,7 @@ Correlation between Italy and France seems to be higher when France is 6 days be
 ![Italy and France lagged](/assets/2020-03-07/italy-france-lagged.png)
 With human eyes, France appears to be 8 days behind and not 6 as we previously compute. Origin of the error may come from the data recorded before the epidemy starts in each country.
 
-### Hubei vs Italy: epidemy starts about 36 days later in Italy but what for the quarantine ?
+### Hubei vs Italy: epidemy starts about 36 days later in Italy but what's for the quarantine ?
 It's quite intersting to compare confirmed cases between Italy and the province of Hubei (Mainland China) because they have similar caracteristics in term of population and density.
 
 
