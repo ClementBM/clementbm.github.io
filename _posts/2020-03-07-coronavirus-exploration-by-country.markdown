@@ -5,9 +5,8 @@ excerpt: "A brief analysis of the confirmed cases of Coronavirus by country"
 date:   2020-03-07
 categories: [EDA, Coronavirus, time series]
 ---
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-Coronavirus is a virus that has been spreading globally, killing more than four thousand individuals. It is a major public health concern. The outbreak has been linked to a wet market in Wuhan which sold live animals including fish and birds – and not just dead ones. There are concerns that the source of the virus may be bats. A vaccine is being developed. However, most of the infections are mild, which means they do not pose a threat.
+Coronavirus is a virus that has been spreading globally, killing more than four thousand individuals. It is a major public health concern. The outbreak has been linked to a wet market in Wuhan which sold animals including fish and birds – and not just dead ones. There are concerns that the source of the virus may be bats. A vaccine is being developed. However, most of the infections are mild, which means they do not pose a threat.
 
 In this post, I perform a brief analyis of the data we have for now (last update on march 10th 2020).
 You can find the entire notebook at this [link](https://github.com/ClementBM/Experiment_Coronavius/blob/master/notebook/Coronavirus_By_Country.ipynb).
@@ -62,7 +61,7 @@ Correlation between Italy and France seems to be higher when France is 6 days be
 ![Italy and France lagged](/assets/2020-03-07/italy-france-lagged.png)
 With human eyes, France appears to be 8 days behind and not 6 as we previously compute. Origin of the error may come from the data recorded before the epidemy starts in each country.
 
-### Hubei vs Italy: epidemy starts about 36 days later in Italy but what's for the quarantine ?
+### Hubei vs Italy: epidemy starts about 37 days later in Italy but what's for the quarantine ?
 It's quite intersting to compare confirmed cases between Italy and the province of Hubei (Mainland China) because they have similar caracteristics in term of population and density.
 
 
@@ -74,17 +73,16 @@ It's quite intersting to compare confirmed cases between Italy and the province 
 This time, we removed the first useless data points from Italy. So be carefull reading the synchrony diagram because we removed the first 28 days.
 ![Synchrony between Italy and France](/assets/2020-03-07/hubei-italy-synchrony.png)
 
-Let's now print the confirmed cases of Hubei and Italy with a 36 days (28 + 8) delay.
+Let's now print the confirmed cases of Hubei and Italy with a 37 days (28 + 9) delay.
 ![Synchrony between Italy and France](/assets/2020-03-07/hubei-italy-lagged.png)
 
-Despite a relative small error which should be minimize by using a filter (Kalman or rolling window ?), what's strike me the most here is the delta between the quarantine policies. *Hubei* quarantine occurs the 25th of january whereas the quarantine of *Italy* occurs on the 10th of march, which is equivalent to the 2nd of february, if we overlap the curves. It's more than we week delay !
+Despite a relative small error which should be minimize by using a filter (Kalman or rolling window ?), what's strike me the most here is the delta between the quarantine policies. *Hubei* quarantine occurs the 25th of january whereas the quarantine of *Italy* occurs on the 10th of march, which is equivalent to the 2nd of february, if we overlap the curves. It's more than a week delay !
 
-Now that we compare the quarantine delay, let's evaluate the quarantine effect, that is, after what period of time seems the quarantine to slow down the propagation ?
-On the following graph we fit the evolution of the confirmed cases to a sigmoid function, which enables us to have an evaluation of the point of inflexion, when the declaration of new cases starts to decrease.
+Now that we compared the quarantine delay, let's evaluate the quarantine effect, that is, after what period of time seems the quarantine to slow down the propagation ?
+On the following graph we fit the evolution of the confirmed cases in China to a sigmoid function, which enables us to have an evaluation of the point of inflexion, when the declaration of new cases starts to decrease.
 
 ![China fit to sigmoid function](/assets/2020-03-07/fit-china-sigmoid.png)
 For China, the point of inflexion seems to be around 14 days after the quarantine event. Will it be the same for Italy ?
-
 
 # Sources
 * [Coronavirus data](https://github.com/CSSEGISandData/COVID-19.git)
