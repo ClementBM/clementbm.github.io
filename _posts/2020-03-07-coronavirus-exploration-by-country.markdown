@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Time serie analysis on Coronavirus data"
+title:  "Time series analysis on Coronavirus data"
 excerpt: "A brief analysis of the confirmed cases of Coronavirus by country"
 date:   2020-03-07
 categories: [EDA, Coronavirus, time series]
@@ -88,3 +88,6 @@ For China, the point of inflexion seems to be around 14 days after the quarantin
 * [Coronavirus data](https://github.com/CSSEGISandData/COVID-19.git)
 * [Correlation and synchrony](https://towardsdatascience.com/four-ways-to-quantify-synchrony-between-time-series-data-b99136c4a9c9)
 * Intro has been written with the help of [gpt-2](https://github.com/openai/gpt-2)
+
+# Related post
+* [Age distribution analysis on Coronavirus data]({% post_url 2020-03-08-coronavirus-south-korean-distribution %})
