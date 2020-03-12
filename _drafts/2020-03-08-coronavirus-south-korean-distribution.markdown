@@ -60,3 +60,5 @@ Apparently how have a guiness record here ! Well, more seriously, despite the fa
 * [Wiki](https://en.wikipedia.org/wiki/2020_coronavirus_outbreak_in_South_Korea)
 * [South Korea](https://abcnews.go.com/international/massive-coronavirus-testing-program-south-korea-underscores-nimble/story?id=69226222)
 * Intro has been written with the help of [gpt-2](https://github.com/openai/gpt-2)
+* https://edition.cnn.com/2019/06/03/health/south-korea-age-law-intl/index.html
+* https://www.theguardian.com/inequality/2017/aug/02/south-koreas-inequality-paradox-long-life-good-health-and-poverty
