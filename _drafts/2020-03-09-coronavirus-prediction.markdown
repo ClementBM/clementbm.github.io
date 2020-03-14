@@ -7,6 +7,36 @@ categories: [Prediction, Coronavirus]
 ---
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+## Prediction with S curve
+
+Taking the sigmoid function as the S curve:
+$$
+y(x)
+=
+{
+    c
+    \over
+    1 + e^{-k(x - x_0)}
+}
++ y0
+$$
+
+## Prediction with gaussian
+
+Taking the gaussian:
+$$
+c
+{
+    e^{
+        {
+            -(x - x_0)^2
+            \over
+            2 \sigma^2
+        }
+    }
+}
+$$
+
 ## Prediction with SIR model
 To understand the trend of infection, we will use mathematical epidemic model. We start to discuss the trend using a basic model named SIR model.
 
