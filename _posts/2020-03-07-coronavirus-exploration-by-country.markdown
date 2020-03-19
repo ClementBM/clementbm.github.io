@@ -6,6 +6,8 @@ date:   2020-03-07
 categories: [EDA, Coronavirus, time series]
 ---
 
+*Updated on march 10th 2020*
+
 Coronavirus is a virus that has been spreading globally, killing more than four thousand individuals. It is a major public health concern. The outbreak has been linked to a wet market in Wuhan which sold animals including fish and birds – and not just dead ones. There are concerns that the source of the virus may be bats. A vaccine is being developed. However, most of the infections are mild, which means they do not pose a threat.
 
 In this post, I perform a brief analyis of the data we have for now (last update on march 10th 2020).
@@ -84,10 +86,11 @@ On the following graph we fit the evolution of the confirmed cases in China to a
 ![China fit to sigmoid function](/assets/2020-03-07/fit-china-sigmoid.png)
 For China, the point of inflexion seems to be around 14 days after the quarantine event. Will it be the same for Italy ?
 
+# Related posts
+* [Age distribution analysis on Coronavirus data]({% post_url 2020-03-08-coronavirus-south-korean-distribution %})
+* [Prediction on Coronavirus data]({% post_url 2020-03-18-coronavirus-prediction %})
+
 # Sources
 * [Coronavirus data](https://github.com/CSSEGISandData/COVID-19.git)
 * [Correlation and synchrony](https://towardsdatascience.com/four-ways-to-quantify-synchrony-between-time-series-data-b99136c4a9c9)
 * Intro has been written with the help of [gpt-2](https://github.com/openai/gpt-2)
-
-# Related post
-* [Age distribution analysis on Coronavirus data]({% post_url 2020-03-08-coronavirus-south-korean-distribution %})

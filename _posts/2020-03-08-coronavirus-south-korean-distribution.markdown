@@ -6,6 +6,8 @@ date:   2020-03-08
 categories: [Distribution, Coronavirus]
 ---
 
+*Updated on march 12th 2020*
+
 South Korea is testing people for COVID-19 at an impressive rate and faster than all other countries who have been reporting confirmed cases. This shows an impressive and significant lab capacity. The nation offers a unique opportunity for countries that are dealing with the new coronavirus.
 
 In this post, I use publicly available data from the Official information of Coronavirus disease 2019 in South Korea, whose repository is located [here](https://github.com/jihoo-kim/Coronavirus-Dataset). You can find the entire notebook at this [link](https://github.com/ClementBM/Experiment_Coronavius/blob/master/notebook/Coronavirus_Korea_Distribution.ipynb).
@@ -75,6 +77,10 @@ For a total of 55 released cases:
 ![Balanced distribution of released cases](/assets/2020-03-08/normed-disitribution-released-cases.png)
 Unfortunately, number of released cases are too little at the moment, which makes it hard to draw conclusions.
 
+# Related posts
+* [Time series analysis on Coronavirus data]({% post_url 2020-03-07-coronavirus-exploration-by-country %})
+* [Prediction on Coronavirus data]({% post_url 2020-03-18-coronavirus-prediction %})
+
 # Sources
 * [Coronavirus outbreau in South Korea](https://en.wikipedia.org/wiki/2020_coronavirus_outbreak_in_South_Korea)
 * [Testing program in South Korea](https://abcnews.go.com/international/massive-coronavirus-testing-program-south-korea-underscores-nimble/story?id=69226222)
@@ -82,6 +88,3 @@ Unfortunately, number of released cases are too little at the moment, which make
 
 [1]: https://www.theguardian.com/inequality/2017/aug/02/south-koreas-inequality-paradox-long-life-good-health-and-poverty
 [2]: https://edition.cnn.com/2019/06/03/health/south-korea-age-law-intl/index.html
-
-# Related post
-* [Time series analysis on Coronavirus data]({% post_url 2020-03-07-coronavirus-exploration-by-country %})

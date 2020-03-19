@@ -688,7 +688,8 @@ $$
 \begin{align}
 {
     \partial a_{\text{L},k}
-    \over\partial z_{\text{L},i}
+    \over
+    \partial z_{\text{L},i}
 }
 &=
 {
@@ -1613,8 +1614,10 @@ $$
 \end{equation}
 $$
 
-Thanks for reading !
+## Thanks
+I would like to give a special thank to [Vinh](https://github.com/vinh-tr) who help me with the tricky chain rule for derivation.
 
+# Sources
 Writing this article, I found this resources really useful
 * [Backpropagation by J.G. Makin](http://www.cs.cornell.edu/courses/cs5740/2016sp/resources/backprop.pdf)
 * [Machine Learning course from University of Stuttgart](https://ipvs.informatik.uni-stuttgart.de/mlr/wp-content/uploads/2018/06/ML_NeuralNetworks_SS18.pdf)
