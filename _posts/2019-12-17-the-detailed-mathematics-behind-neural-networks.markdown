@@ -1615,7 +1615,7 @@ $$
 $$
 
 ## Thanks
-I would like to give a special thank to [Vinh](https://github.com/vinh-tr) who help me with the tricky chain rule for derivation.
+I would like to give a special thank to [Vinh](https://github.com/vinh-tr) who helped me with the tricky chain rule for derivation.
 
 # Sources
 Writing this article, I found this resources really useful
