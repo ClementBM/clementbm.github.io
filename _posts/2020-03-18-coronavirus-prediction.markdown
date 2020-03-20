@@ -9,18 +9,18 @@ categories: [Prediction, Coronavirus]
 
 It is unlikely that the number of cases of Covid-19 reported in this blog post accurately represents the actual number of people infected by the novel coronavirus. There are various reasons to that.
 
-First, despite the fact that several countries publish total number of tests performered, there is no centralized database of COVID-19 testing.
+First, despite the fact that several countries publish total number of tests performed, there is no centralized database of COVID-19 testing.
 
 Second, countries have different testing strategies, while South Korea seems to test a lot, some Western countries like France or the US seem to have quiet a low testing rate per habitant.
 
 ![Balanced distribution of deceased cases](/assets/2020-03-19/covid-19-tests-country.png)
 
-Why testing is so important ? Because, we would want to know how many people are currently infected. As the rate of testing increase, the potential difference between the current cases and the confirmed cases decrease.
+Why testing is so important ? Because we would like to know how many people are currently infected. As the rate of testing increases, the potential difference between the current cases and the confirmed cases decreases.
 
 Third, there are several reasons why someone infected with COVID-19 may produce a false-negative result when tested:
 
 * early stage of the disease with low viral load might be hard to detect
-* when no major respiratory symptoms, there could be little detectable virus in the patient’s throat and nose
+* when no major respiratory symptoms, there could be too little virus quantity in the patient’s throat and nose
 * problem with sample collection, handling or shipping of samples and test materials
 
 What we know for sure, with little error, is the number of confirmed cases. That's the data will be focus on.
@@ -58,7 +58,7 @@ The data comes from the [Johns Hopkins University](https://systems.jhu.edu/resea
 ![France confirmed cases](/assets/2020-03-19/france-confirmed-cases-sigmoid.png)
 
 ### Sigmoid regression summary
-I compiled theses numbers in the following table. I omit the parameter $$y_0$$ as it's has expected very close to 0. However, I should have constrained $$y_0$$ to be greater or equal than zero. 
+I compiled theses numbers in the following table. I omit the parameter $$y_0$$ as it is, as expected, very close to 0. However, I should have constrained $$y_0$$ to be greater or equal than zero.
 * $$x_0$$ represents the point of inflexion. Geometrically speaking, the intersection between the curve and the vertical line of abscissa $$x_0$$ is a point of symmetry. 
 * $$c$$ represents the height of the curve. I also add the *max* confirmed cases which came by multipling $$c$$ with the current number of cumulative confirmed cases.
 * $$k$$ represents the steepness. The greater it is, the steeper the curve is.
@@ -70,8 +70,8 @@ I compiled theses numbers in the following table. I omit the parameter $$y_0$$ a
 | Italy | 19/03/2020 | 2.193 (78316) | 0.214 | 0.0056 |
 | France | 21/03/2020 | 2.927 (26655) | 0.255 | 0.0122 |
 
-We have to categories of countries here, the ones where the epidemic passed and the other.
-* The firsts have $$x_0$$ in the past and $$c$$ close to 1. Here again, $$c$$ should have been constrained to be greater or equal to 1, otherwise it can leads to miscalculation as in the case of Korea where $$c=0.985$$.
+We have two categories of countries here, the ones where the epidemic passed and the others.
+* The firsts have $$x_0$$ in the past and $$c$$ close to 1. Here again, $$c$$ should have been constrained to be greater or equal to 1, otherwise it can lead to miscalculation as in the case of Korea where $$c=0.985$$.
 * The others have $$c > 1$$ and $$x_0$$ in the future.
 
 :warning: Today is the 19th of march. The data has not been yet actualized so the last data available is from yesterday, the 18th of march.
@@ -101,7 +101,7 @@ c
 }
 $$
 
-Here, I had to extract the confirmed cases, the recovered and the deaths, and the calculate the currently known infected cases
+Here, I had to extract the confirmed cases, the recovered and the deaths, and then calculate the currently known infected cases:
 
 $$
 infected = confirmed - recovered - deaths
@@ -128,7 +128,7 @@ $$
 | Italy | 02/04/2020 | 68027 | 11.209 | 5.8x10⁶ |
 | France | 10/04/2020 | 71382 | 11.304 | 9.4x10⁵ |
 
-Here we can see that $$x_0$$ is ten to twenty days greater than before. Which gives a better estimation of the peak of the virus spread in France and Italy.
+Here we can see that $$x_0$$ is ten to twenty days greater than before. Which gives us a better estimation of the peak of the virus spread in France and Italy.
 
 ## Modeling with SIR
 On a different angle, we can also use a mathematical epidemic model to understand the trend of infection. Here we present the SIR model, for **S**usceptible **I**nfected **R**ecovered.
@@ -163,10 +163,9 @@ $$
 $$
 
 ## What we know about Coronavirus
-At the moment, the estimated basic reproduction number is betwen 2.5 and 5. We also know the population for each country but we won't use them in this particular model. From the data taken from the John Hopkins University, we can get all three temporal functions. The estimated days of infection is between 15 and 20 with a mean incubation period of 5-6 days.
+At the moment, the estimated basic reproduction number is betwen 2.5 and 5. We also know the population for each country but we won't use them in this particular model. With the data taken from John Hopkins University, we can get all three temporal functions. The estimated days of infection is between 15 and 20 with a mean incubation period of 5-6 days.
 
 Let's fit the data to multiple countries.
-
 
 ### Fitting China to SIR model
 ![China SIR](/assets/2020-03-19/china-sir.png)
@@ -189,11 +188,11 @@ Let's fit the data to multiple countries.
 | Italy | 42572 | 0.383 | 0.0395 | 25.5 | 9.75 |
 | France | 13415 | 0.344 | 0.0042 | 239.6 | 82.4 |
 
-First, we can drop the estimation with South Korea and France because the results for $$\gamma$$ seem pretty wrong. Indeed, it gives us a really high period of infection $$D$$ (as $$\gamma = { 1 \over D}$$).
+First, we can drop the estimation of South Korea and France because the results for $$\gamma$$ seem pretty wrong. Indeed, it gives us a really high period of infection $$D$$ ($$\gamma = { 1 \over D}$$).
 
 For Italy, the fit seems a little erroneous because the infected cases will surely continue to increase in the next few days before starting to decrease. This bad estimation may come from the fitting method I used.
 
-Finally, for China, despite that the loss is not optimal, the results are not too bad. The $$R_0$$ estimated here for China is 7.5, around two times geater than the one estimated by experts. SIR doesn't modelize the incubation period, and while and individual in incubation may be infectious, this model can be improved.
+Finally, for China, despite that the loss is not optimal, the results are not too bad. The $$R_0$$ estimated for China is 7.5, around two times geater than the one estimated by experts. In fact, SIR doesn't modelize the incubation period, and while and individual in incubation may be infectious, this model can be improved.
 
 Here is a graph from [annals.org](https://annals.org/aim/fullarticle/2762808/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported), showing the cumulative distribution of Covid-19 incubation period.
 ![Incubation](/assets/2020-03-19/proportion-of-symptomatic-cases.jpeg)
