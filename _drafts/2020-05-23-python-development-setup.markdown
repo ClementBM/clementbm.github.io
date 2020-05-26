@@ -21,6 +21,22 @@ source ~/.profile
 /!\ vscode share the same terminal instance ?
 ~/.bashrc
 
+### Configuration
+```shell
+python run import sys; print(sys.version); print(sys.executable)
+```
+
+**Configure bashrc**
+```bashrc
+alias python=python3
+alias pip=pip3
+```
+
+**Show installed package**
+```shell
+pip show <package_name>
+```
+
 ## Pipenv
 ### Pipenv
 ```shell
