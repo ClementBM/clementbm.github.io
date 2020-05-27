@@ -44,10 +44,24 @@ Advantages: cross platform
 Advanced settings
 Already built-in functionnalities
 
-Workspace settings
+### Renaming:
 
-Renaming:
-Snippets:
+### Snippets:
+
+### Debugging tools
+https://code.visualstudio.com/docs/editor/debugging
+
+### Workspace settings
+Configuration
+* settings.json
+
+* configuration python path
+PIPENV_VENV_IN_PROJECT 
+https://pipenv-fork.readthedocs.io/en/latest/advanced.html
+https://github.com/pypa/pipenv/issues/178
+
+### Platform-specific properties
+https://code.visualstudio.com/docs/editor/debugging#_platformspecific-properties
 
 ## Pipenv
 ### Pipenv
@@ -118,8 +132,11 @@ pipenv lock -r
 pipenv install <package> --dev
 ```
 
+## Formatter
+
 ## Coding rules ?
 
+flake8, pep8 ?
 ### Pylint
 ```shell
 pipenv install pylint --dev
@@ -159,6 +176,9 @@ pipenv install pyyaml
 ## Documentation
 Sphinx
 https://www.sphinx-doc.org/en/master/
+Latex ?
+
+Model design with **GraphViz** (integrated to Sphinx ?)
 
 ## Git
 ### Folder hierarchy
@@ -211,11 +231,11 @@ https://help.github.com/en/actions/configuring-and-managing-workflows/configurin
 * https://martin-thoma.com/configuration-files-in-python/
 
 Famous repo
-1| scikit-learn.
-2| Flask.
-3| Keras.
-4| Sentry.
-5| Django.
-6| Ansible.
-7| Tornado.
-8| Pandas.
+1| scikit-learn
+2| Flask
+3| Keras
+4| Sentry
+5| Django
+6| Ansible
+7| Tornado
+8| Pandas
