@@ -12,6 +12,8 @@ categories: [python, vscode]
 * One configuration per project (folder)
 * Default configuration ?
 
+Not a full setup environment, not SOLID, but could be assess in a next post.
+
 ## Prerequisite
 ### Brew
 https://brew.sh/
@@ -36,6 +38,16 @@ alias pip=pip3
 ```shell
 pip show <package_name>
 ```
+
+## IDE: VSCode
+Advantages: cross platform
+Advanced settings
+Already built-in functionnalities
+
+Workspace settings
+
+Renaming:
+Snippets:
 
 ## Pipenv
 ### Pipenv
@@ -106,6 +118,8 @@ pipenv lock -r
 pipenv install <package> --dev
 ```
 
+## Coding rules ?
+
 ### Pylint
 ```shell
 pipenv install pylint --dev
@@ -137,6 +151,15 @@ pipenv install ipykernel --dev
 pipenv install notebook --dev
 ```
 
+### Configuration settings YAML
+```shell
+pipenv install pyyaml
+```
+
+## Documentation
+Sphinx
+https://www.sphinx-doc.org/en/master/
+
 ## Git
 ### Folder hierarchy
 * Avoid space
@@ -149,18 +172,43 @@ git rebase
 ...
 ```
 
+- .github
+   - ISSUE_TEMPLATE.md
+   - PULL_REQUEST_TEMPLATE.md
+
+### .gitignore
+
+
 ## Continous integration
 build, test, package, release, or deploy 
 GitHub Actions powers GitHub's built-in continuous integration service
 Published Docker container image ?
+Travis, Jenkins ? but github action simpler, as I just want a really basic CI
+TOX ?
+
+to go further: Artifact and publishing package
+https://help.github.com/en/actions/publishing-packages-with-github-actions
+
+### Add a badge
+https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#adding-a-workflow-status-badge-to-your-repository
+
+![](https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_FILE_PATH>/badge.svg)
 
 # Sources
+* https://docs.brew.sh/Homebrew-on-Linux
+
+**Pipenv**
 * https://www.youtube.com/watch?v=zDYL22QNiWk
 * https://pipenv.pypa.io/en/latest/
 * https://code.visualstudio.com/docs/python/testing
 
+**CI in github**
 * https://help.github.com/en/actions/getting-started-with-github-actions/about-github-actions
 * https://help.github.com/en/actions/getting-started-with-github-actions/core-concepts-for-github-actions
+* https://github.com/marketplace?type=actions
+
+**Configuration files**
+* https://martin-thoma.com/configuration-files-in-python/
 
 Famous repo
 1| scikit-learn.
