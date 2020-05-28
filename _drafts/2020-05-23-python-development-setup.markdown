@@ -45,6 +45,7 @@ Advanced settings
 Already built-in functionnalities
 
 ### Renaming:
+F2
 
 ### Snippets:
 
@@ -56,7 +57,10 @@ Configuration
 * settings.json
 
 * configuration python path
-PIPENV_VENV_IN_PROJECT 
+PIPENV_VENV_IN_PROJECT
+```shell
+export PIPENV_VENV_IN_PROJECT=1
+```
 https://pipenv-fork.readthedocs.io/en/latest/advanced.html
 https://github.com/pypa/pipenv/issues/178
 
@@ -90,7 +94,11 @@ exit
 ### Update environment
 ```shell
 pipenv --rm
-pipenv install
+pipenv install --dev
+```
+
+```shell
+pipenv update ?
 ```
 
 Better way ?
@@ -151,6 +159,15 @@ pipenv install mypy --dev
 ```shell
 pipenv install pytest --dev
 ```
+
+## Editing
+https://code.visualstudio.com/docs/python/editing
+### Formatter: black
+https://github.com/psf/black
+```shell
+pipenv install black --dev --pre
+```
+https://github.com/Microsoft/vscode-python/issues/5171
 
 ## For Python interactive inside vscode
 ### Jupyter
