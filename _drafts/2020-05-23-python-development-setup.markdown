@@ -156,6 +156,8 @@ pipenv install <package> --dev
 ```
 
 ## Formatter
+add rules in `.editorconfig`
+https://github.com/django/django/blob/master/.editorconfig
 
 ## Coding rules ?
 
@@ -169,11 +171,15 @@ pipenv install pylint --dev
 ```shell
 pipenv install mypy --dev
 ```
+Configuration: mypy.ini
 
 ### Pytest
 ```shell
 pipenv install pytest --dev
 ```
+https://docs.pytest.org/en/latest/goodpractices.html
+
+Configuration: pytest.ini
 
 ## Editing
 https://code.visualstudio.com/docs/python/editing
@@ -183,6 +189,8 @@ https://github.com/psf/black
 pipenv install black --dev --pre
 ```
 https://github.com/Microsoft/vscode-python/issues/5171
+
+add `isort` to sort Python import definitions alphabetically within logical
 
 ## For Python interactive inside vscode
 Visual Sudio Code supports working with Jupyter Notebooks natively.
@@ -222,6 +230,91 @@ Latex ?
 
 Model design with **GraphViz** (integrated to Sphinx ?)
 
+```shell
+pipenv install sphinx --dev
+pipenv install sphinx_rtd_theme --dev
+```
+
+also `mkdocs`
+https://www.mkdocs.org/
+
+### Initialization
+```shell
+cd docs
+sphinx-quickstart
+```
+
+```markdown
+Bienvenue dans le kit de démarrage rapide de Sphinx 3.0.4.
+
+Please enter values for the following settings (just press Enter to
+accept a default value, if one is given in brackets).
+
+Selected root path: .
+
+You have two options for placing the build directory for Sphinx output.
+Either, you use a directory "_build" within the root path, or you separate
+"source" and "build" directories within the root path.
+> Séparer les répertoires build et source (y/n) [n]: 
+
+The project name will occur in several places in the built documentation.
+> Nom du projet: ClimbingBoard
+> Nom(s) de l'auteur: clementbm
+> version du projet []: 
+
+If the documents are to be written in a language other than English,
+you can select a language here by its language code. Sphinx will then
+translate text that it generates into that language.
+
+For a list of supported codes, see
+https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-language.
+> Langue du projet [en]: 
+
+Fichier en cours de création ./conf.py.
+Fichier en cours de création ./index.rst.
+Fichier en cours de création ./Makefile.
+Fichier en cours de création ./make.bat.
+
+Terminé : la structure initiale a été créée.
+
+You should now populate your master file ./index.rst and create other documentation
+source files. Use the Makefile to build the docs, like so:
+   make builder
+where "builder" is one of the supported builders, e.g. html, latex or linkcheck.
+```
+
+Edit `conf.py` file
+```python
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath("../src"))
+
+extensions = ["sphinx.ext.autodoc"]
+
+html_theme = "sphinx_rtd_theme"
+```
+
+Edit `index.rst` file
+```rst
+   modules
+```
+
+```shell
+cd docs
+# might delete *.rst (exept index.rst) files before
+sphinx-apidoc -o . ../src/climbingboard --ext-autodoc
+make html
+
+```
+
+## Python package
+
+`setup.py`
+* https://github.com/akaihola/darker/blob/master/setup.cfg
+* https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files
+
+
 ## Git
 ### Folder hierarchy
 * Avoid space
@@ -256,6 +349,11 @@ https://help.github.com/en/actions/configuring-and-managing-workflows/configurin
 
 ![](https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_FILE_PATH>/badge.svg)
 
+# Zen of Python
+```python
+import this
+```
+
 # Sources
 * https://docs.brew.sh/Homebrew-on-Linux
 
@@ -271,6 +369,9 @@ https://help.github.com/en/actions/configuring-and-managing-workflows/configurin
 
 **Configuration files**
 * https://martin-thoma.com/configuration-files-in-python/
+
+**Sphinx**
+* https://www.youtube.com/watch?v=b4iFyrLQQh4
 
 Famous repo
 1| scikit-learn
