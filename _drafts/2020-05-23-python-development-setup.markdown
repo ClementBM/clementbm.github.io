@@ -6,7 +6,22 @@ date:   2020-05-23
 categories: [python, vscode]
 ---
 
-# Requirements
+In this post we'll go through the entire setup of basic python project.
+It will cover:
+- IDE `vscode` which integrate really well with python
+- `git` as a revision control system
+- Virtual Environments with `pipenv`
+- Enforce coding rules through static code analysis tools
+   - `Pylint` looking for programming errors, helps enforcing a coding standard, sniffs for code smells and offers simple refactoring suggestions
+   - `mypy`: a static type checker
+- Code formatter `black`
+- Unit tests with `pytest`
+- Continuous integration with github `action`
+- Debugging with vscode and make use of th python interactive windows in vscode
+- Prepare project for packaging
+- Documentation with `sphinx`
+
+# My requirements
 * Cross plateform (windows, linux)
 * Works well with vscode
 * One configuration per project (folder)
@@ -34,7 +49,7 @@ alias python=python3
 alias pip=pip3
 ```
 
-**Show installed package**
+**Show information about installed package**
 ```shell
 pip show <package_name>
 ```
@@ -170,6 +185,16 @@ pipenv install black --dev --pre
 https://github.com/Microsoft/vscode-python/issues/5171
 
 ## For Python interactive inside vscode
+Visual Sudio Code supports working with Jupyter Notebooks natively.
+
+* Work with Jupyter-like code cells
+Run code in the Python Interactive Window
+* View, inspect, and filter variables using the Variable explorer and data viewer
+* Debug a Jupyter notebook
+* Export a Jupyter notebook
+
+https://code.visualstudio.com/docs/python/jupyter-support-py
+
 ### Jupyter
 ```shell
 pipenv install jupyter --dev
