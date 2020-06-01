@@ -25,7 +25,7 @@ It will cover:
 
 I took inspiration on one a the current famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this repository [darker](https://github.com/akaihola/darker). Hoping that the tools their using are durable and scale well to most python projects.
 
-This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project.
+This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of link if you want to dig deeper or know more about alternatives.
 
 ## My requirements
 My requirements might not be yours, there are mines:
@@ -288,6 +288,8 @@ Configuration: `pytest.ini`
 Test discovery alternatives:
 https://docs.pytest.org/en/latest/unittest.html#unittest-testcase
 
+TOX ?
+
 ## Documentation
 Sphinx
 https://www.sphinx-doc.org/en/master/
@@ -339,9 +341,10 @@ make html
 ```
 
 ## Python package
-`setup.py`
-* https://github.com/akaihola/darker/blob/master/setup.cfg
-* https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files
+By default, in python terminology, a folder is package, a file is a module, and that module contains definitions and statements. The file name is the module name with the suffix .py appended.
+__init__.py is required to import the directory as a regular package, and can simply be an empty file. More information [here](https://docs.python.org/3/reference/import.html#regular-packages).
+
+We then need a build script for [setuptools](https://packaging.python.org/key_projects/#setuptools). It tells setuptools about your package (such as the name and version) as well as which code files to include. It's commonly done in a `setup.py` located at the root of the repository. I personnaly prefer the configuration way, with a `setup.cfg` [file](https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files).
 
 ## Git
 * Download and install the [latest version of git](https://git-scm.com/downloads).
@@ -370,7 +373,10 @@ It's always good to have issue and pull request templates. These are located in
 ```
 
 ## Code coverage
-https://coverage.readthedocs.io/en/coverage-5.1/
+Coverage measurement is used to gauge the effectiveness of tests. It can show which parts of your code are being exercised by tests, and which are not.
+
+For this task we use [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.1/).
+Here is how you can install it with `pipenv`.
 
 ```shell
 pipenv install coverage --dev
@@ -381,32 +387,57 @@ coverage report  # prints to stdout
 coverage html  # creates ./htmlcov/*.html including annotated source
 ```
 
-https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts
+We can then upload it as an [artifact](https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts) with github action. It enables us to download the coverage report in github action tab.
 
-https://codecov.io/
-https://github.com/marketplace/codecov
+> Github integrates also with [codecov](https://github.com/marketplace/codecov), and make it easier to vizualise report.
 
-Add comment on a pull request
-https://github.com/thollander/actions-comment-pull-request
+> You can also add comment on a pull request with this [action](https://github.com/thollander/actions-comment-pull-request).
 
 ## Continous integration
-build, test, package, release, or deploy 
-GitHub Actions powers GitHub's built-in continuous integration service
-Published Docker container image ?
-Travis, Jenkins ? but github action simpler, as I just want a really basic CI
-TOX ?
+From [october 2018](https://github.blog/2018-10-17-action-demos/) GitHub Actions enables developers to automate, customize, and execute workflows directly in their repositories. By workflow, I mean build, test, package, release, or deploy your software.
+Besides the complete built-in continuous integration service within github, it has another two intersting features:
+* Built in secret store
+* Multi-container testing, to play with `docker-compose`
 
-to go further: Artifact and publishing package
-https://help.github.com/en/actions/publishing-packages-with-github-actions
+There are two well known service: [Travis](https://travis-ci.org/) and [Jenkins](https://www.jenkins.io/), but as my requirements are not that high, and for the sake of simplicity I choose github action.
 
-### Add a badge
-https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#adding-a-workflow-status-badge-to-your-repository
+> To go further: artifact and publishing package are common tasks, as if you want to register a Docker container image to a package provider, and are supported by github action. Go [there](https://help.github.com/en/actions/publishing-packages-with-github-actions) to know more about packaging.
 
+### Github Action: Add a badge
+You can easily add a [workflow status badge](https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#adding-a-workflow-status-badge-to-your-repository) associated with a github workflow.
+
+For example to show on your readme:
+```markdown
 ![](https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_FILE_PATH>/badge.svg)
+```
 
 ## Zen of Python
 ```python
 import this
+```
+
+```
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
 ```
 
 # Sources
@@ -427,3 +458,12 @@ import this
 
 **Sphinx**
 * https://www.youtube.com/watch?v=b4iFyrLQQh4
+
+**Package**
+* https://www.youtube.com/watch?v=UK97NoQK23k
+* http://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html
+* https://docs.python.org/3/reference/import.html
+* https://docs.python.org/3/tutorial/modules.html
+* https://packaging.python.org/tutorials/packaging-projects/
+* https://docs.python.org/3/glossary.html#term-portion
+* https://stackoverflow.com/questions/26667490/change-cwd-before-running-tests
