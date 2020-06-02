@@ -23,3 +23,10 @@ https://github.com/marketplace/actions/jekyll-actions
 
 [link](https://digitaldrummerj.me/jekyll-validating-links-and-images/)
 [link](https://www.supertechcrew.com/jekyll-check-for-broken-links/)
+
+https://help.github.com/en/actions/creating-actions/setting-exit-codes-for-actions
+
+**Problem matcher**
+https://github.com/actions/toolkit/blob/master/docs/commands.md#problem-matchers
+https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
+https://github.com/actions/setup-python/blob/master/.github/python.json
