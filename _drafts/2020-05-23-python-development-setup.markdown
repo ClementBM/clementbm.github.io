@@ -17,13 +17,13 @@ It will cover:
    - `mypy`: a static type checker
 - Code formatter `black`
 - Unit tests with `pytest`
-- Continuous integration with github `action`
-- Debugging with vscode and make use of th python interactive windows in vscode
+- Continuous integration with `github action`
+- Debugging with vscode and make use of `python interactive windows` in vscode
 - Prepare project for packaging
 - Documentation with `sphinx`
 - Code coverage with `coverage.py`
 
-I took inspiration on one a the current famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this repository [darker](https://github.com/akaihola/darker). Hoping that the tools their using are durable and scale well to most python projects.
+I took inspiration from famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this repository [darker](https://github.com/akaihola/darker). Hoping that the tools their using are durable and scale well to most python projects.
 
 This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of link if you want to dig deeper or know more about alternatives.
 
