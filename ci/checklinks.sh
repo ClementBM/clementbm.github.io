@@ -1,0 +1,1 @@
+bundle exec htmlproofer --log-level :debug ./_site > links.log && exit 0

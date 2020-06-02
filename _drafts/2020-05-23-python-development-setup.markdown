@@ -25,7 +25,7 @@ It will cover:
 
 I took inspiration from famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this repository [darker](https://github.com/akaihola/darker). Hoping that the tools their using are durable and scale well to most python projects.
 
-This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of link if you want to dig deeper or know more about alternatives.
+This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of links if you want to dig deeper or know more about alternatives.
 
 ## My requirements
 My requirements might not be yours, there are mines:
@@ -36,25 +36,6 @@ My requirements might not be yours, there are mines:
 * Default configuration ?
 
 Not a full setup environment, not SOLID, but could be assessed in a next post.
-
-## Prerequisites
-I personnaly used [`brew`](https://brew.sh/) to install `pipenv`, and thus to manage `python` too.
-I tested it on ubuntu `bionic` distribution, but it also works is macOS and Windows WSL. In my case, I had to add some paths to `~/.bashrc` file, but it's certainly better to read the complete [installation procedure](https://docs.brew.sh/Installation).
-
-:warning: with the integrated `vscode` terminal, it appears that sourcing the `~/.bashrc` file or equivalent is not sufficient. It also seems that `vscode` share the same terminal instance across windows.
-
-With [Brewfile](https://homebrew-file.readthedocs.io/en/latest/usage.html), `brew` enables configuration, that make easy first setup installation. Here is an example [file](https://github.com/getsentry/sentry/blob/master/Brewfile).
-
-> You can check version and installation path of your current python installation by running
-```shell
-python3 -c $'import sys; print(sys.version); print(sys.executable)'
-```
-
-> You also might want to create aliases in your `~/.bashrc` or equivalent to run python3 by default:
-```bashrc
-alias python=python3
-alias pip=pip3
-```
 
 ## Directory structure
 A basic git python project looks somethings like this:
@@ -138,12 +119,33 @@ Configurations is made through file located in the .vscode folder at root. Here 
 ## Pipenv
 [Pipenv](https://github.com/pypa/pipenv) automatically creates and manages a virtualenv for your projects, as well as adds/removes packages from your Pipfile as you install/uninstall packages. It also generates the ever-important Pipfile.lock, which is used to produce deterministic builds.
 
-### Pipenv: Installation
+## Pipenv: Setup
 For installation you may refer to the [official procedure](https://github.com/pypa/pipenv#installation).
-I personnaly make a global installation with `brew`:
+
+I personnaly used [`brew`](https://brew.sh/) to install `pipenv`, and thus to manage `python` too.
+
 ```shell
 brew install pipenv
 ```
+
+I tested it on ubuntu `bionic` distribution, but it also works is macOS and Windows WSL. In my case, I had to add some paths to `~/.bashrc` file, but it's certainly better to read the complete [installation procedure](https://docs.brew.sh/Installation).
+
+:warning: with the integrated `vscode` terminal, it appears that sourcing the `~/.bashrc` file or equivalent is not sufficient. It also seems that `vscode` share the same terminal instance across windows.
+
+With [Brewfile](https://homebrew-file.readthedocs.io/en/latest/usage.html), `brew` enables configuration, that make easy first setup installation. Here is an example [file](https://github.com/getsentry/sentry/blob/master/Brewfile).
+
+> You can check version and installation path of your current python installation by running
+```shell
+python3 -c $'import sys; print(sys.version); print(sys.executable)'
+```
+
+> You also might want to create aliases in your `~/.bashrc` or equivalent to run python3 by default:
+```bashrc
+alias python=python3
+alias pip=pip3
+```
+
+### Pipenv: Installation
 Since `pipenv` can manage different python versions via pyenv, it's preferable to have it set up globally instead of installing it only for a specific python version using pip.
 
 I think it can also work well with the official `sudo apt install pipenv` on Ubuntu.
