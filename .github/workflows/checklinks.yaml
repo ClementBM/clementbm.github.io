@@ -15,9 +15,14 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
-      - uses: helaili/jekyll-action@2.0.1
-        env:
-          JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
+      - name: Ruby
+        uses: action/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+      - name: Update Rubygems
+        run: 'gem update --system --no-document'
+      - name: Update Bundler
+        run: 'gem update bundler --no-document'
       - name: build jekyll site with drafts
         run: bundle exec jekyll build --drafts
       - name: check broken links

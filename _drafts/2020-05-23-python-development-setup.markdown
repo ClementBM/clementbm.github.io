@@ -92,7 +92,7 @@ A basic git python project looks somethings like this:
 ├── setup.cfg
 ```
 
-As you might suppose, none of the file or directory is random. You'll know more about these choices reading the post. It's worth noting that this structure might be familiar for most programers familiar with github and python. Major inspiration for the structure comes from [pytest good practices](https://docs.pytest.org/en/latest/goodpractices.html), other from famous repositories previously listed.
+As you might suppose, none of the files or directories are choosen randomly. You'll know more about these choices reading the post. It's worth noting that this structure might be familiar for most programers working with github and python. Major inspiration for the structure comes from [pytest good practices](https://docs.pytest.org/en/latest/goodpractices.html), other from famous repositories previously listed.
 
 > Just one reminder when naming your files ans directories, avoid spaces !
 
@@ -115,6 +115,17 @@ Run code in the Python Interactive Window
 * Debug a Jupyter notebook
 * Export a Jupyter notebook
 
+For the vscode interactive window to be active, you need these three packages: `jupyter`, `ipykernel` and `notebook`.
+Here are the installation commands with pipenv:
+```shell
+# Jupyter
+pipenv install jupyter --dev
+# ipykernel
+pipenv install ipykernel --dev
+# notebook
+pipenv install notebook --dev
+```
+
 ### Visual Studio Code: Workspace settings
 Workspace settings makes settings specific to a project, they make the development process easier and easily shareable with others.
 Configurations is made through file located in the .vscode folder at root. Here we present two
@@ -127,7 +138,7 @@ Configurations is made through file located in the .vscode folder at root. Here 
 ## Pipenv
 [Pipenv](https://github.com/pypa/pipenv) automatically creates and manages a virtualenv for your projects, as well as adds/removes packages from your Pipfile as you install/uninstall packages. It also generates the ever-important Pipfile.lock, which is used to produce deterministic builds.
 
-### Installation
+### Pipenv: Installation
 For installation you may refer to the [official procedure](https://github.com/pypa/pipenv#installation).
 I personnaly make a global installation with `brew`:
 ```shell
@@ -148,7 +159,7 @@ See [doc](https://pipenv-fork.readthedocs.io/en/latest/advanced.html) for detail
 "python.pythonPath": ".venv/bin/python"
 ```
 
-### Some basic pipenv commands
+### Pipenv: some basic commands
 **Open virtual environment**
 ```shell
 cd <project_directory>
@@ -170,7 +181,7 @@ pipenv install --dev
 pipenv install <package> --dev
 ```
 
-### Dependencies
+### Pipenv: manage dependencies
 **Import dependencies from requirement.txt**
 ```shell
 pipenv install -r <path_to_requirement.txt>
@@ -212,17 +223,6 @@ pipenv lock
 pipenv lock -r
 ```
 
-### Install common packages
-
-```shell
-# Jupyter
-pipenv install jupyter --dev
-# ipykernel
-pipenv install ipykernel --dev
-# notebook
-pipenv install notebook --dev
-```
-
 ## Restructure code with Formatting
 ### Black
 [`black`](https://github.com/psf/black) is code formatter which does not require configuration. It integrates with vscode as well.
@@ -255,27 +255,30 @@ pipenv install pylint --dev
 ```
 https://code.visualstudio.com/docs/python/linting
 
-[flake8](https://pypi.org/project/flake8/), [pep8](https://pypi.org/project/pycodestyle/)
+linters other than the default PyLint [flake8](https://pypi.org/project/flake8/), [pep8](https://pypi.org/project/pycodestyle/)
 
 ### Mypy
+[mypy](http://mypy-lang.org/) is static type checker. Since [type hint](https://docs.python.org/3/library/typing.html) were released in version `3.5` but as the Python runtime does not enforce function and variable type annotations, a type checker is needed if you want to enable type checking.
+Installation via pipenv:
 ```shell
 pipenv install mypy --dev
 ```
-
+Update the vscode `settings.json` file:
 ```json
 "python.linting.mypyEnabled": true
 ```
 
-Configuration: `mypy.ini`
+For the configuration of `mypy`, it uses by default the `mypy.ini` file with fallback to `setup.cfg`.
 
 ## Testing
 ### Pytest
-linters other than the default PyLint
+`pytest` full-featured Python testing tool. It is already used by a lot of repositories.
+Installation with pipenv: 
 ```shell
 pipenv install pytest --dev
 ```
-https://docs.pytest.org/en/latest/goodpractices.html
 
+Then update vscode `settings.json` file with these lines:
 ```json
 "python.testing.pytestEnabled": true,
 "python.testing.pytestArgs": [
@@ -283,12 +286,11 @@ https://docs.pytest.org/en/latest/goodpractices.html
 ]
 ```
 
-Configuration: `pytest.ini`
+To [customize pytest](https://docs.pytest.org/en/latest/customize.html), your configuration must go in either one of these files: `pytest.ini`, `tox.ini` and `setup.cfg`.
 
-Test discovery alternatives:
-https://docs.pytest.org/en/latest/unittest.html#unittest-testcase
+For discovery, `pytest` usually search for file called like `test_*.py` or `*_test.py` and then looks for function and methods prefixed by test. See [this](https://docs.pytest.org/en/latest/goodpractices.html#conventions-for-python-test-discovery) for the full explanation. As an alternative, `pytest` also discover natively [unittest](https://docs.pytest.org/en/latest/unittest.html#unittest-testcase) and nosetest.
 
-TOX ?
+I could not omit to talk about `tox`, a tool that automates and standardizes testing in Python. It integrates easily with `pytest`. What does `tox` do ? Basically it will creates a virtual environment a run the tests for you, as well as checking the package installation, and it make your life easier when you go in continuous integration workflow.  
 
 ## Documentation
 Sphinx
