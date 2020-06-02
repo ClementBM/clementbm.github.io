@@ -23,8 +23,8 @@ jobs:
         run: 'gem update --system --no-document'
       - name: Update Bundler
         run: 'gem update bundler --no-document'
-      - name: Install
-        run: 'gem install jekyll bundler'
+      # - name: Install
+      #   run: 'gem install jekyll bundler'
       - name: build jekyll site with drafts
         run: bundle exec jekyll build --drafts
       - name: check broken links
