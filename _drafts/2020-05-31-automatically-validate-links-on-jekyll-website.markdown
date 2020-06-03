@@ -33,3 +33,6 @@ https://github.com/actions/setup-python/blob/master/.github/python.json
 
 **On github action**
 https://tech.gadventures.com/things-i-learned-making-my-first-github-action-84f528a97015
+
+**Continue on error**
+https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
