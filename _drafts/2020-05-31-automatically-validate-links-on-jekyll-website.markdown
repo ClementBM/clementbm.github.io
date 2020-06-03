@@ -5,7 +5,7 @@ excerpt: "Automate jekyll website links checking with github action CI"
 date:   2020-05-31
 categories: [github action, jekyll, link checking]
 ---
-
+each Action runs within a Docker container, which is given a variety of context from Github (environment variables, the repository at hand)
 
 The action needs permissions to push to your gh-pages branch. So you need to create a GitHub authentication token on your GitHub profile, then set it as an environment variable in your build using Secrets:
 
@@ -30,3 +30,6 @@ https://help.github.com/en/actions/creating-actions/setting-exit-codes-for-actio
 https://github.com/actions/toolkit/blob/master/docs/commands.md#problem-matchers
 https://github.com/actions/toolkit/blob/master/docs/problem-matchers.md
 https://github.com/actions/setup-python/blob/master/.github/python.json
+
+**On github action**
+https://tech.gadventures.com/things-i-learned-making-my-first-github-action-84f528a97015
