@@ -5,40 +5,37 @@ excerpt: "Development setup with vscode, git, pipenv, mypy and pytest"
 date:   2020-05-23
 categories: [python, vscode]
 ---
+In this post we'll go through the entire setup of a basic python project. It will cover, in no particular order:
+- Directory structure [:link:](#directory-structure)
+- Virtual environments with `pipenv` [:link:](#pipenv)
+- IDE `vscode` which integrates really well with python [:link:](#visual-studio-code)
+- Enforce coding rules with static code analysis tools [:link:](#linters)
+   - `Pylint` looks for programming errors, helps enforcing a coding standard, sniffs for code smells and offers simple refactoring suggestions [:link:](#linters-pylint)
+   - `mypy`: a static type checker [:link:](#linters-mypy)
+- Code formatter `black` [:link:](#formatter)
+- Unit tests with `pytest` [:link:](#testing)
+- Code coverage with `coverage.py` [:link:](#code-coverage)
+- Prepare project for packaging [:link:](#python-package)
+- `git` as a revision control system [:link:](#git)
+- Continuous integration with `github action` [:link:](#continuous-integration)
+- Documentation with `sphinx` [:link:](#documentation)
 
-In this post we'll go through the entire setup of basic python project.
-It will cover:
-- Directory structure
-- IDE `vscode` which integrate really well with python
-- `git` as a revision control system
-- Virtual Environments with `pipenv`
-- Enforce coding rules through static code analysis tools
-   - `Pylint` looking for programming errors, helps enforcing a coding standard, sniffs for code smells and offers simple refactoring suggestions
-   - `mypy`: a static type checker
-- Code formatter `black`
-- Unit tests with `pytest`
-- Continuous integration with `github action`
-- Debugging with vscode and make use of `python interactive windows` in vscode
-- Prepare project for packaging
-- Documentation with `sphinx`
-- Code coverage with `coverage.py`
+I took inspiration from famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this [darker](https://github.com/akaihola/darker) repository. Hoping that the tools their using are durable and scale well to most python projects.
 
-I took inspiration from famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this repository [darker](https://github.com/akaihola/darker). Hoping that the tools their using are durable and scale well to most python projects.
+This post is not a complete walk through tutorial, its aim is to give you a starter point if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of links if you want to dig deeper or know more about alternatives.
 
-This post is not a complete walk through tutorial, its aim is to give you a starter point, if you are relatively new to python and you look for good practices on how to structure a python project. I also give a bunch of links if you want to dig deeper or know more about alternatives.
+The order of the post may look messy (yes, in fact it is), so feel free to just go to the part of your interest by clicking on the links in the index table above.
 
 ## My requirements
-My requirements might not be yours, there are mines:
+Here are some of my requirements:
 
 * Cross platform (Windows, macOS and Linux)
-* Works well with vscode
-* One configuration per project (folder)
-* Default configuration ?
-
-Not a full setup environment, not SOLID, but could be assessed in a next post.
+* Flawless integration with the IDE
+* One environment per project
+* Suitable for various python project (web app, desktop app, framework ...)
 
 ## Directory structure
-A basic git python project looks somethings like this:
+A basic python project looks something like this:
 ```
 .
 ├── .github/workflows
@@ -73,9 +70,69 @@ A basic git python project looks somethings like this:
 ├── setup.cfg
 ```
 
-As you might suppose, none of the files or directories are choosen randomly. You'll know more about these choices reading the post. It's worth noting that this structure might be familiar for most programers working with github and python. Major inspiration for the structure comes from [pytest good practices](https://docs.pytest.org/en/latest/goodpractices.html), other from famous repositories previously listed.
+As you might suppose, none of the files or directories are choosen randomly. You'll know more about these choices reading the post. It's worth noting that this structure might be familiar for most programers working with github and python. Indeed, inspiration for the structure comes from [pytest good practices](https://docs.pytest.org/en/latest/goodpractices.html), and from the repositories previously listed.
 
-> Just one reminder when naming your files ans directories, avoid spaces !
+> Just one reminder when naming your files and directories, avoid spaces !
+
+## Pipenv
+[Pipenv](https://github.com/pypa/pipenv) automatically creates and manages a virtualenv for your projects, as well as adds/removes packages from your Pipfile as you install/uninstall packages. It also generates the Pipfile.lock, which is used to produce deterministic builds.
+
+### Pipenv: setup
+For installation you may refer to the [official procedure](https://github.com/pypa/pipenv#installation).
+
+I personnaly used [`brew`](https://brew.sh/) to install `pipenv`, and thus to handle `python` too. Since `pipenv` can manage different python versions via pyenv, it's preferable to have it set up globally instead of installing it only for a specific python version using pip.
+
+```shell
+brew install pipenv
+```
+
+I tested it on ubuntu `bionic` distribution, but it also works on macOS and Windows with [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10). In my case, I had to add some paths to `~/.bashrc` file.
+
+:warning: with the integrated `vscode` terminal, it appears that sourcing the `~/.bashrc` file or equivalent is not sufficient. It also seems that `vscode` share the same terminal instance across windows.
+
+The [Brewfile](https://homebrew-file.readthedocs.io/en/latest/usage.html) configuration file makes the setup task easy. Feel free to look at this example [file](https://github.com/getsentry/sentry/blob/master/Brewfile).
+
+> You can check version and installation path of your current python installation by running
+```shell
+python3 -c $'import sys; print(sys.version); print(sys.executable)'
+```
+
+> You also might want to create aliases in your `~/.bashrc` or equivalent to run python3 by default:
+```bashrc
+alias python=python3
+alias pip=pip3
+```
+
+### Pipenv: custom settings
+In my case I wanted the virtual environment folder to be in the project directory. For that, pipenv offers a configuration which can be activated via the `PIPENV_VENV_IN_PROJECT` environment variable. Just set it in your `~/.bashrc` file or equivalent.
+
+```shell
+export PIPENV_VENV_IN_PROJECT=1
+```
+See [doc](https://pipenv-fork.readthedocs.io/en/latest/advanced.html) for details, this [tutorial](https://pipenv.pypa.io/en/latest/install/#virtualenv-mapping-caveat), and this [issue](https://github.com/pypa/pipenv/issues/178).
+
+And finally you can set your `.vscode/settings.json` with a fix virtual environment folder across projects:
+```json
+"python.pythonPath": ".venv/bin/python"
+```
+
+### Pipenv: some basic commands
+If you are completely new to `pipenv`, I highly recommend this [short tutorial](https://www.youtube.com/watch?v=zDYL22QNiWk).
+
+| Description | shell |
+| --- | --- |
+| Open virtual environment | `cd <project_directory>`<br>`pipenv shell` |
+| Exit virtual environment | `exit` |
+| First setup, install all packages | `pipenv install --dev` |
+| Add package | `pipenv install <package> --dev` |
+| Import dependencies from requirement.txt | `pipenv install -r <requirement.txt>` |
+| :warning: Locking may take a lot of time | `# => Locking [packages] dependencies...`<br>`# => Locking ...` |
+| Install dependencies from Pipfile.lock | `pipenv sync` |
+| Install dependencies from Pipfile.lock on system (for docker) | `pipenv install --system --deploy --ignore-pipfile` |
+| Update dev environment | `pipenv --rm`<br>`pipenv install --dev` |
+| Upgrade packages | `pipenv update` |
+| Update lock file | `pipenv lock` |
+| Display dependency in the requirement.txt fashion | `pipenv lock -r` |
 
 ## Visual Studio Code
 [Visual studio code](https://github.com/microsoft/vscode) is a versatile code editor, which natively integrates with `python`.
@@ -89,9 +146,9 @@ One of its advantages are:
 
 We present two more features that's worth noting: debugging and workspace settings.
 ### Visual Studio Code: Debugging tools
-Apart from the great [vscode debugging](https://code.visualstudio.com/docs/editor/debugging) support, `vscode` also supports working with Jupyter Notebooks natively, through the [Python interactive windows](https://code.visualstudio.com/docs/python/jupyter-support-py), which enables you to:
-* Work with Jupyter-like code cells
-Run code in the Python Interactive Window
+Apart from the great [vscode debugging](https://code.visualstudio.com/docs/editor/debugging) support, `vscode` also supports Jupyter Notebooks natively through the [Python interactive windows](https://code.visualstudio.com/docs/python/jupyter-support-py), which enables you to:
+* Work Jupyter-like code cells
+* Run code in the Python Interactive Window
 * View, inspect, and filter variables using the Variable explorer and data viewer
 * Debug a Jupyter notebook
 * Export a Jupyter notebook
@@ -116,123 +173,51 @@ Configurations is made through file located in the .vscode folder at root. Here 
 `settings.json` gather all general settings specific to the current project.
 `launch.json` specify the type of debugging scenarios. One cool thing about `launch.json` is that it has [Platform-specific properties](https://code.visualstudio.com/docs/editor/debugging#_platformspecific-properties) which means you can have specific launch commands depending on your OS.
 
-## Pipenv
-[Pipenv](https://github.com/pypa/pipenv) automatically creates and manages a virtualenv for your projects, as well as adds/removes packages from your Pipfile as you install/uninstall packages. It also generates the ever-important Pipfile.lock, which is used to produce deterministic builds.
+## Linters
+Linting enforces coding rules by highlighting syntactical and stylistic problems in your Python source code. It often helps you identify and correct subtle programming errors or unconventional coding practices that can lead to errors.
 
-## Pipenv: Setup
-For installation you may refer to the [official procedure](https://github.com/pypa/pipenv#installation).
+More details from [code.visualstudio.com](https://code.visualstudio.com/docs/python/linting):
+> For example, linting detects use of an uninitialized or undefined variable, calls to undefined functions, missing parentheses, and even more subtle issues such as attempting to redefine built-in types or functions. **Linting is thus distinct from Formatting because linting analyzes how the code runs and detects errors whereas formatting only restructures how code appears.**
 
-I personnaly used [`brew`](https://brew.sh/) to install `pipenv`, and thus to manage `python` too.
+### Linters: pylint
+By looking for programming errors `pylint` helps to enforce a coding standard. It also gives simple refactoring suggestions. `pylint` is the default linter for vscode.
 
+Installation via pipenv
 ```shell
-brew install pipenv
+pipenv install pylint --dev
 ```
 
-I tested it on ubuntu `bionic` distribution, but it also works is macOS and Windows WSL. In my case, I had to add some paths to `~/.bashrc` file, but it's certainly better to read the complete [installation procedure](https://docs.brew.sh/Installation).
-
-:warning: with the integrated `vscode` terminal, it appears that sourcing the `~/.bashrc` file or equivalent is not sufficient. It also seems that `vscode` share the same terminal instance across windows.
-
-With [Brewfile](https://homebrew-file.readthedocs.io/en/latest/usage.html), `brew` enables configuration, that make easy first setup installation. Here is an example [file](https://github.com/getsentry/sentry/blob/master/Brewfile).
-
-> You can check version and installation path of your current python installation by running
-```shell
-python3 -c $'import sys; print(sys.version); print(sys.executable)'
-```
-
-> You also might want to create aliases in your `~/.bashrc` or equivalent to run python3 by default:
-```bashrc
-alias python=python3
-alias pip=pip3
-```
-
-### Pipenv: Installation
-Since `pipenv` can manage different python versions via pyenv, it's preferable to have it set up globally instead of installing it only for a specific python version using pip.
-
-I think it can also work well with the official `sudo apt install pipenv` on Ubuntu.
-
-In my case I wanted the virtual environment package to be in the project directory. For that, pipenv offer a configuration which can be activated via the `PIPENV_VENV_IN_PROJECT` environment variable. Just set it in your `~/.bashrc` file or equivalent.
-
-```shell
-export PIPENV_VENV_IN_PROJECT=1
-```
-See [doc](https://pipenv-fork.readthedocs.io/en/latest/advanced.html) for details, and this [issue](https://github.com/pypa/pipenv/issues/178).
-
+And add this configuration line to the vscode `settings.json` file
 ```json
-"python.pythonPath": ".venv/bin/python"
+"python.linting.enabled": true
 ```
 
-### Pipenv: some basic commands
-**Open virtual environment**
+Out there, other linters are available: [flake8](https://pypi.org/project/flake8/), [pep8](https://pypi.org/project/pycodestyle/) (just to mention two of them).
+
+### Linters: mypy
+[mypy](http://mypy-lang.org/) is static type checker. Since [type hint](https://docs.python.org/3/library/typing.html) were released in version `3.5` but as the Python runtime does not enforce function and variable type annotations, a type checker is needed if you want to enable type checking.
+
+Installation via pipenv
 ```shell
-cd <project_directory>
-pipenv shell
+pipenv install mypy --dev
 ```
 
-**Exit virtual environment**
-```shell
-exit
+Update the vscode `settings.json` file
+```json
+"python.linting.mypyEnabled": true
 ```
 
-**First setup, install all packages**
-```shell
-pipenv install --dev
-```
+For the configuration of `mypy`, it uses by default the `mypy.ini` file with fallback to `setup.cfg`.
 
-**Add package**
-```shell
-pipenv install <package> --dev
-```
-
-### Pipenv: manage dependencies
-**Import dependencies from requirement.txt**
-```shell
-pipenv install -r <path_to_requirement.txt>
-```
-
-:warning: the locking part may take a lot of time
-```shell
-Locking [packages] dependencies...
-Locking ...
-```
-
-**Install dependencies from Pipfile.lock**
-```shell
-pipenv sync
-```
-
-on docker
-```shell
-pipenv install --system --deploy --ignore-pipfile
-```
-
-**Update environment**
-```shell
-pipenv --rm
-pipenv install --dev # install dev packages
-```
-
-```shell
-pipenv update
-```
-
-**Update lock file**
-```shell
-pipenv lock
-```
-
-**Display dependency in the requirement.txt fashion**
-```shell
-pipenv lock -r
-```
-
-## Restructure code with Formatting
+## Formatter
+Restructure your code with a formatting tool.
 ### Black
 [`black`](https://github.com/psf/black) is code formatter which does not require configuration. It integrates with vscode as well.
 
 ```shell
 pipenv install black --dev --pre
 ```
-Using the `--pre` switch was mandatory because black is not currently released. See [issue](https://github.com/Microsoft/vscode-python/issues/5171) for more information.
+Using the `--pre` switch was mandatory because black is not currently released. See this [issue](https://github.com/Microsoft/vscode-python/issues/5171) for more informations.
 
 To make it work with vscode I added this configuration lines in `settings.json`
 ```json
@@ -243,44 +228,19 @@ To make it work with vscode I added this configuration lines in `settings.json`
 ```
 
 It's also possible to sort Python import definitions alphabetically with `isort`.
-Another useful way to share coding styles accross IDEs is using the `.editorconfig`, see [this](https://editorconfig.org/) for more info.
 
-## Enforce coding rules with Linting
-### Pylint
-Linting highlights syntactical and stylistic problems in your Python source code, which oftentimes helps you identify and correct subtle programming errors or unconventional coding practices that can lead to errors. For example, linting detects use of an uninitialized or undefined variable, calls to undefined functions, missing parentheses, and even more subtle issues such as attempting to redefine built-in types or functions. Linting is thus distinct from Formatting because linting analyzes how the code runs and detects errors whereas formatting only restructures how code appears.
-
-```shell
-pipenv install pylint --dev
-```
-```json
-"python.linting.enabled": true
-```
-https://code.visualstudio.com/docs/python/linting
-
-linters other than the default PyLint [flake8](https://pypi.org/project/flake8/), [pep8](https://pypi.org/project/pycodestyle/)
-
-### Mypy
-[mypy](http://mypy-lang.org/) is static type checker. Since [type hint](https://docs.python.org/3/library/typing.html) were released in version `3.5` but as the Python runtime does not enforce function and variable type annotations, a type checker is needed if you want to enable type checking.
-Installation via pipenv:
-```shell
-pipenv install mypy --dev
-```
-Update the vscode `settings.json` file:
-```json
-"python.linting.mypyEnabled": true
-```
-
-For the configuration of `mypy`, it uses by default the `mypy.ini` file with fallback to `setup.cfg`.
+> Another useful way to share coding styles accross IDEs is using the `.editorconfig`, see [this](https://editorconfig.org/) for more info.
 
 ## Testing
 ### Pytest
-`pytest` full-featured Python testing tool. It is already used by a lot of repositories.
-Installation with pipenv: 
+`pytest` is a full-featured Python testing tool. It is already used by a lot of repositories.
+
+Installation with pipenv
 ```shell
 pipenv install pytest --dev
 ```
 
-Then update vscode `settings.json` file with these lines:
+Then update vscode `settings.json` file with these lines
 ```json
 "python.testing.pytestEnabled": true,
 "python.testing.pytestArgs": [
@@ -290,24 +250,44 @@ Then update vscode `settings.json` file with these lines:
 
 To [customize pytest](https://docs.pytest.org/en/latest/customize.html), your configuration must go in either one of these files: `pytest.ini`, `tox.ini` and `setup.cfg`.
 
-For discovery, `pytest` usually search for file called like `test_*.py` or `*_test.py` and then looks for function and methods prefixed by test. See [this](https://docs.pytest.org/en/latest/goodpractices.html#conventions-for-python-test-discovery) for the full explanation. As an alternative, `pytest` also discover natively [unittest](https://docs.pytest.org/en/latest/unittest.html#unittest-testcase) and nosetest.
+For discovery, `pytest` usually search for files called like `test_*.py` or `*_test.py` and then looks for functions and methods prefixed by test. See [this](https://docs.pytest.org/en/latest/goodpractices.html#conventions-for-python-test-discovery) for the full explanation. As an alternative, `pytest` also discover natively [unittest](https://docs.pytest.org/en/latest/unittest.html#unittest-testcase) and nosetest.
 
-I could not omit to talk about `tox`, a tool that automates and standardizes testing in Python. It integrates easily with `pytest`. What does `tox` do ? Basically it will creates a virtual environment a run the tests for you, as well as checking the package installation, and it make your life easier when you go in continuous integration workflow.  
+I could not omit to talk about `tox`, a tool that automates and standardizes testing in Python. It integrates easily with `pytest`. What does `tox` do ? Basically it will creates a virtual environment a run the tests for you, as well as checking the package installation. Consequently, it will make your life easier when you go for a continuous integration workflow.
+
+## Code coverage
+Coverage measurement is used to gauge the effectiveness of tests. It can show which parts of your code are being exercised by tests, and which are not.
+
+For this task we use [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.1/).
+Here is how you can install it with `pipenv`.
+
+```shell
+pipenv install coverage --dev
+pipenv shell
+coverage erase  # clears previous data if any
+coverage run --source='.src' -m pytest
+coverage report  # prints to stdout
+coverage html  # creates ./htmlcov/*.html including annotated source
+```
+
+We can then upload it as an [artifact](https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts) with github action. It enables us to download the coverage report in github action tab.
+
+> Github integrates also with [codecov](https://github.com/marketplace/codecov), and make it easier to vizualise report.
+
+> You can also add comment on a pull request with this [action](https://github.com/thollander/actions-comment-pull-request).
 
 ## Documentation
-Sphinx
-https://www.sphinx-doc.org/en/master/
-Latex ?
+[Sphinx](https://www.sphinx-doc.org/en/master/) is a tool that makes it easy to create intelligent and beautiful documentation. Originally created for the Python documentation, it's used by a wide range of projects. It can output the documentation in HTLM and LaTeX (among other formats).
 
-Model design with **GraphViz** (integrated to Sphinx ?)
+`Sphinx` has a lot of built-in extensions, just to name a few interesting ones:
+* sphinx.ext.coverage: collect doc coverage stats
+* sphinx.ext.graphviz: add graphiz graphs support, and combined it with `pyreverse` would be great.
+* sphinx.ext.mathjax: render math via javascript
 
+Installation with `pipenv`:
 ```shell
 pipenv install sphinx --dev
 pipenv install sphinx_rtd_theme --dev
 ```
-
-also `mkdocs`
-https://www.mkdocs.org/
 
 ### Documentation: initialization
 ```shell
@@ -344,11 +324,17 @@ sphinx-apidoc -o . ../src/climbingboard --ext-autodoc
 make html
 ```
 
+> [readthedocs](https://readthedocs.org/) is a service that allows you to create, host and browse documentation. It has a [complete tutorial](https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html) to integrate with `sphinx`
+
+> One alternative to sphinx is [`mkdocs`](https://www.mkdocs.org/).
+
 ## Python package
-By default, in python terminology, a folder is package, a file is a module, and that module contains definitions and statements. The file name is the module name with the suffix .py appended.
-__init__.py is required to import the directory as a regular package, and can simply be an empty file. More information [here](https://docs.python.org/3/reference/import.html#regular-packages).
+By default, in python terminology, a folder is package, a file is a module, and a module contains definitions and statements. The file name is the module name with the suffix .py appended.
+\__init__.py is required to import the directory as a regular package, and can simply be an empty file. More information [here](https://docs.python.org/3/reference/import.html#regular-packages).
 
 We then need a build script for [setuptools](https://packaging.python.org/key_projects/#setuptools). It tells setuptools about your package (such as the name and version) as well as which code files to include. It's commonly done in a `setup.py` located at the root of the repository. I personnaly prefer the configuration way, with a `setup.cfg` [file](https://setuptools.readthedocs.io/en/latest/setuptools.html#configuring-setup-using-setup-cfg-files).
+
+> If you are curious, take a look at [Poetry](https://python-poetry.org/), it makes python packaging and dependency management easy.
 
 ## Git
 * Download and install the [latest version of git](https://git-scm.com/downloads).
@@ -376,30 +362,9 @@ It's always good to have issue and pull request templates. These are located in
     └── PULL_REQUEST_TEMPLATE.md
 ```
 
-## Code coverage
-Coverage measurement is used to gauge the effectiveness of tests. It can show which parts of your code are being exercised by tests, and which are not.
-
-For this task we use [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.1/).
-Here is how you can install it with `pipenv`.
-
-```shell
-pipenv install coverage --dev
-pipenv shell
-coverage erase  # clears previous data if any
-coverage run --source='.src' -m pytest
-coverage report  # prints to stdout
-coverage html  # creates ./htmlcov/*.html including annotated source
-```
-
-We can then upload it as an [artifact](https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts) with github action. It enables us to download the coverage report in github action tab.
-
-> Github integrates also with [codecov](https://github.com/marketplace/codecov), and make it easier to vizualise report.
-
-> You can also add comment on a pull request with this [action](https://github.com/thollander/actions-comment-pull-request).
-
-## Continous integration
+## Continuous integration
 From [october 2018](https://github.blog/2018-10-17-action-demos/) GitHub Actions enables developers to automate, customize, and execute workflows directly in their repositories. By workflow, I mean build, test, package, release, or deploy your software.
-Besides the complete built-in continuous integration service within github, it has another two intersting features:
+Besides the complete built-in continuous integration service within github, it has another two interesting features:
 * Built in secret store
 * Multi-container testing, to play with `docker-compose`
 
@@ -415,10 +380,21 @@ For example to show on your readme:
 ![](https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_FILE_PATH>/badge.svg)
 ```
 
+## Next Steps
+### Project template and scaffolding
+There are various way to help creating a project from scratch, each one having its own specificity:
+* [yeoman](https://yeoman.io/): code generator ecosystem, cross platform and technology agnostic
+* [cookiecutter](https://github.com/cookiecutter/cookiecutter): a command line utility to create python projects from templates
+* [github template](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template): not a scaffolding tool, but an easy way to reuse a repository without having to fork it.
+
+### Database
+The choice of the database is a crucial point when designing an app.
+If your database has to be centralized, you can take a look at [Parse server](https://github.com/parse-community/parse-server) and [Firebase](https://firebase.google.com/docs/database/). Check this [article](https://medium.com/@brenda.clark/firebase-alternative-3-open-source-ways-to-follow-e45d9347bc8c) for more informations.
+
+If you want an easy to go local database, take a look at [tinydb](https://tinydb.readthedocs.io/en/latest/usage.html) a minimal document oriented database, and [ZODB](http://www.zodb.org/en/latest/) an object oriented database.
+
 ## Zen of Python
-```python
-import this
-```
+Just to remember, open python and run `import this`
 
 ```
 The Zen of Python, by Tim Peters
@@ -443,31 +419,3 @@ If the implementation is hard to explain, it's a bad idea.
 If the implementation is easy to explain, it may be a good idea.
 Namespaces are one honking great idea -- let's do more of those!
 ```
-
-# Sources
-* https://docs.brew.sh/Homebrew-on-Linux
-
-**Pipenv**
-* https://www.youtube.com/watch?v=zDYL22QNiWk
-* https://pipenv.pypa.io/en/latest/
-* https://code.visualstudio.com/docs/python/testing
-
-**CI in github**
-* https://help.github.com/en/actions/getting-started-with-github-actions/about-github-actions
-* https://help.github.com/en/actions/getting-started-with-github-actions/core-concepts-for-github-actions
-* https://github.com/marketplace?type=actions
-
-**Configuration files**
-* https://martin-thoma.com/configuration-files-in-python/
-
-**Sphinx**
-* https://www.youtube.com/watch?v=b4iFyrLQQh4
-
-**Package**
-* https://www.youtube.com/watch?v=UK97NoQK23k
-* http://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html
-* https://docs.python.org/3/reference/import.html
-* https://docs.python.org/3/tutorial/modules.html
-* https://packaging.python.org/tutorials/packaging-projects/
-* https://docs.python.org/3/glossary.html#term-portion
-* https://stackoverflow.com/questions/26667490/change-cwd-before-running-tests
