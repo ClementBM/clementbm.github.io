@@ -67,6 +67,17 @@ jobs:
           path: links.log
 ```
 
+You may prefix jekyll and html-proofer action with bundle exec, otherwise you may get some error
+```shell
+You have already activated mercenary 0.4.0, but your Gemfile requires mercenary 0.3.6
+```
+
+### Setup
+
+### Avoid stop on error
+
+### Artifacts
+
 # Sources
 **Jekyll Action**
 https://jekyllrb.com/docs/continuous-integration/github-actions/

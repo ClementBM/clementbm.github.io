@@ -393,6 +393,9 @@ If your database has to be centralized, you can take a look at [Parse server](ht
 
 If you want an easy to go local database, take a look at [tinydb](https://tinydb.readthedocs.io/en/latest/usage.html) a minimal document oriented database, and [ZODB](http://www.zodb.org/en/latest/) an object oriented database.
 
+### Configuration files
+
+
 ## Zen of Python
 Just to remember, open python and run `import this`
 
