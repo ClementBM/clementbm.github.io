@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Automatically check jekyll website links"
+title:  "Automatically check for broken links on your jekyll website"
 excerpt: "Automate jekyll website links checking with github action CI"
 date:   2020-05-31
 categories: [github action, jekyll, link checking]
