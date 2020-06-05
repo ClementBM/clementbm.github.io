@@ -19,14 +19,12 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6.x
-      - name: Update Rubygems
-        run: 'gem update --system --no-document'
-      - name: Update Bundler
-        run: 'gem update bundler --no-document'
-      - name: Install jekyll bundler
-        run: 'gem install jekyll bundler'
-      - name: Bundle install
-        run: bundle install
+      - name: Setup Rubygems, Bundler, jekyll
+        run: | 
+          gem update --system --no-document
+          gem update bundler --no-document
+          gem install jekyll bundler
+          bundle install
       - name: Build jekyll website with drafts
         run: bundle exec jekyll build --drafts
       - name: Check for broken links

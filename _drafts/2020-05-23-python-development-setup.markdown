@@ -19,6 +19,7 @@ In this post we'll go through the entire setup of a basic python project. It wil
 - `git` as a revision control system [:link:](#git)
 - Continuous integration with `github action` [:link:](#continuous-integration)
 - Documentation with `sphinx` [:link:](#documentation)
+- Next steps [:link:](#next-steps)
 
 I took inspiration from famous python repositories like [scikit-learn](https://github.com/scikit-learn/scikit-learn), [Flask](https://github.com/pallets/flask), [Keras](https://github.com/keras-team/keras), [Sentry](https://github.com/getsentry/sentry), [Django](https://github.com/django/django), [Ansible](https://github.com/ansible/ansible), [Tornado](https://github.com/tornadoweb/tornado), [Pandas](https://github.com/pandas-dev/pandas), and also from this [darker](https://github.com/akaihola/darker) repository. Hoping that the tools their using are durable and scale well to most python projects.
 
@@ -394,7 +395,12 @@ If your database has to be centralized, you can take a look at [Parse server](ht
 If you want an easy to go local database, take a look at [tinydb](https://tinydb.readthedocs.io/en/latest/usage.html) a minimal document oriented database, and [ZODB](http://www.zodb.org/en/latest/) an object oriented database.
 
 ### Configuration files
+There's a lot of way to save configurations/settings. Apart from saving settings in the database, it's common to have configuration files in these formats:  
+* json
+* yaml
+* py (yes, just a classic `py` file)
 
+Check this [excellent post](https://martin-thoma.com/configuration-files-in-python/) to know more about how to implement it.
 
 ## Zen of Python
 Just to remember, open python and run `import this`
