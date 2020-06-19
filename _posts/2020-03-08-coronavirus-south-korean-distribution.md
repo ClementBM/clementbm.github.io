@@ -5,7 +5,6 @@ excerpt: "Analysis of the age distribution of Coronavirus confirmed cases in the
 date:   2020-03-08
 categories: [Distribution, Coronavirus]
 ---
-
 *Updated on march 12th 2020*
 
 South Korea is testing people for COVID-19 at an impressive rate and faster than all other countries who have been reporting confirmed cases. This shows an impressive and significant lab capacity. The nation offers a unique opportunity for countries that are dealing with the new coronavirus.

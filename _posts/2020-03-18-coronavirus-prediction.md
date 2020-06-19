@@ -5,8 +5,6 @@ excerpt: "Predictions with Sigmoid and SIR based on coronavirus data"
 date:   2020-03-19
 categories: [Prediction, Coronavirus]
 ---
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
 It is unlikely that the number of cases of Covid-19 reported in this blog post accurately represents the actual number of people infected by the novel coronavirus. There are various reasons to that.
 
 First, despite the fact that several countries publish total number of tests performed, there is no centralized database of COVID-19 testing.

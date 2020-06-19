@@ -5,7 +5,6 @@ excerpt: "A brief analysis of the confirmed cases of Coronavirus by country"
 date:   2020-03-07
 categories: [EDA, Coronavirus, time series]
 ---
-
 *Updated on march 10th 2020*
 
 Coronavirus is a virus that has been spreading globally, killing more than four thousand individuals. It is a major public health concern. The outbreak has been linked to a wet market in Wuhan which sold animals including fish and birds – and not just dead ones. There are concerns that the source of the virus may be bats. A vaccine is being developed. However, most of the infections are mild, which means they do not pose a threat.

@@ -5,7 +5,6 @@ excerpt: "A quick sentiment analysis on twitter data with ELK (Elasticsearch, Lo
 date:   2020-03-02
 categories: [Elasticsearch, Kibana, Logstash, ELK, Sentiment analysis]
 ---
-
 In this post we'll perform a very quick installation of ELK, then get some tweets filtered by a certain keyword and finally add a sentiment analysis plugin into the logstash pipeline.
 
 > Prerequisite: you may already be familiar with Docker and Docker Compose.

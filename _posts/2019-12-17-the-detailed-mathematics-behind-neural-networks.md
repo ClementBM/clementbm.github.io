@@ -5,9 +5,6 @@ excerpt: "A mathematic demonstration of a neural network optimization for multic
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
 This post will guide you trough the main theory behind one basic  neural network. Starting from scratch, I hope it will show you how things linked together.
 
 This article doesn't go through the details of how to implement a neural network.

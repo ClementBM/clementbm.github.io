@@ -5,8 +5,6 @@ excerpt: "Understanding function optimization with tensorflow 2.0"
 date:   2019-11-03
 categories: [tensorflow 2.0, tf.keras.optimizers]
 ---
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
 # Why tensorflow 2.0 ?
 Tensorflow 2.0 was recently released ! It provides, better usability with `tf.keras` as the recommended high-level API and `Eager execution` by default. It also improves clarity by removing duplicated functionalities and putting forward an intuitive syntax accross APIs. Save models is simpler, in fact there's just one way of saving a model.
 It improves flexibility by providing different level of customization. For instance `variable`, `checkpoint` and `layers` have now inheritable interfaces.
