@@ -1,12 +1,12 @@
-# Site settings
-title: Hacking data
+title: Clément's blog
 email: clement.brutti.mairesse@gmail.com
-description: Clément Brutti-Mairesse blog
+description: Writting some of my experiments around data chemistry
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 linkedin_username: clementbrutti
 github_username:  clementbm
 owner: Clément Brutti-Mairesse
+author: Clément Brutti-Mairesse
 
 theme: minima
 
@@ -21,6 +21,11 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
 
+# Github page overrides
+gist:
+  noscript: false
+future: true 
+jailed: false
 kramdown:
   math_engine: mathjax
   syntax_highlighter: rouge
