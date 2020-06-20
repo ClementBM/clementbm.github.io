@@ -21,6 +21,8 @@ plugins:
   - jekyll-sitemap
   - jekyll-paginate
 
+google_analytics: UA-170163331-1
+
 # Github page overrides
 gist:
   noscript: false
