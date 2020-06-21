@@ -1,8 +1,7 @@
 title: Clément's blog
 email: clement.brutti.mairesse@gmail.com
 description: Writting some of my experiments around data chemistry
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://clementbm.github.io/"
 linkedin_username: clementbrutti
 github_username:  clementbm
 owner: Clément Brutti-Mairesse
