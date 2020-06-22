@@ -11,8 +11,6 @@ jobs:
   checklinks:
     name: Linux
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - name: Ruby
@@ -29,6 +27,8 @@ jobs:
       - name: Check for broken links
         run: |
           LINK_CHECK=$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)
+      - name: Save and show
+        run: |
           echo $LINK_CHECK
           echo $LINK_CHECK > links.log
         continue-on-error: true
