@@ -27,11 +27,11 @@ jobs:
       - name: Check for broken links
         run: |
           LINK_CHECK=$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)
+        continue-on-error: true
       - name: Save and show
         run: |
           echo $LINK_CHECK
           echo $LINK_CHECK > links.log
-        continue-on-error: true
       - name: Archive log links
         uses: actions/upload-artifact@v1
         with:
