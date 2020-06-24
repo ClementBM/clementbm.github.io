@@ -27,14 +27,18 @@ jobs:
       - name: Check for broken links
         id: "broken-link-check"
         run: |
-          echo "::set-output name=link_check::`$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)`"
+          bundle exec htmlproofer --log-level :debug ./_site &> links.log
         continue-on-error: true
-      - name: Save and show
-        run: |
-          echo "${{ steps.broken-link-check.outputs.link_check }}"
-          echo "${{ steps.broken-link-check.outputs.link_check }}" > links.log
       - name: Archive log links
         uses: actions/upload-artifact@v1
         with:
           name: link-check.log
           path: links.log
+      - name: Download
+        uses: actions/download-artifact@v1
+        with:
+          name: link-check.log
+      - name: Print
+        shell: bash
+        run: |
+          cat link-check.log
