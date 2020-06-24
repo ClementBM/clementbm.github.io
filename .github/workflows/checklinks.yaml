@@ -27,7 +27,7 @@ jobs:
       - name: Check for broken links
         id: "broken-link-check"
         run: |
-          echo "::set-output name=link_check::'$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)'"
+          echo "::set-output name=link_check::`$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)`"
         continue-on-error: true
       - name: Save and show
         run: |
