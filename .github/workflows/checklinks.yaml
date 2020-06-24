@@ -25,13 +25,14 @@ jobs:
       - name: Build jekyll website with drafts
         run: bundle exec jekyll build --drafts
       - name: Check for broken links
+        id: "broken-link-check"
         run: |
-          LINK_CHECK=$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)
+          echo "::set-output name=link_check::'$(bundle exec htmlproofer --log-level :debug ./_site 2>&1)'"
         continue-on-error: true
       - name: Save and show
         run: |
-          echo $LINK_CHECK
-          echo $LINK_CHECK > links.log
+          echo "${{ steps.broken-link-check.outputs.link_check }}"
+          echo "${{ steps.broken-link-check.outputs.link_check }}" > links.log
       - name: Archive log links
         uses: actions/upload-artifact@v1
         with:
