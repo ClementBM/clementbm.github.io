@@ -29,6 +29,10 @@ jobs:
         run: |
           bundle exec htmlproofer --log-level :debug ./_site &> links.log
         continue-on-error: true
+      - name: Print test
+        shell: bash
+        run: |
+          cat links.log
       - name: Archive log links
         uses: actions/upload-artifact@v1
         with:
