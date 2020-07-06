@@ -29,7 +29,7 @@ jobs:
         run: |
           bundle exec htmlproofer --log-level :debug ./_site &> links.log
         continue-on-error: true
-      - name: Print test
+      - name: Print
         shell: bash
         run: |
           cat links.log
@@ -38,11 +38,3 @@ jobs:
         with:
           name: link-check
           path: links.log
-      - name: Download
-        uses: actions/download-artifact@v1
-        with:
-          name: link-check
-      - name: Print
-        shell: bash
-        run: |
-          cat link-check/links.log
