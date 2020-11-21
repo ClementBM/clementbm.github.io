@@ -4,7 +4,7 @@ title:  "Mostly used activation functions"
 date:   2019-11-17
 categories: [activation function]
 ---
-This a simple record of the most used activation function and their derivatives.
+This is a simple record of the most used activation functions and their derivatives.
 
 ## Sigmoid
 
