@@ -5,7 +5,7 @@ excerpt: "A mathematic demonstration of a neural network optimization for multic
 date:   2019-12-17
 categories: [gradient descent, neural network]
 ---
-This post will guide you trough the main theory behind one basic  neural network. Starting from scratch, I hope it will show you how things linked together.
+This post will guide you through the main theory behind one basic neural network. Starting from scratch, I hope it will show you how things linked together.
 
 This article doesn't go through the details of how to implement a neural network.
 
@@ -212,7 +212,7 @@ $$
 However, the MSE function (mean squared error) is not convex for a multiclass classification neural networks.
 
 > :alien: *alien says* :speech_balloon:<br>
-> Is it an advantage to have a convex function for the loss ?
+> Is it an advantage to have a convex function for the loss?
 
 As our parametric model defines a distribution
 $$p(\underline{y_i}|\underline{x_i};\Theta)$$
@@ -396,7 +396,7 @@ $$
 \arg \min_{\Theta} E_{\text{CE}}(\Theta)
 $$
 
-How do we minimize a fonction ? Well... with an optimization algorithm !
+How do we minimize a fonction? Well... with an optimization algorithm!
 In this post we will use the gradient descent. Gradient descent belong to the family of the `first-order optimization algorithms`. It enables us to minimize the error $$E_{\text{CE}}$$ using the gradient with respect to the weights $$\Theta$$, so at t$$^{\text{th}}$$ iteration
 
 $$
@@ -1521,7 +1521,7 @@ $$
 \underline{a_{\ell-1,k}}
 $$
 
-And *that's it* !
+And *that's it*!
 
 ## Summing things up
 
