@@ -51,7 +51,7 @@ Count_{match}(n\text{-}gram)
 }
 $$
 
-For example the matches in the sample sentences are "to", "make", "people", "trustworthy", "to", "trust", "them"
+For example, the matches in the sample sentences are "to", "make", "people", "trustworthy", "to", "trust", "them"
 
 ![Bleu score unigrams](/assets/2021-12-23/bleu-unigrams.png)
 
@@ -125,7 +125,7 @@ $$
 And finally we aggregate the precisions which gives:
 
 $$
-BLEU_{N=4} \approx 0.339325
+BLEU_{N=4} \approx 0.33933
 $$
 
 ### BLEU with python and `sacreBLEU` package
@@ -197,7 +197,7 @@ $$
 Four ROUGE metrics are defined is the ROUGE paper: ROUGE-N, ROUGE-L, ROUGE-W and ROUGE-S. The next section present the ROUGE-L score.
 
 ### ROUGE-L
-ROUGE-L or $$ROUGE_{LCS}$$ is based on the length of the longest common subsequence (LCS). To counter the disadvantages of a pure recall metric as in ROUGE-N, Rouge-L calculates the weighted harmonic mean (or f-measure) combining the precision score the recall score.
+ROUGE-L or $$ROUGE_{LCS}$$ is based on the length of the longest common subsequence (LCS). To counter the disadvantages of a pure recall metric as in ROUGE-N, Rouge-L calculates the weighted harmonic mean (or f-measure) combining the precision score and the recall score.
 
 The advantages of $$ROUGE_{LCS}$$ is that it does not require consecutive matches but in-sequence matches that reflect sentence level word order as n-grams. The other advantage is that it automatically includes longest in-sequence common n-grams, therefore no predefined n-gram length is necessary.
 
@@ -227,6 +227,8 @@ $$
 $$
 
 ### ROUGE-L example
+
+![Rouge-L score](/assets/2021-12-23/rouge-l.png)
 
 $$
 \left\{
@@ -275,9 +277,9 @@ score[0]["rouge-l"]["f"]
 ## BLEU VS ROUGE
 A short summary of the similitudes of the two scoring methods:
 * Inexpensive automatic evaluation
-* **The more references sentences the better**
-* Correlates highly with human evaluation
 * Count the number of overlapping units such as n-gram, word sequences, and word pairs between hypothesis and references
+* **The more reference sentences the better**
+* Correlates highly with human evaluation
 * Rely on tokenization and word filtering, text normalization
 * Does not cater for different words that have the same meaning — as it measures syntactical matches rather than semantics
 
@@ -285,7 +287,7 @@ And here is for the differences:
 
 | BLEU score | ROUGE score |
 |---|---|
-| Initially for translation evaluation (**B**i**l**ingual **E**valuation **U**nderstudy) | Initially for summary evaluations (**R**ecall-**O**riented **U**nderstudy for **G**isting **E**valuation) |
+| Initially made for translation evaluations (**B**i**l**ingual **E**valuation **U**nderstudy) | Initially made for summary evaluations (**R**ecall-**O**riented **U**nderstudy for **G**isting **E**valuation) |
 | Precision oriented score | Recall oriented score, in this ROUGE-N version |
 | One version | Multiple versions |
 
