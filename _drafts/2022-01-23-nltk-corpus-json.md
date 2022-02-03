@@ -18,8 +18,10 @@ The whole code for this project is located at [https://github.com/ClementBM/hack
   - [Load the data](#load-the-data)
   - [Save the dataset in a convenient format](#save-the-dataset-in-a-convenient-format)
 - [Integrate with NLTK](#integrate-with-nltk)
-  - [Custom Tokenizer, inherits from `TokenizerI`](#custom-tokenizer-inherits-from-tokenizeri)
-  - [Custom Corpus, inherits from `CorpusReader`](#custom-corpus-inherits-from-corpusreader)
+  - [Define a custom Tokenizer, inherits from `TokenizerI`](#define-a-custom-tokenizer-inherits-from-tokenizeri)
+  - [Define a custom CorpusReader, inherits from `CorpusReader`](#define-a-custom-corpusreader-inherits-from-corpusreader)
+    - [Data Access Methods](#data-access-methods)
+    - [Corpus Views](#corpus-views)
 - [Explore with NLTK](#explore-with-nltk)
 - [Descriptive metrics](#descriptive-metrics)
   - [Create a simple Corpus Metrics class](#create-a-simple-corpus-metrics-class)
@@ -34,6 +36,8 @@ It's a free, open source and community-driven project.
 
 Natural Language Tookkit (NLTK), give us a nice starting point to perform exploratory data analysis on textual data.
 
+If you don't care about the technical part, and are just interested by the analytical part, feel free to jump right to [Explore with NLTK](#explore-with-nltk).
+
 # HackerNews Dataset
 [Hacker News](https://news.ycombinator.com/) (sometimes abbreviated as HN) is a social news website focusing on computer science and entrepreneurship, similar to [slashdot](https://slashdot.org/). In general, content that can be submitted is defined as "anything that gratifies one's intellectual curiosity."
 
@@ -44,14 +48,12 @@ Since HackerNews open its [API](https://github.com/HackerNews/API), data is avai
 ## Load the data
 The real time of top 500 stories is available at `https://hacker-news.firebaseio.com/v0/topstories.json`.
 
-Then every story is retreived via the following end point `https://hacker-news.firebaseio.com/v0/item/{item_id}.json`, `{item_id}` being the `id` of the story in this case.
+Every story is retreived via the following end point `https://hacker-news.firebaseio.com/v0/item/{item_id}.json`, `{item_id}` being the `id` of the story in this case.
 
 ```python
 import json
-
 import requests
 from tqdm import tqdm
-
 
 hn_topstories_url = (
     "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"
@@ -89,40 +91,28 @@ You can then read it calling `pd.read_pickle(TOPSTORIES_PATH)`
 # Integrate with NLTK
 The `nltk.corpus` package defines a collection of corpus reader classes, which can be used to access the contents of a diverse set of corpora, which are listed [here](https://www.nltk.org/nltk_data/).
 
-The documentation at https://www.nltk.org/howto/corpus.html gives you all the details about each peculiar CorporaReader inherited instances and specificities in its implementation.
-
-Each corpus reader class is specialized to handle a specific corpus format. In addition, the nltk.corpus package automatically creates a set of corpus reader instances that can be used to access the corpora in the NLTK data package
-
-https://stackoverflow.com/questions/38179829/how-to-load-a-json-file-with-python-nltk
-
-https://gist.github.com/JeremyEnglert/3eda4a123244c37b669472d9e8166ea6
+Each corpus reader class is specialized to handle a specific corpus format. In addition, the nltk.corpus package automatically creates a set of corpus reader instances that can be used to access the corpora in the NLTK data package distribution.
 
 Unlike most corpora, which consist of a set of files, we'll show here how to build a CorpusReader class that handles corpus in a json format.
 
-* `̀TokenizerI`
-* `CorpusReader`
-
-Although the nltk.corpus module automatically creates corpus reader instances for the corpora in the NLTK data distribution, you may sometimes need to create your own corpus reader. In particular, you would need to create your own corpus reader if you want…
+You would need to create your own corpus reader if you want:
 
 * To access a corpus that is not included in the NLTK data distribution.
 * To access a full copy of a corpus for which the NLTK data distribution only provides a sample.
 * To access a corpus using a customized corpus reader (e.g., with a customized tokenizer).
 
-Corpus Types
+The base class `CorpusReader` only defines a few general-purpose methods for listing and accessing the files that make up a corpus. Corpora vary widely in the types of content they include.
+It is up to the subclasses to define data access methods that provide access to the information in the corpus. However, corpus reader subclasses should be consistent in their definitions of these data access methods wherever possible.
 
-Corpora vary widely in the types of content they include. This is reflected in the fact that the base class CorpusReader only defines a few general-purpose methods for listing and accessing the files that make up a corpus. It is up to the subclasses to define data access methods that provide access to the information in the corpus. However, corpus reader subclasses should be consistent in their definitions of these data access methods wherever possible.
+All the details about the nltk corpus is available at [this link](https://www.nltk.org/howto/corpus.html).
 
-## Custom Tokenizer, inherits from `TokenizerI`
+In the following sections we see how to subclass `̀TokenizerI` and `CorpusReader`.
 
-`nltk.tokenize.api.TokenizerI`
+## Define a custom Tokenizer, inherits from `TokenizerI`
 
-A processing interface for tokenizing a string.
-Subclasses must define ``tokenize()`` or ``tokenize_sents()`` (or both).
+NLTK has an interface for tokenizing a string `nltk.tokenize.api.TokenizerI`.
 
-override `tokenize()` method
-
-> Note: this is NOT "re" you're likely used to. The regex module is an alternative to the standard re module that supports Unicode codepoint properties with the \p{} syntax.
-> You may have to "pip install regx"
+Subclasses must define `tokenize()` or `tokenize_sents()` (or both).
 
 **Tokenizer specifications**
 
@@ -132,26 +122,38 @@ override `tokenize()` method
 | Find word according to regex patterns | |
 | Filter (remove) words that are punctuation | |
 
-## Custom Corpus, inherits from `CorpusReader`
-A base class for "corpus reader" classes, each of which can be
-used to read a specific corpus format.  Each individual corpus
-reader instance is used to read a specific corpus, consisting of
-one or more files under a common root directory.  Each file is
-identified by its ``file identifier``, which is the relative path
-to the file from the root directory.
+The NTLK api define a processing interface for tokenizing a string.
+```python
+class TokenizerI(ABC):    
+    @abstractmethod
+    def tokenize(self, s: str) -> List[str]:
+        """
+        Return a tokenized copy of *s*.
 
-A separate subclass is defined for each corpus format.  These
-subclasses define one or more methods that provide 'views' on the
-corpus contents, such as ``words()`` (for a list of words) and
-``parsed_sents()`` (for a list of parsed sentences).  Called with
-no arguments, these methods will return the contents of the entire
-corpus.  For most corpora, these methods define one or more
-selection arguments, such as ``fileids`` or ``categories``, which can
-be used to select which portion of the corpus should be returned.
+        :rtype: List[str]
+        """
+```
 
-`nltk.corpus.reader.api.CorpusReader`
+A subclass `StoryTokenizer` subclassing `TokenizerI`
+```python
+class StoryTokenizer(TokenizerI):
+    def tokenize(self, text: str) -> typing.List[str]:
+        """Tokenize the input text.
 
-NLTK data package also includes a number of lexicons and word lists. 
+        :param text: str
+        :rtype: list(str)
+        :return: a tokenized list of strings; joining this list returns\
+        the original string if `preserve_case=False`.
+        """
+```
+
+> Note: this is NOT "re" you're likely used to. The regex module is an alternative to the standard re module that supports Unicode codepoint properties with the \p{} syntax.
+> You may have to "pip install regx"
+
+## Define a custom CorpusReader, inherits from `CorpusReader`
+NTLK api defines `nltk.corpus.reader.api.CorpusReader`, a base class for "corpus reader" classes. Each corpus reader instance can be used to read a specific corpus format consisting of one or more files under a common root directory. Each file is identified by its `file identifier`, which is the relative path to the file from the root directory.
+
+These subclasses define one or more methods that provide 'views' on the corpus contents, such as `words()` (for a list of words) and `parsed_sents()` (for a list of parsed sentences). Called with no arguments, these methods will return the contents of the entire corpus. For most corpora, these methods define one or more selection arguments, such as `fileids` or `categories`, which can be used to select which portion of the corpus should be returned.
 
 In general CorpusReader gives us way to access properties of the corpus such as
 * raw text
@@ -159,20 +161,16 @@ In general CorpusReader gives us way to access properties of the corpus such as
 * a list of sentences
 * a list of paragraphs
 
-There are also tagged corpora, in case, the Corpus object gives a set of additional methods is text data annotated such as:
+NLTK data package also includes various type of corpora such as lexicons and word lists, as well as tagged corpora, in case, the Corpus object gives a set of additional methods is text data annotated such as:
 * a list of annotated words, in the form of a list of word and tag couple (as a tuple)
 * a list of annotated sentences
 
-The most similar is the [twitter dataset](https://www.nltk.org/howto/corpus.html#twitter-samples), Tweets are stored as a line-separated JSON.
-
-Every corpus is assumed to consist of one or more files, all located in a common root directory (or in subdirectories of that root directory)
-
-**Data Access Methods**
+### Data Access Methods
 
 Individual corpus reader subclasses typically extend this basic set of file-access methods with one or more data access methods, which provide easy access to the data contained in the corpus. The signatures for data access methods often have the basic form:
 
 ```python
-corpus_reader.some_data access(fileids=None, ...options...)
+corpus_reader.some_data_access(fileids=None, ...options...)
 ```
 
 Some of the common data access methods, and their return types, are:
@@ -189,12 +187,12 @@ Some of the common data access methods, and their return types, are:
 * I{corpus}.xml(): A single xml ElementTree
 * I{corpus}.raw(): str (unprocessed corpus contents)
 
+### Corpus Views
+
 ```python
 class StoryCorpusReader(CorpusReader):
     CorpusView = StreamBackedCorpusView
 ```
-
-**Corpus Views**
 
 An important feature of NLTK’s corpus readers is that many of them access the underlying data files using “corpus views.” A corpus view is an object that acts like a simple data structure (such as a list), but does not store the data elements in memory; instead, data elements are read from the underlying data files on an as-needed basis.
 
@@ -220,12 +218,15 @@ The first option is usually easier, but the second option can allow you to write
 
 Corpus views have also the following properties: Concatenation, Slicing, Multiple Iterators
 
+
+The most similar is the [twitter dataset](https://www.nltk.org/howto/corpus.html#twitter-samples), Tweets are stored as a line-separated JSON.
+
 # Explore with NLTK
 
 ```python
 corpus_metric.frequency_distribution.most_common(20)
 
-corpus_metric.story_text.collocations()
+corpus_metric.story_text.collocations() # Dunning likelihood collocation
 corpus_metric.story_text.collocations(window_size=3)  # does not work ?
 
 corpus_metric.story_text.concordance("language")
@@ -280,3 +281,6 @@ corpus_metric.frequency_distribution.plot(20, cumulative=True)
 * https://regex101.com
 * https://www.tensorflow.org/text/guide/subwords_tokenizer?hl=en#optional_the_algorithm
 * https://www.nltk.org/book_1ed
+* https://stackoverflow.com/questions/38179829/how-to-load-a-json-file-with-python-nltk
+
+* See Manning, C.D., Manning, C.D. and Schütze, H., 1999. Foundations of Statistical Natural Language Processing. MIT press, p. 162 https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22
