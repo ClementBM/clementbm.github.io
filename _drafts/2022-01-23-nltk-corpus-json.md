@@ -23,6 +23,12 @@ The whole code for this project is located at [https://github.com/ClementBM/hack
     - [Data Access Methods](#data-access-methods)
     - [Corpus Views](#corpus-views)
 - [Explore with NLTK](#explore-with-nltk)
+  - [Concordance](#concordance)
+  - [Frequency distribution](#frequency-distribution)
+  - [Lexical dispersion plot](#lexical-dispersion-plot)
+  - [Word Cloud](#word-cloud)
+  - [Recurrent pattern](#recurrent-pattern)
+  - [Collocations with Dunning likelihood method](#collocations-with-dunning-likelihood-method)
 - [Descriptive metrics](#descriptive-metrics)
   - [Create a simple Corpus Metrics class](#create-a-simple-corpus-metrics-class)
 - [WordCloud](#wordcloud)
@@ -118,9 +124,9 @@ Subclasses must define `tokenize()` or `tokenize_sents()` (or both).
 
 | Step | Description |
 |--|--|
-| Replace html entities | |
+| Replace html entities | Remove html entities like &gt; or &nbsp; and convert them to their corresponding unicode character. |
 | Find word according to regex patterns | |
-| Filter (remove) words that are punctuation | |
+| Filter (remove) words that are punctuation | remove punctuation from `string.punctuation` **'!"#$%&\'()*+,-./:;<=>?@[\\]^_`{\|}~'** and **——–’‘“”×** |
 
 The NTLK api define a processing interface for tokenizing a string.
 ```python
@@ -175,17 +181,13 @@ corpus_reader.some_data_access(fileids=None, ...options...)
 
 Some of the common data access methods, and their return types, are:
 
-* I{corpus}.words(): list of str
-* I{corpus}.sents(): list of (list of str)
-* I{corpus}.paras(): list of (list of (list of str))
-* I{corpus}.tagged_words(): list of (str,str) tuple, only supported by corpora that include part-of-speech annotations
-* I{corpus}.tagged_sents(): list of (list of (str,str)), only supported by corpora that include part-of-speech annotations
-* I{corpus}.tagged_paras(): list of (list of (list of (str,str))), only supported by corpora that include part-of-speech annotations
-* I{corpus}.chunked_sents(): list of (Tree w/ (str,str) leaves)
-* I{corpus}.parsed_sents(): list of (Tree with str leaves)
-* I{corpus}.parsed_paras(): list of (list of (Tree with str leaves))
-* I{corpus}.xml(): A single xml ElementTree
-* I{corpus}.raw(): str (unprocessed corpus contents)
+| Method | Return type |
+|---|---|
+| I{corpus}.words() | list of str |
+| I{corpus}.sents() | list of (list of str) |
+| I{corpus}.paras() | list of (list of (list of str)) |
+| I{corpus}.chunked_sents() | list of (Tree w/ (str,str) leaves) |
+| I{corpus}.raw() | str (unprocessed corpus contents) |
 
 ### Corpus Views
 
@@ -202,7 +204,7 @@ The most common corpus view is the `StreamBackedCorpusView`, which acts as a rea
 
 > When writing a corpus reader for a corpus that is never expected to be very large, it can sometimes be appropriate to read the files directly, rather than using a corpus view.
 
-The heart of a StreamBackedCorpusView is its block reader function, which reads zero or more tokens from a stream, and returns them as a list. A very simple example of a block reader is:
+The heart of a `StreamBackedCorpusView` is its block reader function, which reads zero or more tokens from a stream, and returns them as a list. A very simple example of a block reader is:
 
 ```python
 def simple_block_reader(stream):
@@ -211,10 +213,10 @@ def simple_block_reader(stream):
 
 You can create your own corpus view in one of two ways:
 
-1. Call the StreamBackedCorpusView constructor, and provide your block reader function via the block_reader argument.
-2. Subclass StreamBackedCorpusView, and override the read_block() method.
+1. Call the `StreamBackedCorpusView` constructor, and provide your block reader function via the block_reader argument.
+2. Subclass `StreamBackedCorpusView`, and override the `read_block()` method.
 
-The first option is usually easier, but the second option can allow you to write a single read_block method whose behavior can be customized by different parameters to the subclass’s constructor. For an example of this design pattern, see the TaggedCorpusView class, which is used by TaggedCorpusView.
+The first option is usually easier, but the second option can allow you to write a single `read_block` method whose behavior can be customized by different parameters to the subclass’s constructor. For an example of this design pattern, see the `TaggedCorpusView` class, which is used by `TaggedCorpusView`.
 
 Corpus views have also the following properties: Concatenation, Slicing, Multiple Iterators
 
@@ -223,14 +225,22 @@ The most similar is the [twitter dataset](https://www.nltk.org/howto/corpus.html
 
 # Explore with NLTK
 
+## Concordance
+```python
+corpus_metric.story_text.concordance("language")
+```
+
+## Frequency distribution
 ```python
 corpus_metric.frequency_distribution.most_common(20)
+corpus_metric.frequency_distribution.plot(20, cumulative=True)
+```
 
-corpus_metric.story_text.collocations() # Dunning likelihood collocation
-corpus_metric.story_text.collocations(window_size=3)  # does not work ?
+![alt](/assets/2022-01-23/frequency-distribution.png)
 
-corpus_metric.story_text.concordance("language")
+## Lexical dispersion plot
 
+```python
 corpus_metric.story_text.dispersion_plot(
     [
         "Google",
@@ -240,8 +250,33 @@ corpus_metric.story_text.dispersion_plot(
         "Tesla",
     ]
 )
+```
 
-corpus_metric.frequency_distribution.plot(20, cumulative=True)
+![alt](/assets/2022-01-23/lexical-dispersion-plot.png)
+
+## Word Cloud
+
+![alt](/assets/2022-01-23/word-cloud.png)
+
+## Recurrent pattern
+
+```python
+topstories[topstories["title"].str.contains("Ask HN")]["title"]
+```
+
+## Collocations with Dunning likelihood method
+
+```python
+corpus_metric.story_text.collocations() # Dunning likelihood collocation
+# three word window: corpus_metric.story_text.collocations(window_size=3)
+```
+
+open source; command line; Dark Souls; Nhat Hanh; Points Guy; Suite
+legacy; Thich Nhat; largest chip; American Airlines; black holes; SICP
+JavaScript; modern language; Google Analytics; source Ask
+
+```python
+topstories[topstories["title"].str.contains(" source")]["title"]
 ```
 
 # Descriptive metrics
