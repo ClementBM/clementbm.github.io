@@ -9,7 +9,7 @@ tags: []
 
 ![Granadilla fruit](/assets/2022-04-11/granadilla.jpg)
 
-If you don't know how to look for something, lacking the words to describe your search, how can you even start seeking about this topic you cannot named? Like Alfred Nobel, who accidently invented the dynamite or Sir Alexander Flemming who discover the effects of penicilline, with enough patience you'll find out by chance what your looking for ... when you are no longer looking for it.
+If you don't know how to look for something, missing the words to describe your search, how can you even start seeking about this topic you cannot named? Like Alfred Nobel, who accidently invented the dynamite or Sir Alexander Flemming who discover the effects of penicilline, with enough patience you'll find out by chance what your looking for ... when you are no longer looking for it.
 
 When you dive into the world of Data Science, you literally need to learn something everyday. The discipline is so broad that you may look for informations in the field of statistic, linear algebra, probability, machine learning, coding and much more. I often struggle to find the information I need or to get a resource that gives a brief introduction on the unknown topic. And sometimes I just need a quick access to sufficiently detailed information for non specialists, to make an informed choice.
 
