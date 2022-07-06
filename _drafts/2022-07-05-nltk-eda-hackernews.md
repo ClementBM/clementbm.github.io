@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Exploratory data analysis on hacker news stories with NLTK"
-excerpt: "How to load a json corpus with NLTK and perform a quick analysis on hacker news top stories"
-date:   2022-01-23
+title:  "Exploratory data analysis on hacker news stories"
+excerpt: "How to perform perform a quick analysis on hacker news top stories with NLTK"
+date:   2022-07-05
 categories: [EDA, NLP, tokenizer]
 tags: [NLTK, json]
 ---
 
-![Split of an apple](/assets/2022-01-23/split-apple.jpg)
+![Split of an apple](/assets/2022-07-05/split-apple.jpg)
 
 # Explore with NLTK
 
@@ -22,7 +22,7 @@ corpus_metric.frequency_distribution.most_common(20)
 corpus_metric.frequency_distribution.plot(20, cumulative=True)
 ```
 
-![alt](/assets/2022-01-23/frequency-distribution.png)
+![alt](/assets/2022-07-05/frequency-distribution.png)
 
 ## Lexical dispersion plot
 
@@ -38,11 +38,11 @@ corpus_metric.story_text.dispersion_plot(
 )
 ```
 
-![alt](/assets/2022-01-23/lexical-dispersion-plot.png)
+![alt](/assets/2022-07-05/lexical-dispersion-plot.png)
 
 ## Word Cloud
 
-![alt](/assets/2022-01-23/word-cloud.png)
+![alt](/assets/2022-07-05/word-cloud.png)
 
 ## Recurrent pattern
 
