@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to extend NLTK CorpusReader"
+title:  "How to extend NLTK CorpusReader?"
 excerpt: "How to load a json corpus with NLTK on hacker news top stories"
 date:   2022-01-23
 categories: [EDA, NLP, tokenizer]

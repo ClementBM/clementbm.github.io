@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to purposefully discover new data analysis technics"
+title:  "How to purposefully discover new data analysis technics?"
 excerpt: "How to stay up to date or discover unkown field in datascience"
 date:   2022-04-11
 categories: [SOTA, Datascience]
