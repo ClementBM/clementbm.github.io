@@ -127,7 +127,7 @@ Hopefully, the following diagram will help you understand the NLTK class hierarc
 
 ![Corpus Reader Diagram](/assets/2022-01-23/corpus_reader_diag.png)
 
-The two last following section gives more information of the data access methods of the corpus reader, and finally on the Corpus View classes.
+The two last following sections give more information on the data access methods of the corpus reader, and finally on the Corpus View classes.
 
 ### Data Access Methods of the Corpus Reader class
 

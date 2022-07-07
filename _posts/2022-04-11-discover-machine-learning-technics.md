@@ -5,7 +5,7 @@ excerpt: "How to stay up to date or discover unkown field in datascience"
 date:   2022-04-11
 categories: [SOTA, Datascience]
 tags: []
---- 
+---
 
 ![Granadilla fruit](/assets/2022-04-11/granadilla.jpg)
 

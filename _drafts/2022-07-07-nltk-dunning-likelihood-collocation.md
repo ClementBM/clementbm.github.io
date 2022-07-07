@@ -11,14 +11,42 @@ tags: [NLTK, json]
 ![Grape vine fruit](/assets/2022-07-07/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
 
 # Co-occurrence
-In linguistics, co-occurrence or cooccurrence is an above-chance frequency of occurrence of two terms (also known as coincidence or concurrence) from a text corpus alongside each other in a certain order. Co-occurrence in this linguistic sense can be interpreted as an indicator of semantic proximity or an idiomatic expression. Corpus linguistics and its statistic analyses reveal patterns of co-occurrences within a language and enable to work out typical collocations for its lexical items. A co-occurrence restriction is identified when linguistic elements never occur together. Analysis of these restrictions can lead to discoveries about the structure and development of a language.
+
+
+
+In linguistics, co-occurrence or cooccurrence is an above-chance frequency of occurrence of two or more terms in the same text (phrase, paragraph, corpus...), from a text corpus alongside each other in a certain order. Co-occurrence in this linguistic sense can be interpreted as an indicator of semantic proximity or an idiomatic expression. Corpus linguistics and its statistic analyses reveal patterns of co-occurrences within a language and enable to work out typical collocations for its lexical items. A co-occurrence restriction is identified when linguistic elements never occur together. Analysis of these restrictions can lead to discoveries about the structure and development of a language.
 
 Co-occurrence can be seen an extension of word counting in higher dimensions. Co-occurrence can be quantitatively described using measures like correlation or mutual information.
 
-# Idiom
+It's possible that terms are mutally dependent when the use of the two is very frequent.
+Statistic tests can prove the hypothetic dependance, like test of mutual information or coefficient verosimilitud.
+
+Co-occurrence is the co presence statistically significative of two or multiple unit within the same contextual window.
+
+When it's proved that there is a semantical or gramatical dependency between two words, we call it colocation.
+
+Location are "stable" coocurrence, group of words forming one lexical unit with a typical/own/particular meaning
+
+# Phraseme
+A phraseme also called a "set phrase" or "idiomatic phrase", "multi-word expression", or "idiom" is a multi word utterance where at least one of whose components is selectionnaly constrained or restricted by linguistic convention such that it is not freely chosen.
+
+At the contrary, there are collocations such as "infinite patience" where one of the words is chosen freely (patience) based on the meaning the speaker wishes to express while the choice of the other word (infinite) is constrained by the convention of the English language.
+
+Both kinds of expression are phrasemes and can be contrasted with "free phrases", expressions where all of the members are chosen freely, based exclusively on their meaning and the message that the speaker wishes to communicate.
+
+Saying, or a probverb, figure of speech, foxed expression
 
 # Collocation
+Cooccureence are close to collocationn, which is a form of idiomatic expression caused by a systematic coocurrence.
 
+# Cooccureence and champ lexical
+When two words or other linguistic unit, have a semantical relationship, cooccurrence notion is at the base of thematic, champ lexical, isotopie.
+
+# Isotopie
+in semantic and semiotiquen, isotopie is the redondancy of element in a corpus enabling to understand it?
+
+For example, the redondancy of the first person (I), make it easy to understand that the same person is talking.
+Redondancy of the same champ lexical enale us to understand that we are talking about the same theme.
 
 # Dunning likelihood
 
