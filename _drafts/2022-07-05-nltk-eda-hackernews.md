@@ -3,8 +3,8 @@ layout: post
 title:  "Exploratory data analysis on hacker news stories"
 excerpt: "How to perform perform a quick analysis on hacker news top stories with NLTK"
 date:   2022-07-05
-categories: [EDA, NLP, tokenizer]
-tags: [NLTK, json]
+categories: [study]
+tags: [NLTK, NLP, visualization]
 ---
 
 ![Original fruit](/assets/2022-07-05/pexels-irina-kaminskaya-12633634.jpg)

@@ -3,7 +3,8 @@ layout: post
 title:  "Simple tensorflow 2.0 optimization"
 excerpt: "Understanding function optimization with tensorflow 2.0"
 date:   2019-11-03
-categories: [tensorflow 2.0, tf.keras.optimizers]
+categories: [coding]
+tags: ["tensorflow 2.0", "tf.keras.optimizers"]
 ---
 # Why tensorflow 2.0 ?
 Tensorflow 2.0 was recently released ! It provides, better usability with `tf.keras` as the recommended high-level API and `Eager execution` by default. It also improves clarity by removing duplicated functionalities and putting forward an intuitive syntax accross APIs. Save models is simpler, in fact there's just one way of saving a model.

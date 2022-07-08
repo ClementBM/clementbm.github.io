@@ -2,7 +2,8 @@
 layout: post
 title:  "Mostly used activation functions"
 date:   2019-11-17
-categories: [activation function]
+categories: [theory]
+tags: ["activation functions"]
 ---
 This is a simple record of the most used activation functions and their derivatives.
 

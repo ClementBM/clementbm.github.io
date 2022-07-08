@@ -3,7 +3,8 @@ layout: post
 title:  "Time series analysis on Coronavirus data"
 excerpt: "A brief analysis of the confirmed cases of Coronavirus by country"
 date:   2020-03-07
-categories: [EDA, Coronavirus, time series]
+categories: [study]
+tags: ["EDA", "Coronavirus", "time series"]
 ---
 *Updated on march 10th 2020*
 

@@ -3,7 +3,8 @@ layout: post
 title:  "Play with MNIST and tensorflow 2.1"
 excerpt: "Use of a convolutional neural network on MNIST with tensorflow 2.1"
 date:   2020-02-12
-categories: [tensorflow 2.1, confusion matrix, convolutional neural network]
+categories: [project]
+tags: ["tensorflow 2.1", "confusion matrix", "convolutional neural network"]
 ---
 In this post we use tensorflow 2.1 custom model and custom loop on the famous MNIST dataset.
 We perform a multiclass classification with a basic convolutional neural network.

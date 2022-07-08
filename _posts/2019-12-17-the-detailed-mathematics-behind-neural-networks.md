@@ -3,7 +3,8 @@ layout: post
 title:  "The (detailed) mathematics behind neural networks"
 excerpt: "A mathematic demonstration of a neural network optimization for multiclass classification"
 date:   2019-12-17
-categories: [gradient descent, neural network]
+categories: [theory]
+tags: ["gradient descent", "neural network"]
 ---
 This post will guide you through the main theory behind one basic neural network. Starting from scratch, I hope it will show you how things linked together.
 

@@ -3,7 +3,8 @@ layout: post
 title:  "Age distribution analysis on Coronavirus data"
 excerpt: "Analysis of the age distribution of Coronavirus confirmed cases in the Republic of Korea"
 date:   2020-03-08
-categories: [Distribution, Coronavirus]
+categories: [study]
+tags: [Coronavirus]
 ---
 *Updated on march 12th 2020*
 

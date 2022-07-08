@@ -3,7 +3,8 @@ layout: post
 title:  "A basic python development setup"
 excerpt: "Development setup with vscode, git, pipenv, mypy and pytest"
 date:   2020-05-23
-categories: [python, vscode]
+categories: [coding]
+tags: [python, vscode]
 ---
 In this post we'll go through the entire setup of a basic python project. It will cover, in no particular order:
 - Directory structure [:link:](#directory-structure)

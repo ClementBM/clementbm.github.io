@@ -3,7 +3,8 @@ layout: post
 title:  "Coronavirus prediction based on current data"
 excerpt: "Predictions with Sigmoid and SIR based on coronavirus data"
 date:   2020-03-19
-categories: [Prediction, Coronavirus]
+categories: [study]
+tags: [Prediction, Coronavirus]
 ---
 It is unlikely that the number of cases of Covid-19 reported in this blog post accurately represents the actual number of people infected by the novel coronavirus. There are various reasons to that.
 

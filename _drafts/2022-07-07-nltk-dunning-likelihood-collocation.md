@@ -3,16 +3,14 @@ layout: post
 title:  "Get collocations with Dunning likelihood method"
 excerpt: "Explore a corpus with NLTK and the Dunning likelihood method to find common collocations"
 date:   2022-07-07
-categories: [EDA, NLP, tokenizer]
-tags: [NLTK, json]
+categories: [theory]
+tags: [NLTK, NLP, statistic]
 ---
 
 
 ![Grape vine fruit](/assets/2022-07-07/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
 
 # Co-occurrence
-
-
 
 In linguistics, co-occurrence or cooccurrence is an above-chance frequency of occurrence of two or more terms in the same text (phrase, paragraph, corpus...), from a text corpus alongside each other in a certain order. Co-occurrence in this linguistic sense can be interpreted as an indicator of semantic proximity or an idiomatic expression. Corpus linguistics and its statistic analyses reveal patterns of co-occurrences within a language and enable to work out typical collocations for its lexical items. A co-occurrence restriction is identified when linguistic elements never occur together. Analysis of these restrictions can lead to discoveries about the structure and development of a language.
 
@@ -34,7 +32,7 @@ At the contrary, there are collocations such as "infinite patience" where one of
 
 Both kinds of expression are phrasemes and can be contrasted with "free phrases", expressions where all of the members are chosen freely, based exclusively on their meaning and the message that the speaker wishes to communicate.
 
-Saying, or a probverb, figure of speech, foxed expression
+Saying, or a proverb, figure of speech, foxed expression
 
 # Collocation
 Cooccureence are close to collocationn, which is a form of idiomatic expression caused by a systematic coocurrence.

@@ -3,8 +3,8 @@ layout: post
 title:  "Automatically check for broken links on your jekyll website"
 excerpt: "Automate jekyll website links checking with github action CI"
 date:   2020-05-31
-categories: [github action, jekyll, link checking]
-tags: [github action, jekyll, development]
+categories: [coding]
+tags: [github action, jekyll, link checking]
 ---
 In this post, I'll show a way to automatically validate links of your jekyll website with `html-proofer` (another Ruby Gem) and `Github Action CI`.
 

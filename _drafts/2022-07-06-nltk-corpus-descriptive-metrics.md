@@ -3,8 +3,8 @@ layout: post
 title:  "Compute simple corpus descriptive metrics"
 excerpt: "Get a quick overview of a corpus with some basic descriptive metrics with the help of NLTK"
 date:   2022-07-06
-categories: [EDA, NLP, tokenizer]
-tags: [NLTK, json]
+categories: [theory]
+tags: [NLTK, NLP, tokenizer, metrics]
 ---
 
 

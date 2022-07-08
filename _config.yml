@@ -22,6 +22,9 @@ plugins:
 
 google_analytics: UA-170163331-1
 
+disqus:
+  shortname: clementbm
+
 # Github page overrides
 gist:
   noscript: false
