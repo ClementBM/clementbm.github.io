@@ -82,7 +82,7 @@ Unfortunately, number of released cases are too little at the moment, which make
 * [Prediction on Coronavirus data]({% post_url 2020-03-18-coronavirus-prediction %})
 
 # Sources
-* [Coronavirus outbreau in South Korea](https://en.wikipedia.org/wiki/2020_coronavirus_outbreak_in_South_Korea)
+* [Coronavirus outbreak in South Korea](https://en.wikipedia.org/wiki/2020_coronavirus_outbreak_in_South_Korea)
 * [Testing program in South Korea](https://abcnews.go.com/international/massive-coronavirus-testing-program-south-korea-underscores-nimble/story?id=69226222)
 * Intro has been written with the help of [gpt-2](https://github.com/openai/gpt-2)
 
