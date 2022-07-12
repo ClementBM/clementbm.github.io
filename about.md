@@ -13,7 +13,7 @@ Data Science is a multidisciplinary field that combines *mathematics/statistic/a
 
 As a matter of course this blog may be related to one or more of these disciplines :relaxed:
 
-And why another blog? First for myself, because trying to explain something show me often the holes in my knowledge. It also forces to structure my thoughts and I hope it will be a good record for the future.
+And why another blog? First for myself, because trying to explain something shows me often the holes in my knowledge. It also forces to structure my thoughts and I hope it will be a good record for the future.
 
 To close this page, I make a random selection of quotes :grin:
 
