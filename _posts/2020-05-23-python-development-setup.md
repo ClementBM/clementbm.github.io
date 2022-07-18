@@ -318,7 +318,7 @@ And then edit the `index.rst` file
    modules
 ```
 
-You can the run the following commands to build a basic documentation
+You can then run the following commands to build a basic documentation
 ```shell
 cd docs
 # might delete *.rst (exept index.rst) files before
