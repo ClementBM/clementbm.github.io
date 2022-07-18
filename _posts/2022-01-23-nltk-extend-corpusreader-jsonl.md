@@ -181,4 +181,5 @@ However, as the documentation said:
 Thanks for reading and follow the next blog post to explore the HackerNews story dataset with the CorpusReader.
 
 # Sources
-* [Book](https://www.nltk.org/book_1ed)
+* [Natural Language Processing with Python](https://www.nltk.org/book_1ed)
+* [NLTK Chap 2 book](https://www.nltk.org/book/ch02.html)
