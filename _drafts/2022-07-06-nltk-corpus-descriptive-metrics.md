@@ -64,3 +64,16 @@ We define the dictionary $$ \mathcal{D} = { t_i } $$ given a tokenizer function 
 "r" for adverbs
 "s" for satellite adjectives
 ```
+
+
+
+
+Apart for a good definition of a dataset and its context, it's good to have a quick descriptive card with a bunch of classic metric.
+In NLP, these metrics can give an hint on the way to go in the objective.
+
+Remember that you cannot 
+> You can’t control what you cannot measure
+
+If you can't measure it, you can't improve it (William Thomson, Lord Kelvin)
+
+If you can't measure it, you can't manage it (Peter Drucker)
