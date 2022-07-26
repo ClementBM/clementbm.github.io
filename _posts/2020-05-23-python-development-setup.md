@@ -321,7 +321,7 @@ And then edit the `index.rst` file
 You can then run the following commands to build a basic documentation
 ```shell
 cd docs
-# might delete *.rst (exept index.rst) files before
+# might delete *.rst (except index.rst) files before
 sphinx-apidoc -o . ../src/climbingboard --ext-autodoc
 make html
 ```
