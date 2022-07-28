@@ -61,6 +61,24 @@ JavaScript; modern language; Google Analytics; source Ask
 topstories[topstories["title"].str.contains(" source")]["title"]
 ```
 
+# Tokenizer specifications
+
+| Step | Description |
+|--|--|
+| Replace html entities | Remove html entities like &gt; or &nbsp; and convert them to their corresponding unicode character. |
+| Find word according to regex patterns | |
+| Filter (remove) words that are punctuation | remove punctuation from `string.punctuation` **'!"#$$%&\'()*+,-./:;<=>?@[\\]^_`{\|}~'** and **——–’‘“”×** |
+
+## Create a simple Corpus Metrics class
+
+```python
+"n" for nouns
+"v" for verbs
+"a" for adjectives
+"r" for adverbs
+"s" for satellite adjectives
+```
+
 # Sources
 * https://en.wikipedia.org/wiki/Collocation
 * https://en.wikipedia.org/wiki/Co-occurrence
