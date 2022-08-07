@@ -7,7 +7,6 @@ categories: [theory]
 tags: [NLTK, NLP, statistic]
 ---
 
-
 ![Grape vine fruit](/assets/2022-07-07/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
 
 # Co-occurrence
@@ -57,29 +56,15 @@ open source; command line; Dark Souls; Nhat Hanh; Points Guy; Suite
 legacy; Thich Nhat; largest chip; American Airlines; black holes; SICP
 JavaScript; modern language; Google Analytics; source Ask
 
-```python
-topstories[topstories["title"].str.contains(" source")]["title"]
-```
-
-# Tokenizer specifications
-
-| Step | Description |
-|--|--|
-| Replace html entities | Remove html entities like &gt; or &nbsp; and convert them to their corresponding unicode character. |
-| Find word according to regex patterns | |
-| Filter (remove) words that are punctuation | remove punctuation from `string.punctuation` **'!"#$$%&\'()*+,-./:;<=>?@[\\]^_`{\|}~'** and **——–’‘“”×** |
-
-## Create a simple Corpus Metrics class
-
-```python
-"n" for nouns
-"v" for verbs
-"a" for adjectives
-"r" for adverbs
-"s" for satellite adjectives
-```
 
 # Sources
 * https://en.wikipedia.org/wiki/Collocation
 * https://en.wikipedia.org/wiki/Co-occurrence
 * See Manning, C.D., Manning, C.D. and Schütze, H., 1999. Foundations of Statistical Natural Language Processing. MIT press, p. 162 https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22
+* https://en.wikipedia.org/wiki/Pointwise_mutual_information
+*  [Word association norms, mutual information, and lexicography](https://aclanthology.org/J90-1003.pdf)
+*  https://www.nltk.org/howto/collocations.html
+*  [Mutual information](https://towardsdatascience.com/mutual-information-prediction-as-imitation-da2cfb1e9bdd)
+*  [Information theory](https://towardsdatascience.com/information-theory-a-gentle-introduction-6abaf99835ac)
+*  [La vraisemblance](https://www.youtube.com/watch?v=P-AHaAP8fIk)
+*  [Initiation à la statistique bayésienne](https://www.youtube.com/watch?v=5hN_plbtPjw)
