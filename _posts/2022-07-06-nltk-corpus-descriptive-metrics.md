@@ -45,6 +45,8 @@ We define the dictionary $$ \mathcal{D} = { t_i } $$ given a tokenizer function 
 
 Having already seen some basic function of [text analysis with `nltk.book.Text`]({% post_url 2022-07-05-nltk-eda-hackernews %}), we describe and compute some basic metrics to find characteristic and informative thing about the hackernews story dataset.
 
+To see the code used to build the following table go [this way](https://github.com/ClementBM/hackernews-eda/blob/main/hn_eda/corpus_metrics.py).
+
 |    | Name                        | Formula                                                                                                                                                  | Value   | Description                                          |
 |---:|:----------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|:--------|:-----------------------------------------------------|
 |  0 | Count                       | $$\vert \mathcal{O} \vert$$                                                                                                                                | 500     | Number of title                                      |
