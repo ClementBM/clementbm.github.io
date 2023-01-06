@@ -158,7 +158,7 @@ A first-order autoregressive process is the special case of an ARIMA process whe
 
 | Parametric Notation | Backward Shift Notation |
 |--|--|
-| $$z_t = \phi_1 + \sum^p_{i=1} \phi_i z_{t-i} + \epsilon_t$$ | $$\Phi_1(B)(1 - B)^0 z_t = \Theta_1(B)\epsilon_t$$ |
+| $$z_t = \phi_0 + \sum^p_{i=1} \phi_i z_{t-i} + \epsilon_t$$ | $$\Phi_1(B)(1 - B)^0 z_t = \Theta_0(B)\epsilon_t$$ |
 | $$z_t = \phi_1 z_{t-1} + \epsilon_t$$ | $$(1 -\phi_1B) z_t = \epsilon_t$$ |
 
 | Autocovariance ACVF | Autocorrelation ACF | Partial Autocorrelation PACF |

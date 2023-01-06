@@ -7,6 +7,12 @@ categories: [study]
 tags: [time series, dtw, clustering]
 ---
 
+## Hypothesis
+Electricity generation, consumption data sources are not always used at 100% of their capacities due to:
+* maintenance
+* failures
+* power consumption needs
+
 ## Dynamic Time Warping metric
 
 Dynamic time warping (DTW) was introduced in order to overcome some of the restrictions of simpler similarity measures such as Euclidean distance.
@@ -89,3 +95,9 @@ https://app.electricitymaps.com/zone/IT-SO
 
 ## Le reveilleur
 https://www.youtube.com/watch?v=HMystmGbctw
+
+# See reference in time series survey
+
+## Prix electricité
+https://opera-energie.com/prix-electricite-prix-du-kwh/
+https://www.fournisseurs-electricite.com/guides/prix/mwh-electricite
