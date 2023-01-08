@@ -1,19 +1,19 @@
 ---
 layout: post
 title:  "How to statistically test the residuals from forecasted data?"
-excerpt: "Hands-on testing the residuals from electric consumption forecast"
+excerpt: "Hands-on testing the residuals from electric power consumption forecast"
 date:   2023-01-06
 categories: [study]
 tags: [time series, residuals]
 ---
 
-![Main image beetroots](/assets/2023-01-06/beetroot-gee78938b9_1280.jpg)
+![Beetroots illustration](/assets/2023-01-06/beetroot-gee78938b9_1280.jpg)
 
-In this post I will test the estimated noise sequence from a forecasted time series. Taking the 2020's electrical consumption in France and comparing it to the forecasts.
-First I'll test the residuals coming from the difference between the forecast and the consumption and in a second part I'll fit a SARIMA model to the preceding residuals, to further perform the same tests and compare.
+In this post I will test the estimated noise sequence from the difference between the forecast and the actual time series. Taking the 2020's electricity consumption in France and comparing it to the forecasts.
+First I'll test the raw residuals coming from the difference between the forecast and the consumption. In a second part I'll fit a SARIMA model to the preceding residuals to further perform the same tests and compare them.
 
 **Table of contents**
-- [Electrical consumption in France](#electrical-consumption-in-france)
+- [Electric energy consumption in France](#electric-energy-consumption-in-france)
   - [Data integrity](#data-integrity)
   - [Behavior shifts](#behavior-shifts)
   - [Extreme values](#extreme-values)
@@ -59,60 +59,59 @@ First I'll test the residuals coming from the difference between the forecast an
 
 First, let's make a brief scan of the dataset, mostly by visual checking, without getting to much into the details.
 
-# Electrical consumption in France
+# Electric energy consumption in France
 
-Let's see the shape of the electric consumption in France for year 2020. We also plot the forecast and the forecast error. The forecast error is the consumption minus the forecast.
+Let's see the shape of the electricity consumption in France for year 2020. We also plot the forecast and the forecast error. The forecast error is the consumption minus the forecast.
 
 ![Plot showing power electric energy consumption in France for year 2020](/assets/2023-01-06/overall-forecast-consumption.png)
 
 ## Data integrity
 
-Some brief sanity check, to remove the none values. Since the sample rate is initially 15 minutes, but only half hour data are provided, we have to clean this up.
-And then check that the time steps are constant and continue over time.
+Firstly I performed a brief sanity check. Since the dataset sample rate is initially 15 minutes but only half hour data are provided, I removed the null values. Then I checked that the time steps are constant and continue over time.
 
 ## Behavior shifts
 
-We can easily see two different regimes, in winter with high consumption of electric energy and another in summer when people tend to consume less electricity (in France).
+Looking at the time serie of the consumption of electricity, we can easily see two different regimes. One in winter with a high consumption of electric energy and another in summer when people tend to consume less electricity (in France at least).
 
 ## Extreme values
 
-No extreme values seems to be present nor in the forecast or in the prediction.
+No extreme values seem to be present neither in the forecast nor in the prediction.
 However, the forecast error do seem to have a few extreme values.
 
 There are about 70 values where the forecast error is greater than 5 GigaWatts in absolute value:
 
 $$ \lvert {FORECAST}\_{ERROR} \rvert > 5 GW$$
 
-Note that 5 GigaWatts is a quite arbitrary value. Giving that 1 MegaWatts is equivalent to the consumption of about 600 homes, then 5GW would be of about 3 millions homes, which is quite a number in comparison with the France population, which has about 30 millions homes. More that one third of the total electric consumption is consumed by private homes.
+Note that 5 GigaWatts is a quite arbitrary value. Giving that 1 MegaWatts is equivalent to the consumption of about 600 homes, then 5GW would be of about 3 millions homes, which is quite a number in comparison with the France population, which has about 30 millions homes, knowing than more that one third of the total electric power consumption is consumed by private homes.
 
 ### First lock down due to Covid
 
-The unusual situation due to the first lock down in France, lead to higher variance, and at some times, an underestimation of the electric consumption. 17 of march was surely the day with the higher forecast error, with peaks at almost 10 GigaWatts.
+The spread of the coronavirus among the population leads to a national lock down in France. Looking at the time series, the unusual situation cause a higher variance during a few days. As a result, the forecast process had to be trickier than usual and over and underestimations of the electric energy consumption happened. For instance, the 17th of march might be the day with the higher forecast error, with a peak at almost 10 GigaWatts.
 
-![alt](/assets/2023-01-06/covid-1-forecast-consumption.png)
+![First covid lock down](/assets/2023-01-06/covid-1-forecast-consumption.png)
 
-| Thursday, March 12 | Childcare centers are closed, as well as for all students from elementary school to university |
-| Saturday, March 14 | Third and last stage of the crisis plan announced by 1st minister |
-| Tuesday, March 17 |	Lock down, Movement restriction in all European Union, frontiers of the Schengen Area are closed |
+| Thursday, March 12 | Childcare centers are closed, as well as elementary schools and universities |
+| Saturday, March 14 | Third and last stage of the crisis plan announced by the prime minister |
+| Tuesday, March 17 |	Lock down, movement restriction in all European Union, frontiers of the Schengen Area are closed |
 
 ### Second lock down due to Covid
 
-During the second lock down, the perturbations in the forecast error were less important. Sunday 25th of october has the higher forecast error on this period. The error only long on 1/2 hour, understimation the consumption.
+During the second lock down, the perturbations in the forecast error were less important. Sunday 25th of october has the higher forecast error on this period. The error only long for 1/2 hour, leading to an underestimation of the consumption.
 
-![alt](/assets/2023-01-06/covid-2-forecast-consumption.png)
+![Second covid lock down](/assets/2023-01-06/covid-2-forecast-consumption.png)
 
-| Saturday, October 17  | Mandatory curfew in certain region for at least 4 weeks (Ile de France, and eight other cities. Les rassemblements sont limités à 6 personnes |
+| Saturday, October 17  | Mandatory curfew in certain regions for at least 4 weeks (Ile de France, and eight other cities. Meetings are limited to 6 people. |
 | Thursday, October 22 | Curfew extension to 38 new french departements, in addition to the 16 departements already curfewed |
-| Friday, October 30 | Generalized shut down. Mandatory lock down of non-essentiels store. Movement restriction. Unlike the first lockdown childcare centers, schools stay opened |
+| Friday, October 30 | Generalized lock down. Mandatory lock down of non-essentiels store. Movement restriction. Unlike the first lock down childcare centers and schools stay opened |
 
 ### Christmas 2020
 
-As for christams 2020, there is an unusual error in the forecast. This time an overestimation of the consumption.
-![alt](/assets/2023-01-06/christmas-forecast-consumption.png)
+As for christams 2020, there is an unusual error in the forecast. This time it's an overestimation of the consumption.
+![Electric Energy Consumption during 2020's Christmas](/assets/2023-01-06/christmas-forecast-consumption.png)
 
 ## Seasonalities
 
-As we can expect, there might be at least 2 kind of seasonality in this time series: daily and weekly.
+As one can expect, there might be at least 2 kind of seasonality in this time series: daily and weekly.
 
 # J-1 Forecast Evaluation
 
@@ -137,20 +136,20 @@ If $$w_t$$ is positive, consumption was greater than expected, otherwise it was 
 
 ## 24-hours Window Rolling statistics
 
-![alt](/assets/2023-01-06/forecast-error-rolling.png)
+![Rolling mean and standard deviation of the residuals](/assets/2023-01-06/forecast-error-rolling.png)
 
 ## Autocorrelation tests
 
 ### Correlogram
 
-![Autocorrelation plots](/assets/2023-01-06/autocorrelations.png)
+![Autocorrelations of the residuals](/assets/2023-01-06/autocorrelations.png)
 
 From the correlograms we can see that:
 * Autocorrelation slowly decay
-* As of the PACF, autoregressive order at least 1
-* Peaks are present around 24 hours (48 $$1/2$$ hours), seasonality at 24 hours intervals
+* Looking at the PACF, it would be possible to fit and AR(1) our AR(2) model
+* Peaks are present at around 24 hours ($$48 \times {1 \over 2}$$ hours), this shows the presence of a seasonal process every 24 hours
 
-> The confidence intervals of ACF values should be at 2 standard errors around $$r_k$$. Testing for randomness of residuals, the standard errors are determined assuming the residuals are white noise.
+> As we we test the randomness of residuals assuming they should be white noise, the confidence intervals of ACF values are at 2 standard errors around $$r_k$$.
 
 ### Ljung-Box test
 Ljung-Box test is a test for autocorrelation in either raw data or model residuals.
@@ -174,7 +173,7 @@ Perform a test of statistical independence of a data series by comparing
 the number of turning points present in the series with the number of turning
 points expected to be present in an i.i.d. series.
 
-|   $$T$$ statistic |   p.value |     n |    $$\mu$$ |   $$\sigma$$ |
+|   $$T$$ statistic |   p-value |     n |    $$\mu$$ |   $$\sigma$$ |
 |------------|----------|------|------|--------|
 |    -41.5094 |         0 | 17558 | 11704 | 55.8668 |
 
@@ -187,7 +186,7 @@ This test is useful for detecting linear trends in data series.
 Test for a trend in a data series by comparing the number of increasing
 pairs in the series with the number expected in an i.i.d. series.
 
-|  $$P$$ statistic |     p.value |       pairs |     n |     $$\mu$$ |    $$\sigma$$  |
+|  $$P$$ statistic |     p-value |       pairs |     n |     $$\mu$$ |    $$\sigma$$  |
 |------------|------------|------------|------|------------|--------|
 |    -4.56648 | 4.95979e-06 | 7.52957e+07 | 17558 | 7.70665e+07 |  387775 |
 
@@ -215,13 +214,13 @@ Since $$p<0.05$$ we can reject the null hypothesis that the time series has a un
 
 Here we plot the sample distribution of the forecast error in blue, and the ideal gaussian density distribution in orange.
 
-![Forecast error](/assets/2023-01-06/forecast-error-distribution.png)
+![Distribution of the forecasted error](/assets/2023-01-06/forecast-error-distribution.png)
 
 The sample distribution calculated with kernel density estimation seems higher, and to have a fatter tail than the gaussian, maybe due to outliers.
 
 ### Q-Q plot
 
-![Q-Q plot](/assets/2023-01-06/qq-plot.png)
+![Q-Q plot of the forecasted error](/assets/2023-01-06/qq-plot.png)
 
 Both the ends of the Q-Q plot deviate from the straight line and its center follows a straight line.
 Kurtosis is 8, confirm that the tail is larger than one draw from a normal distribution.
@@ -229,7 +228,7 @@ Kurtosis is 8, confirm that the tail is larger than one draw from a normal distr
 ### Jarque-Bera Tests
 Since sample size is quite large (> 10000), we can use the Jarque-Bera test.
 
-|   J-Q Test Statistic |  p-Value |
+|   J-Q Test Statistic |  p-value |
 |-----------|---------|
 | 39184.568 | 0.0 |
 
@@ -266,7 +265,7 @@ The mean of the SARIMA residuals are closer than 0, and the variance is smaller 
 
 ## 24-hours Window Rolling statistics
 
-![alt](/assets/2023-01-06/sarimax-forecast-error-rolling.png)
+![Rolling mean and standard deviation of the SARIMA residuals](/assets/2023-01-06/sarimax-forecast-error-rolling.png)
 
 ## Autocorrelation tests
 
@@ -274,11 +273,11 @@ The mean of the SARIMA residuals are closer than 0, and the variance is smaller 
 
 The correlogram looks like a random noise one except at time lag 49, where it might still remain a seasonal effect.
 
-![alt](/assets/2023-01-06/sarimax-autocorrelations.png)
+![Autocorrelations of the SARIMA residuals](/assets/2023-01-06/sarimax-autocorrelations.png)
 
 ### Ljung-Box test
 
-|  Lags  |   $$Q_{LB}$$ statistic |    lb_pvalue |
+|  Lags  |   $$Q_{LB}$$ statistic |    p-value |
 |----|----------|-------------|
 |  96 |   1464.91 | 1.4445e-243  |
 | 144 |   1874.97 | 9.32924e-299 |
@@ -292,7 +291,7 @@ The p-values for lags [0,...,144] are still way lower than 0.05. We reject the n
 ## Independence tests
 ### Turning Point Test
 
-|   $$T$$ statistic |   p.value |     n |       $$\mu$$ |   $$\sigma$$ |
+|   $$T$$ statistic |   p-value |     n |       $$\mu$$ |   $$\sigma$$ |
 |------------|----------|------|--------|--------|
 |    0.829117 |  0.407038 | 17568 | 11710.7 | 55.8827 |
 
@@ -300,7 +299,7 @@ The p-value is greater than 0.05, we cannot reject the null hypothesis that the 
 
 ### Rank Test
 
-|   $$P$$ statistic |   p.value |       pairs |     n |      $$\mu$$ |    $$\sigma$$  |
+|   $$P$$ statistic |   p-value |       pairs |     n |      $$\mu$$ |    $$\sigma$$  |
 |------------|----------|------------|------|------------|--------|
 |  -0.0587056 |  0.953187 | 7.71315e+07 | 17568 | 7.71543e+07 |  388106 |
 
@@ -325,18 +324,18 @@ More or less the same results as for the previous residuals.
 ## Normality tests
 SARIMA distribution seems more concentrated around the mean. Still higher than the gaussian distribution.
 
-![alt](/assets/2023-01-06/sarimax-forecast-error-distribution.png)
+![Distribution of the SARIMA residuals](/assets/2023-01-06/sarimax-forecast-error-distribution.png)
 
 ### Q-Q plot
 The Q-Q plot is quite similar.
 
-![alt](/assets/2023-01-06/sarimax-qq-plot.png)
+![Q-Q plot of the SARIMA residuals](/assets/2023-01-06/sarimax-qq-plot.png)
 
 ### Jarque-Bera Tests
 
-| J-Q Test Statistic | p-Value |
+| J-Q Test Statistic | p-value |
 |----|---------|
-| 49886.860 | 0.0 |
+| 49886.86 | 0.0 |
 
 A value higher than the previous one confirm that the distribution is more concentrated around the mean.
 
@@ -347,23 +346,23 @@ A value higher than the previous one confirm that the distribution is more conce
 | Mean | 0.115271 | -4.26557e-06 | More centered |
 | Standard Deviation | 1.11063 | 0.371329 |
 | Skewness | 0.88854 |  0.491632 | Less right skewed |
-| Kurtosis |7.09978 |  8.19931 | More thinner density distribution |
+| Kurtosis |7.09978 |  8.19931 | Thinner density distribution |
 | Min | -5.819 | -3.8873 |
 | Max | 10.299 | 5.05434 |
 | Median | 0.102 | -0.008537 |
-| Ljung-Box Test | 143366 | 1874.97 | Still not independant |
+| Ljung-Box Test | 143366 (0) | 1874.97 (0) | Still not independant |
 | Turning Point Test | 41.5094 (0)| 0.8291 (0.4070) | Now independent |
 | Rank Test | -4.56648 (4.96e-06)| -0.0587 (0.9532) | Now independent |
 | KPSS Test | 0.246049 (0.1) | 0.0527507 (0.1) | Still stationary |
 | ADF Test | -10.0775 (1.21e-17) | -14.8331 (1.89e-27) | Still stationary |
-| Jarque-Bera Test | 39184.568 (0.0) | 49886 (0.0) | Still not normal |
+| Jarque-Bera Test | 39184 (0.0) | 49886 (0.0) | Still not normal |
 
 
 # Sources
+* [French electrcity consumption](https://www.hellowatt.fr/suivi-consommation-energie/consommation-electrique/consommation-france)
 * [ENTSO-E transparency](https://transparency.entsoe.eu/)
 * [Seasonal Arima](https://otexts.com/fpp2/seasonal-arima.html)
 * [TSA Documentation](https://cran.r-project.org/web/packages/TSA/TSA.pdf)
 * [RPY2 Documentation](https://rpy2.github.io/doc.html)
-* [French consumption](https://www.hellowatt.fr/suivi-consommation-energie/consommation-electrique/consommation-france)
 * [Documentation for package ‘spgs’ version 1.0-3](https://search.r-project.org/CRAN/refmans/spgs/html/00Index.html)
 
