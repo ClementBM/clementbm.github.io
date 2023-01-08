@@ -70,7 +70,7 @@ $$
 ## Codependencies
 
 A correlation of a variable with itself at different times is known as *autocorrelation*. 
-When a value $$Z_t$$ is correlated with a previous value $$Z_{t-h}$$ at lag $$h$$ then autocovariance function can be expressed as:
+When a value $$Z_t$$ is correlated with a subsequent value $$Z_{t+h}$$ at lag $$h$$ then autocovariance function can be expressed as:
 
 $$
 Cov(Z_t, Z_{t+h}) = \gamma_Z(h) = E[(Z_t - \mu_t)(Z_{t+h} - \mu_{t+h})]

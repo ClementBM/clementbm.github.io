@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Testing the residuals from electric consumption data"
-excerpt: "France electric consumption residuals test"
+title:  "How to statistically test the residuals from forecasted data?"
+excerpt: "Hands-on testing the residuals from electric consumption forecast"
 date:   2023-01-06
 categories: [study]
 tags: [time series, residuals]
@@ -9,8 +9,8 @@ tags: [time series, residuals]
 
 ![Main image beetroots](/assets/2023-01-06/beetroot-gee78938b9_1280.jpg)
 
-In this post I will test the estimated noise sequence from forecasted time series. Taking 2020's electrical consumption in France and comparing it to the forecasts.
-First I'll test the residuals resulting from the difference between the forecast and the consumption and in a second part I'll fit a SARIMA model to the preceding residuals, to further perform the same tests and compare.
+In this post I will test the estimated noise sequence from a forecasted time series. Taking the 2020's electrical consumption in France and comparing it to the forecasts.
+First I'll test the residuals coming from the difference between the forecast and the consumption and in a second part I'll fit a SARIMA model to the preceding residuals, to further perform the same tests and compare.
 
 **Table of contents**
 - [Electrical consumption in France](#electrical-consumption-in-france)
@@ -57,7 +57,7 @@ First I'll test the residuals resulting from the difference between the forecast
 - [Sources](#sources)
 
 
-This first part about a brief scan of the dataset, mostly visual check, without getting to much into the details.
+First, let's make a brief scan of the dataset, mostly by visual checking, without getting to much into the details.
 
 # Electrical consumption in France
 
@@ -67,17 +67,17 @@ Let's see the shape of the electric consumption in France for year 2020. We also
 
 ## Data integrity
 
-Some brief sanity check, to remove the none values. Since the sample rate is initially 15 minutes, but only half hour data are provided, we have to clean this off.
-And just check that the time steps are constant and continue over time.
+Some brief sanity check, to remove the none values. Since the sample rate is initially 15 minutes, but only half hour data are provided, we have to clean this up.
+And then check that the time steps are constant and continue over time.
 
 ## Behavior shifts
 
-We can easily see the two different regimes, in winter with high consumption of electric energy and another in summer when people tend to consume less electricity.
+We can easily see two different regimes, in winter with high consumption of electric energy and another in summer when people tend to consume less electricity (in France).
 
 ## Extreme values
 
 No extreme values seems to be present nor in the forecast or in the prediction.
-However,the forecast error do seem to have a few extreme values.
+However, the forecast error do seem to have a few extreme values.
 
 There are about 70 values where the forecast error is greater than 5 GigaWatts in absolute value:
 
