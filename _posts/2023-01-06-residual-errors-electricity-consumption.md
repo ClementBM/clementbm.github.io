@@ -10,7 +10,7 @@ tags: [time series, residuals]
 ![Beetroots illustration](/assets/2023-01-06/beetroot-gee78938b9_1280.jpg)
 
 In this post I will test the estimated noise sequence from the difference between the forecast and the actual time series. Taking the 2020's electricity consumption in France and comparing it to the forecasts.
-First I'll test the raw residuals coming from the difference between the forecast and the consumption. In a second part I'll fit a SARIMA model to the preceding residuals to further perform the same tests and compare them.
+First I'm going to test the raw residuals coming from the difference between the forecast and the consumption. In a second part I'll fit a SARIMA model to the preceding residuals to further perform the same tests and compare them.
 
 **Table of contents**
 - [Electric energy consumption in France](#electric-energy-consumption-in-france)
@@ -18,12 +18,12 @@ First I'll test the raw residuals coming from the difference between the forecas
   - [Behavior shifts](#behavior-shifts)
   - [Extreme values](#extreme-values)
     - [First lock down due to Covid](#first-lock-down-due-to-covid)
-    - [Second lock down due to Covid](#second-lock-down-due-to-covid)
+    - [Second lock down](#second-lock-down)
     - [Christmas 2020](#christmas-2020)
   - [Seasonalities](#seasonalities)
 - [J-1 Forecast Evaluation](#j-1-forecast-evaluation)
   - [Basic informations](#basic-informations)
-  - [24-hours Window Rolling statistics](#24-hours-window-rolling-statistics)
+  - [24-hours window rolling statistics](#24-hours-window-rolling-statistics)
   - [Autocorrelation tests](#autocorrelation-tests)
     - [Correlogram](#correlogram)
     - [Ljung-Box test](#ljung-box-test)
@@ -39,7 +39,7 @@ First I'll test the raw residuals coming from the difference between the forecas
     - [Jarque-Bera Tests](#jarque-bera-tests)
 - [SARIMA Residuals J-1 Forecast Evaluation](#sarima-residuals-j-1-forecast-evaluation)
   - [Basic informations](#basic-informations-1)
-  - [24-hours Window Rolling statistics](#24-hours-window-rolling-statistics-1)
+  - [24-hours window rolling statistics](#24-hours-window-rolling-statistics-1)
   - [Autocorrelation tests](#autocorrelation-tests-1)
     - [Correlogram](#correlogram-1)
     - [Ljung-Box test](#ljung-box-test-1)
@@ -86,7 +86,7 @@ Note that 5 GigaWatts is a quite arbitrary value. Giving that 1 MegaWatts is equ
 
 ### First lock down due to Covid
 
-The spread of the coronavirus among the population leads to a national lock down in France. Looking at the time series, the unusual situation cause a higher variance during a few days. As a result, the forecast process had to be trickier than usual and over and underestimations of the electric energy consumption happened. For instance, the 17th of march might be the day with the higher forecast error, with a peak at almost 10 GigaWatts.
+The spread of the coronavirus among the population leads to a national lock down in France. Looking at the time series, the unusual situation cause a higher variance during a few days. As a result, forecast the electricity consumption one day ahead had to be trickier than usual and over or underestimations of the consumption happened. For instance, the 17th of March might be the day with the higher forecast error, with an error peak at almost 10 GigaWatts.
 
 ![First covid lock down](/assets/2023-01-06/covid-1-forecast-consumption.png)
 
@@ -94,15 +94,15 @@ The spread of the coronavirus among the population leads to a national lock down
 | Saturday, March 14 | Third and last stage of the crisis plan announced by the prime minister |
 | Tuesday, March 17 |	Lock down, movement restriction in all European Union, frontiers of the Schengen Area are closed |
 
-### Second lock down due to Covid
+### Second lock down
 
-During the second lock down, the perturbations in the forecast error were less important. Sunday 25th of october has the higher forecast error on this period. The error only long for 1/2 hour, leading to an underestimation of the consumption.
+During the second lock down, the perturbations in the forecast error were less important. Sunday 25th of October was the day is the higher forecast error on this period. The error peaked at 6 GW and lasted for 1/2 hour, underestimating the consumption.
 
 ![Second covid lock down](/assets/2023-01-06/covid-2-forecast-consumption.png)
 
 | Saturday, October 17  | Mandatory curfew in certain regions for at least 4 weeks (Ile de France, and eight other cities. Meetings are limited to 6 people. |
 | Thursday, October 22 | Curfew extension to 38 new french departements, in addition to the 16 departements already curfewed |
-| Friday, October 30 | Generalized lock down. Mandatory lock down of non-essentiels store. Movement restriction. Unlike the first lock down childcare centers and schools stay opened |
+| Friday, October 30 | Generalized lock down. Mandatory lock down of non-essential stores. Movement restriction. Unlike the first lock down childcare centers and schools stay opened |
 
 ### Christmas 2020
 
@@ -113,6 +113,10 @@ As for christams 2020, there is an unusual error in the forecast. This time it's
 
 As one can expect, there might be at least 2 kind of seasonality in this time series: daily and weekly.
 
+![Daily seasonality box plot](/assets/2023-01-06/daily-seasonality.png)
+
+![Weekly seasonality box plot](/assets/2023-01-06/weekly-seasonality.png)
+
 # J-1 Forecast Evaluation
 
 The residuals are the prediction errors
@@ -121,7 +125,7 @@ $$
 w_t = {Consumption}_t - {Forecast}_t= x_t - \hat{x_t}
 $$
 
-If $$w_t$$ is positive, consumption was greater than expected, otherwise it was underestimated.
+If $$w_t$$ is positive, electric power consumption was greater than expected, otherwise it was underestimated.
 
 ## Basic informations
 
@@ -134,7 +138,7 @@ If $$w_t$$ is positive, consumption was greater than expected, otherwise it was 
 |:----------------|--------:|-------:|-------:|---------:|------:|-------:|
 | PREVISION_ERROR |   17568 | -5.819 | -0.519 |    0.102 | 0.695 | 10.299 |
 
-## 24-hours Window Rolling statistics
+## 24-hours window rolling statistics
 
 ![Rolling mean and standard deviation of the residuals](/assets/2023-01-06/forecast-error-rolling.png)
 
@@ -146,32 +150,30 @@ If $$w_t$$ is positive, consumption was greater than expected, otherwise it was 
 
 From the correlograms we can see that:
 * Autocorrelation slowly decay
-* Looking at the PACF, it would be possible to fit and AR(1) our AR(2) model
+* Looking at the PACF, it would be possible to fit and AR(1) or AR(2) model
 * Peaks are present at around 24 hours ($$48 \times {1 \over 2}$$ hours), this shows the presence of a seasonal process every 24 hours
 
-> As we we test the randomness of residuals assuming they should be white noise, the confidence intervals of ACF values are at 2 standard errors around $$r_k$$.
+> As we we test the randomness of residuals assuming they should be white noise, the confidence intervals of ACF values are at 2 standard errors around 0.
+
+Looking at a correlogram with a maximum lag at more than a week, it seems that the main seasonal effect is at 24 hour interval. Indeed the 24 hour peaks decay every 24h, and no 7 days seasonal effect seems to come out.
+![Weekly autocorrelations](/assets/2023-01-06/autocorrelations-week.png)
 
 ### Ljung-Box test
-Ljung-Box test is a test for autocorrelation in either raw data or model residuals.
+Ljung-Box test is a portmanteau test for testing the autocorrelation in either raw data or model residuals.
 
 |  Lags   |  $$Q_{LB}$$ statistic | p-value |
 |----|----------|------------|
 |  96 |    142969 |           0 |
 | 144 |    143366 |           0 |
 
-Since the test statistic is high 143366 and the p-value is $$<<$$ 0.05 we reject the iid hypothesis at level 0.05. Thus, we reject the null hypothesis of the test and conclude that the residuals are not independent.
+Since the test statistic is high 143366 and the p-value is $$<<$$ 0.05 we reject the iid hypothesis at level 0.05. It suggests that the sample autocorrelations are too large to be a sample from an iid sequence. We reject the null hypothesis of the test and conclude that the residuals are not independent.
 
 ### McLeod-Li test
-McLeod-Li test is a test for autoregressive conditional heteroskedasticity.
-Since p-values for lags [0,...,144] are $$<<$$ 0.05 we reject the iid hypothesis at level 0.05. We reject the null hypothesis of the test and conclude once again that the residuals are not independent.
+McLeod-Li test is a also a portmanteau test similar to Ljung-Box test. Since p-values for lags [0,...,144] are $$<<$$ 0.05 we reject the iid hypothesis at level 0.05. We reject the null hypothesis of the test and conclude once again that the residuals are not independent.
 
 ## Independence tests
 ### Turning Point Test
-This test is useful for detecting cyclic/periodic trends in data series..
-
-Perform a test of statistical independence of a data series by comparing
-the number of turning points present in the series with the number of turning
-points expected to be present in an i.i.d. series.
+Turning Point test is a test of statistical independence of a data series. It can detect cyclic trends. Under the hood, the turning point test compares the number of turning points present in the series with the number of turning points expected to be present in an i.i.d. series.
 
 |   $$T$$ statistic |   p-value |     n |    $$\mu$$ |   $$\sigma$$ |
 |------------|----------|------|------|--------|
@@ -181,10 +183,7 @@ Since $$T - \mu$$ is way below zero, it indicates that there might be a positive
 The p-value is $$<<$$ 0.05, we reject the null hypothesis that the data series is i.i.d., then the data serie probably has a remaining periodic trend.
 
 ### Rank Test
-This test is useful for detecting linear trends in data series.
-
-Test for a trend in a data series by comparing the number of increasing
-pairs in the series with the number expected in an i.i.d. series.
+The rank test is useful for detecting linear trends in data series by comparing the number of increasing pairs in the series with the number expected in an i.i.d. series.
 
 |  $$P$$ statistic |     p-value |       pairs |     n |     $$\mu$$ |    $$\sigma$$  |
 |------------|------------|------------|------|------------|--------|
@@ -216,14 +215,14 @@ Here we plot the sample distribution of the forecast error in blue, and the idea
 
 ![Distribution of the forecasted error](/assets/2023-01-06/forecast-error-distribution.png)
 
-The sample distribution calculated with kernel density estimation seems higher, and to have a fatter tail than the gaussian, maybe due to outliers.
+The sample distribution calculated with kernel density estimation seems higher, and seems to have a fatter tail than the gaussian, maybe due to outliers.
 
 ### Q-Q plot
 
 ![Q-Q plot of the forecasted error](/assets/2023-01-06/qq-plot.png)
 
 Both the ends of the Q-Q plot deviate from the straight line and its center follows a straight line.
-Kurtosis is 8, confirm that the tail is larger than one draw from a normal distribution.
+Kurtosis is 8, confirm that the tail is larger than one drawn from a normal distribution.
 
 ### Jarque-Bera Tests
 Since sample size is quite large (> 10000), we can use the Jarque-Bera test.
@@ -263,7 +262,7 @@ The mean of the SARIMA residuals are closer than 0, and the variance is smaller 
 |--------:|--------:|----------:|------------:|---------:|--------:|
 |   17568 | -3.8873 | -0.209651 | -0.00853736 | 0.203478 | 5.05434 |
 
-## 24-hours Window Rolling statistics
+## 24-hours window rolling statistics
 
 ![Rolling mean and standard deviation of the SARIMA residuals](/assets/2023-01-06/sarimax-forecast-error-rolling.png)
 
@@ -351,6 +350,7 @@ A value higher than the previous one confirm that the distribution is more conce
 | Max | 10.299 | 5.05434 |
 | Median | 0.102 | -0.008537 |
 | Ljung-Box Test | 143366 (0) | 1874.97 (0) | Still not independant |
+| McLeod-Li test | NA (0) | NA (0) | Still not independant |
 | Turning Point Test | 41.5094 (0)| 0.8291 (0.4070) | Now independent |
 | Rank Test | -4.56648 (4.96e-06)| -0.0587 (0.9532) | Now independent |
 | KPSS Test | 0.246049 (0.1) | 0.0527507 (0.1) | Still stationary |
