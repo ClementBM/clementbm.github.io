@@ -100,7 +100,11 @@ In applying the likelihood ratio test to collocation discovery, we examine the f
 * First hypothesis is $$ H_1 : P(w_2 \vert w_1) = p = P(w_2 \vert \bar{w_1} ) $$
 * Second hypothesis is $$ H_2 : P(w_2 \vert w_1) = p_1 \ne p_2 = P(w_2 \vert \bar{w_1} ) $$
 
-## Advantages of likelihood ration
+$$c_1$$, $$c_2$$ and $$c_{12}$$ are the number of occurences of the grapheme $$w_1$$, $$w_2$$ and $$w_{12}$$, $$N$$ the number of tokens/words in the corpus.
+
+
+
+## Advantages of likelihood ratio
 One advantage of likelihood ratios is that they have a clear intuitive in-
 terpretation. For example, the bigram powerful computers is xxx times more likely under the hypothesis that computers is more likely to follow powerful than its base rate of occurrence would suggest.
 This number is easier to interpret than the scores of the t test or the 2 test which we have to look up in a table.
@@ -108,14 +112,114 @@ This number is easier to interpret than the scores of the t test or the 2 test 
 But the likelihood ratio test also has the advantage that it can be more appropriate for sparse data than the 2 test. How do we use the likelihood ratio for hypothesis testing? If  is a likelihood ratio of a particular form, then the quantity  2 log  is asymptotically 2 distributed (Mood et al. 1974: 440). So we can use the values in Table 5.12 to test the null hypothesis H1 against the alternative hypothesis H2 . For example, we can look up the value of 34:15 for powerful cudgels in the table and reject H1 for this bigram on a confidence level of = 0:005. (The critical value (for one degree of freedom) is 7.88.
 
 # Sample use case
+
+```json
+{
+  "options": {
+    "packageName": "judilibre_client"
+  },
+  "spec": {
+
+  }
+}
+```
+
+
 ```python
 corpus_metric.story_text.collocations() # Dunning likelihood collocation
 # three word window: corpus_metric.story_text.collocations(window_size=3)
 ```
 
-open source; command line; Dark Souls; Nhat Hanh; Points Guy; Suite
-legacy; Thich Nhat; largest chip; American Airlines; black holes; SICP
-JavaScript; modern language; Google Analytics; source Ask
+## Bigram Collocation
+```python
+collocation_2(judilibre_text, method="llr", stop_words=stop_words)
+```
+```shell
+{"cour d'appel": 14779.656345618061,
+ 'code civil': 9034.437842527477,
+ 'dès lors': 8061.607047568378,
+ 'bon droit': 2470.063562327007,
+ 'procédure civile': 2074.7855327925286,
+ 'peut être': 1936.8836188208438,
+ 'doit être': 1856.4831975258871,
+ "d'un immeuble": 1694.5615662280786,
+ 'chose jugée': 1512.3425659159825,
+ 'après avoir': 1478.3002163179476,
+ 'condition suspensive': 1253.7851148695208,
+ 'rédaction antérieure': 1221.519857102709,
+ 'base légale': 1133.1024031677157,
+ 'sous seing': 1120.8378898578583,
+ 'seing privé': 1114.6228341225883,
+ "d'autre part": 1037.4683304932462,
+ "qu'une cour": 990.3205509155646,
+ "cassation l'arrêt": 977.635114391793,
+ "l'acte authentique": 969.402554409081,
+ "d'un acte": 947.6827965402367}
+```
+
+```python
+collocation_2(judilibre_text, method="pmi", stop_words=stop_words)
+```
+
+```shell
+{'bonnes moeurs': 17.259674311869706,
+ "d'échelle mobile": 17.259674311869706,
+ "donneur d'aval": 17.259674311869706,
+ 'maniere fantaisiste': 17.259674311869706,
+ "pétition d'hérédité": 17.259674311869706,
+ 'simulations chiffrées': 17.259674311869706,
+ 'trimestre echu': 17.259674311869706,
+ 'viciait fondamentalement': 17.259674311869706,
+ '1035 1036': 16.674711811148548,
+ '13-18 383': 16.674711811148548,
+ '757 758-6': 16.674711811148548,
+ 'associations syndicales': 16.674711811148548,
+ 'coemprunteurs souscrivent': 16.674711811148548,
+ 'collectivités territoriales': 16.674711811148548,
+ 'dissimulée derrière': 16.674711811148548,
+ "désirant l'acquérir": 16.674711811148548,
+ 'endettement croissant': 16.674711811148548,
+ 'huis clos': 16.674711811148548,
+ 'mètre carré': 16.674711811148548,
+ 'potentiellement significatives': 16.674711811148548}
+```
+
+## P-value
+
+|    | w_1       |   w_1_count | w_2         |   w_2_count |     score |   p-value |
+|---:|:----------|------------:|:------------|------------:|----------:|----------:|
+|  0 | cour      |         948 | d'appel     |        1230 | 14779.7   |         0 |
+|  1 | code      |        1051 | civil       |         830 |  9034.44  |         0 |
+|  2 | dès       |         477 | lors        |         773 |  8061.61  |         0 |
+|  3 | bon       |         205 | droit       |         972 |  2470.06  |         0 |
+|  4 | procédure |         496 | civile      |         371 |  2074.79  |         0 |
+|  5 | peut      |         817 | être        |         952 |  1936.88  |         0 |
+|  6 | doit      |         368 | être        |         952 |  1856.48  |         0 |
+|  7 | d'un      |        1879 | immeuble    |         261 |  1694.56  |         0 |
+|  8 | chose     |         157 | jugée       |         110 |  1512.34  |         0 |
+|  9 | après     |         296 | avoir       |         326 |  1478.3   |         0 |
+| 10 | condition |         175 | suspensive  |          73 |  1253.79  |         0 |
+| 11 | rédaction |         189 | antérieure  |         132 |  1221.52  |         0 |
+| 12 | base      |          99 | légale      |         156 |  1133.1   |         0 |
+| 13 | sous      |         247 | seing       |          67 |  1120.84  |         0 |
+| 14 | seing     |          67 | privé       |          84 |  1114.62  |         0 |
+| 15 | d'autre   |          69 | part        |         210 |  1037.47  |         0 |
+| 16 | qu'une    |         302 | cour        |         948 |   990.321 |         0 |
+| 17 | cassation |         186 | l'arrêt     |         329 |   977.635 |         0 |
+| 18 | l'acte    |         647 | authentique |         227 |   969.403 |         0 |
+| 19 | d'un      |        1879 | acte        |         538 |   947.683 |         0 |
+| 20 | justifie  |          38 | légalement  |         139 |   917.195 |         0 |
+| 21 | viole     |          89 | l'article   |        1901 |   914.622 |         0 |
+| 22 | société   |         411 | civile      |         371 |   866.908 |         0 |
+| 23 | officier  |          63 | public      |         217 |   851.046 |         0 |
+| 24 | acte      |         538 | authentique |         227 |   786.687 |         0 |
+| 25 | cet       |         322 | acte        |         538 |   766.902 |         0 |
+| 26 | cet       |         322 | officier    |          63 |   760.165 |         0 |
+| 27 | régime    |         191 | matrimonial |          54 |   736.566 |         0 |
+| 28 | bonne     |          48 | foi         |          86 |   734.162 |         0 |
+| 29 | sécurité  |          49 | sociale     |          63 |   732.558 |         0 |
+
+
 
 
 # Sources
