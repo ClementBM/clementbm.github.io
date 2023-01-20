@@ -12,4 +12,5 @@ tags: [chocolate, correlation]
 
 # Reference
 * [Serious paper](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
-
+* [La vraisemblance](https://www.youtube.com/watch?v=P-AHaAP8fIk)
+* [Initiation à la statistique bayésienne](https://www.youtube.com/watch?v=5hN_plbtPjw)

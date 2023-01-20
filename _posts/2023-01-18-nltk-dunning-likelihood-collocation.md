@@ -1,13 +1,37 @@
 ---
 layout: post
-title:  "Get collocations with Dunning likelihood ratio method"
-excerpt: "Explore a corpus with NLTK and the Dunning likelihood ratio method to find common collocations"
+title:  "Get collocations with dunning likelihood ratio method"
+excerpt: "Explore a corpus with NLTK and the dunning likelihood ratio method to find common collocations"
 date:   2023-01-18
 categories: [theory]
 tags: [NLTK, NLP, statistic, collocation]
 ---
 
 ![Grape vine fruit](/assets/2023-01-18/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
+
+The main theory explaination of this post is largely inspired by part 5.3.4 of the [Foundations of Statistical Natural Language, Manning and Schütze](https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22), not to say excessively copied.
+
+After the boring theory, we'll apply this technic to a french case law dataset. All the code is available in the following git repository [judilibre-eda](https://github.com/ClementBM/judilibre-eda).
+
+**Table of content**
+- [Collocation](#collocation)
+  - [Properties of collocation](#properties-of-collocation)
+    - [Non-compositionality](#non-compositionality)
+    - [Non-substitutability](#non-substitutability)
+    - [Non-modifiability](#non-modifiability)
+  - [Types](#types)
+  - [Applications in NLP](#applications-in-nlp)
+  - [Co-occurrence VS Collocation](#co-occurrence-vs-collocation)
+  - [Co-occurence and semantic field](#co-occurence-and-semantic-field)
+  - [Principal approaches of finding collocations](#principal-approaches-of-finding-collocations)
+- [Dunning likelihood ratio](#dunning-likelihood-ratio)
+  - [Advantages of likelihood ratio](#advantages-of-likelihood-ratio)
+- [Sample use case on Judilibre Open Data](#sample-use-case-on-judilibre-open-data)
+  - [Word Cloud](#word-cloud)
+  - [Bigram Collocation](#bigram-collocation)
+  - [P-value](#p-value)
+- [Sources](#sources)
+
 
 # Collocation
 A collocation is an expression consisting of two or more words that correspond to some conventional way of saying things.
@@ -21,7 +45,7 @@ Collocation is special case of co-occurrence, or "free phrases", where all of th
 ## Properties of collocation
 
 ### Non-compositionality
-Collocation are characterized by limited *compositionality* in that there is usually an element of meaning added to the combination of the meaning of each part.
+Collocations are characterized by limited **compositionality** in that there is usually an element of meaning added to the combination of the meaning of each part.
 
 Idioms are the most extreme examples of non-compositionality. Idioms like **to kick the bucket** or **to hear it through the grapevine** only have an indirect historical relationship to the meanings of the parts of the expression. We are not talking about buckets or grapevines literally when we use these idioms.
 
@@ -39,45 +63,30 @@ There a various types of collocations:
 * **stock phrases**, like *the rich and powerful*
 * **subtle and not-easily-explainable patterns of word usage**, like *a stiff breeze*, or *broad daylight*
 * **phraseme** or **set phrase** is a multi word utterance where at least one of whose components is selectionnaly constrained or restricted by linguistic convention such that it is not freely chosen.
-* **idiomatic phrase** or **idiom**, completely frowzen expressions, like proper nouns
+* **idiomatic phrase** or **idiom**, completely frozen expressions, like proper nouns
   * **proper nouns**, **proper names**, quite different from lexical collocation but usually included
   * **saying** or a proverb, figure of speech, foxed expression
-* **terminological expressions**, objects in technical domains, often fairly compositional but instances that have to be treated consistently for translation (for instance).
+* **terminological expressions**, like group of words in technical domains that are often compositional but they may have to be treated consistently for certain NLP tasks such as translation.
 
 ## Applications in NLP
 Collocations are important for a number of applications:
-* **natural language generation**, to make sure that the output sounds natural and mistakes like powerful tea or to take a decision are avoided
+* **natural language generation**, to make sure that the output sounds natural and mistakes like *powerful tea* or *to take a decision* are avoided
 * **computational lexicography**, to automatically identify the important collocations to be listed in a dictionary entry
-* **word tokenizer/parsing**, so that preference can be given to parses with natural collocations
+* **word tokenizer/parsing**, so that preference can be given to parse with natural collocations
 * **corpus linguistic research**, the study of social phenomena like the reinforcement of cultural stereotypes through language (Stubbs 1996)
 
 ## Co-occurrence VS Collocation
-In linguistics, co-occurrence is an above-chance frequency of occurrence of two or more terms in the same text (phrase, paragraph, corpus...), from a text corpus alongside each other in a certain order. 
+In linguistics, co-occurences or terms association are graphemes where words are strongly associated with each other, but do not necessarily occur in a common grammatical unit and with a particular order, cases like doctor - nurse or plane - airport.
 
-Co-occurrence is the co presence statistically significative of two or multiple unit within the same contextual window.
-
-Co-occurrence can be seen an extension of word counting in higher dimensions.
-
-Co-occurences or terms association are graphemes where words are strongly associated with each other, but do not necessarily occur in a common grammatical unit and with a particular order, cases like doctor - nurse or plane - airport.
+In other words, co-occurrence is an extension of word counting in higher dimensions. The co-presence of more than one word/token within the same contextual window has to be statistically significative.
 
 When it's proved that there is a semantical or gramatical dependency between two words, we call it collocation.
 
-It's possible that terms are mutally dependent when the use of the two is very frequent.
+## Co-occurence and semantic field
+Co-occurrence can be interpreted as an indicator of semantic proximity. When two words or more have a semantical relationship, co-occurrence notion is at the base of thematic, semantic field and isotopy. It is a more general association of words that are likely to be used in the same context.
 
-## Co-occurence and semantic field and isotopy
-Co-occurrence in this linguistic sense can be interpreted as an indicator of semantic proximity or an idiomatic expression.
-Corpus linguistics and its statistic analyses reveal patterns of co-occurrences within a language and enable to work out typical collocations for its lexical items.
-
-Location are "stable" coocurrence, group of words forming one lexical unit with a typical/own/particular meaning.
-
-When two words or other linguistic unit, have a semantical relationship, cooccurrence notion is at the base of thematic, semantic field, isotopy.
-
-It is a more general association of words that are likely to be used in the same context.
-
-In semantic and semiotiquen, isotopy is the redondancy of element in a corpus enabling to understand it?
-
-For example, the redondancy of the first person (I), make it easy to understand that the same person is talking.
-Redondancy of the same champ lexical enable us to understand that we are talking about the same theme.
+In semantic and semiotiquen, isotopy is the redondancy of element in a corpus enabling to understand it. For example, the redondancy of the first person (I), make it easy to understand that the same person is talking.
+Redondancy of the same semantic field enable us to understand that we are talking about the same theme.
 
 ## Principal approaches of finding collocations
 * selection of collocations by frequency
@@ -139,16 +148,14 @@ $$
 $$
 
 ## Advantages of likelihood ratio
-One advantage of likelihood ratios is that they have a clear intuitive interpretation. For example, the bigram **powerful computers** is xxx times more likely under the hypothesis that computers is more likely to follow powerful than its base rate of occurrence would suggest.
-
-This number is easier to interpret than the scores of the t test or the $$\chi^2$$ test.
+One advantage of likelihood ratios is that they have a clear intuitive interpretation. This number is easier to interpret than the scores of the t test or the $$\chi^2$$ test.
 
 The likelihood ratio test has the advantage that it can be more appropriate for sparse data than the $$\chi^2$$ test.
 
 For hypothesis testing? If $$\lambda$$ is a likelihood ratio of a particular form, then the quantity $$-2 log(\lambda)$$  is asymptotically $$\chi^2$$ distributed. So we can use to test the hypothesis $$H_1$$ against the alternative hypothesis $$H_2$$.
 
 # Sample use case on Judilibre Open Data
-The Court of Cassation, as part of the redesign of its website, initiated the JUDILIBRE project aimed at the design and in-house development of a search engine in the corpus of case law, making it available to the public in the spirit of the decree on the Open Data of court decisions.
+The Court of Cassation initiated the JUDILIBRE project aimed at the design and in-house development of a search engine in the corpus of case law, making it available to the public in the spirit of the decree on the Open Data of court decisions.
 
 ## Word Cloud
 
@@ -158,6 +165,9 @@ The Court of Cassation, as part of the redesign of its website, initiated the JU
 ```python
 collocation_2(judilibre_text, method="llr", stop_words=stop_words)
 ```
+
+For example, the bigram **cour d'appel** is 14000 times more likely under the hypothesis that **d'appel** is more likely to follow **cour** than its base rate of occurrence would suggest.
+
 ```shell
 {"cour d'appel": 14779.656345618061,
  'code civil': 9034.437842527477,
@@ -251,8 +261,6 @@ For example, we can look up the value of **sécurité sociale** in the table and
 * [Foundations of Statistical Natural Language, Manning and Schütze](https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22)
 * [Word association norms, mutual information, and lexicography](https://aclanthology.org/J90-1003.pdf)
 * [NLTK documentation on collocations](https://www.nltk.org/howto/collocations.html)
-* [La vraisemblance](https://www.youtube.com/watch?v=P-AHaAP8fIk)
-* [Initiation à la statistique bayésienne](https://www.youtube.com/watch?v=5hN_plbtPjw)
 * [Wikipedia definition of Collocation](https://en.wikipedia.org/wiki/Collocation)
 * [Wikipedia definition of Co-occurrence](https://en.wikipedia.org/wiki/Co-occurrence)
 * [Pointwise Mutual information](https://en.wikipedia.org/wiki/Pointwise_mutual_information)
