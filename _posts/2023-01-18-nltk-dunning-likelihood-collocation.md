@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Get collocations with dunning likelihood ratio method"
-excerpt: "Explore a corpus with NLTK and the dunning likelihood ratio method to find common collocations"
+title:  "How to get collocations with the dunning likelihood ratio?"
+excerpt: "Explore a corpus with NLTK and the dunning likelihood ratio to find common collocations"
 date:   2023-01-18
 categories: [theory]
 tags: [NLTK, NLP, statistic, collocation]
@@ -9,12 +9,13 @@ tags: [NLTK, NLP, statistic, collocation]
 
 ![Grape vine fruit](/assets/2023-01-18/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
 
+In this post, I'll try to explain what a collocation is, how we can retrieve collocations from a text corpus, and how to interpret the results.
 The main theory explaination of this post is largely inspired by part 5.3.4 of the [Foundations of Statistical Natural Language, Manning and Schütze](https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22), not to say excessively copied.
 
 After the boring theory, we'll apply this technic to a french case law dataset. All the code is available in the following git repository [judilibre-eda](https://github.com/ClementBM/judilibre-eda).
 
 **Table of content**
-- [Collocation](#collocation)
+- [Definitions](#definitions)
   - [Properties of collocation](#properties-of-collocation)
     - [Non-compositionality](#non-compositionality)
     - [Non-substitutability](#non-substitutability)
@@ -28,21 +29,24 @@ After the boring theory, we'll apply this technic to a french case law dataset. 
   - [Advantages of likelihood ratio](#advantages-of-likelihood-ratio)
 - [Sample use case on Judilibre Open Data](#sample-use-case-on-judilibre-open-data)
   - [Word Cloud](#word-cloud)
-  - [Bigram Collocation](#bigram-collocation)
+  - [Bigram collocation](#bigram-collocation)
+  - [Pointwise mutual information](#pointwise-mutual-information)
   - [P-value](#p-value)
 - [Sources](#sources)
 
 
-# Collocation
+# Definitions
 A collocation is an expression consisting of two or more words that correspond to some conventional way of saying things.
+
+As Choueka said:
 
 > [A collocation is defined as] a sequence of two or more consecutive words, that has characteristics of a syntactic and semantic unit, and whose exact and unambiguous meaning or connotation cannot be derived directly from the meaning or connotation of its components.
 >
 > Choueka (1988)
 
-Collocation is special case of co-occurrence, or "free phrases", where all of the members are chosen freely, based exclusively on their meaning and the message that the speaker wishes to communicate.
 
 ## Properties of collocation
+More precisly a collocation is a group of words having one or more of the three following properties: non-compositionality, non-substitutability and non-modifiability.
 
 ### Non-compositionality
 Collocations are characterized by limited **compositionality** in that there is usually an element of meaning added to the combination of the meaning of each part.
@@ -76,60 +80,63 @@ Collocations are important for a number of applications:
 * **corpus linguistic research**, the study of social phenomena like the reinforcement of cultural stereotypes through language (Stubbs 1996)
 
 ## Co-occurrence VS Collocation
-In linguistics, co-occurences or terms association are graphemes where words are strongly associated with each other, but do not necessarily occur in a common grammatical unit and with a particular order, cases like doctor - nurse or plane - airport.
+In linguistics, co-occurences or terms associations are graphemes where words are strongly associated with each other, but do not necessarily occur in a common grammatical unit and with a particular order. In other words, a co-occurrence is an extension of word counting in higher dimensions. The co-presence of more than one word/token within the same contextual window has to be statistically significative.
 
-In other words, co-occurrence is an extension of word counting in higher dimensions. The co-presence of more than one word/token within the same contextual window has to be statistically significative.
-
-When it's proved that there is a semantical or gramatical dependency between two words, we call it collocation.
+When it's proved that there is a semantical or gramatical dependency between two words, we call it collocation. Then,  collocation is special case of co-occurrence, or "free phrases", where all of the members are chosen freely, based exclusively on their meaning and the message that the speaker wishes to communicate.
 
 ## Co-occurence and semantic field
 Co-occurrence can be interpreted as an indicator of semantic proximity. When two words or more have a semantical relationship, co-occurrence notion is at the base of thematic, semantic field and isotopy. It is a more general association of words that are likely to be used in the same context.
 
-In semantic and semiotiquen, isotopy is the redondancy of element in a corpus enabling to understand it. For example, the redondancy of the first person (I), make it easy to understand that the same person is talking.
-Redondancy of the same semantic field enable us to understand that we are talking about the same theme.
+In semantic and semiotiquen, isotopy is the redondancy of element in a corpus enabling to understand it. For example, the redondancy of the first person (I), make it easy to understand that the same person is talking. Redondancy of the same semantic field enable us to understand that we are talking about the same theme.
 
 ## Principal approaches of finding collocations
+There are various and complementary ways to look for collocations:
 * selection of collocations by frequency
 * selection based on mean and variance of the distance between focal word and collocating word
 * hypothesis testing
 * mutual information
 
-# Dunning likelihood ratio
-Likelihood ratios are another approach to hypothesis testing. We will see below that they are more appropriate for sparse data than the $$\chi^2$$ test. But they also have the advantage that the statistic we are computing, a likelihood ratio, is more interpretable than the $$\chi^2$$ statistic. 
+In the remaining parts of this post, we are going to focus on hypothesis testing and more specifically on the likelihood ratio test.
 
-It is simply a number that tells us how much more likely one hypothesis is than the other. 
+# Dunning likelihood ratio
+Likelihood ratios are more appropriate for sparse data than the $$\chi^2$$ test. But they also have the advantage that the statistic we are computing, a likelihood ratio, is more interpretable than the $$\chi^2$$ statistic. 
+
+At the end, the likelihood ratio is simply a number that tells us how much more likely one hypothesis is than the other. 
 
 In applying the likelihood ratio test to collocation discovery, we examine the following two alternative explanations for the occurrence frequency of a bigram $$w_1 w_2$$ (Dunning 1993)
 
 * First hypothesis is $$ H_1 : Pr(w_2 \vert w_1) = p = Pr(w_2 \vert \bar{w_1} ) $$
 * Second hypothesis is $$ H_2 : Pr(w_2 \vert w_1) = p_1 \ne p_2 = Pr(w_2 \vert \bar{w_1} ) $$
 
-$$c_1 = \vert w_1 \vert$$, $$c_2 = \vert w_2 \vert$$ and $$c_{12} = \vert w_{12} \vert$$ are the number of occurences of the corresponding grapheme and $$N = \vert \Omega \vert $$ the total number of tokens/words in the corpus.
-
-Then we have
+Given $$c_1 = \vert w_1 \vert$$, $$c_2 = \vert w_2 \vert$$ and $$c_{12} = \vert w_{12} \vert$$ are the number of occurences of the corresponding grapheme and $$N = \vert \Omega \vert $$ the total number of tokens/words in the corpus, we define the probability of having this two words adjacent, and the opposite probability:
 
 * $$Pr(w_2 \vert w_1) = p_1 = { c_{12} \over c_1 } $$,
 * $$Pr(w_2 \vert \bar{w_1} ) = p_2 = { c_2 - c_{12} \over N - c_1 } $$.
 
 ![Collocation spaces](/assets/2023-01-18/collocation-spaces.drawio.png)
 
-| | $$p_1$$ | $$p_2$$ |
+The next table shows the probability of having words $$w_2$$ and $$w_1$$ adjacent, and the probability of having word $$w_2$$ not adjacent to $$w_1$$.
+
+| | $$Pr(w_2 \vert w_1)$$ | $$Pr(w_2 \vert \bar{w_1} ) $$ |
 |--|--|--|
-| $$H_1$$ | $$p_1=p={ c_1 \over N }$$ | $$p_2=p= { c_2 \over N }$$ |
+| $$H_1$$ | $$p_1=p={ c_2 \over N }$$ | $$p_2=p= { c_2 \over N }$$ |
 | $$H_2$$ | $$p_1={ c_{12} \over c_1 }$$ | $$p_2= { c_2 - c_{12} \over N - c_1 }$$ |
 
-
-Following the first hypothesis:
+Following the first hypothesis, the likelihood of observing the data given $$H_1$$ is the product of the likelihood of observing $$c_{12}$$ words out of $$c_1$$ with the likelihood of observing $$c_2 - c_{12}$$ words out of $$N - c_1$$:
 
 $$
 L(H_1) = Pr( w_2 \vert w_1, H_1) \times Pr( w_2 \vert \bar{w_1}, H_1)
 $$
 
+We note $$b()$$ the probability mass function of the binomial distribution:
+
 $$ b(k;n,p) = \binom{n}{k} p^k (1-p)^{n-k} $$
+
+So that the likelihood of $$H_1$$ can be written:
 
 $$L(H_1) = b(c_{12};c_1,p) \times b(c_2 - c_{12};N - c_1,p) $$
 
-Following the second hypothesis:
+Similarly the likelihood of observing the data given $$H_2$$ is the product of the likelihood of observing $$c_{12}$$ words out of $$c_1$$ with the likelihood of observing $$c_2 - c_{12}$$ words out of $$N - c_1$$:
 
 $$
 L(H_2) = Pr( w_2 \vert w_1, H_2) \times Pr( w_2 \vert \bar{w_1}, H_2)
@@ -137,36 +144,40 @@ $$
 
 $$L(H_2) = b(c_{12};c_1,p_1) \times b(c_2 - c_{12};N - c_1,p_2) $$
 
-Likelihood ratio is
+The likelihood ratio $$\lambda$$ is the quotient of the likelihoods:
 
 $$
 \lambda = { L(H_1) \over L(H_2) }
 $$
 
-$$
--2 log(\lambda) \sim \chi^2
-$$
+Generally if $$\lambda \gt 1$$ the first hypothesis is more likely than the second. For instance, if $$\lambda = 4$$ then the $$H_1$$ is four times more likely than $$H_2$$ to happen. In our case, the first hypothesis is much less likely than the second one. So it is common to take the logarithm of the ratio, with a negative constant before $$-2 log(\lambda) $$.
 
 ## Advantages of likelihood ratio
-One advantage of likelihood ratios is that they have a clear intuitive interpretation. This number is easier to interpret than the scores of the t test or the $$\chi^2$$ test.
+One advantage of likelihood ratios is that they have a clear intuitive interpretation. They can also be more appropriate for sparse data than the $$\chi^2$$ test.
 
-The likelihood ratio test has the advantage that it can be more appropriate for sparse data than the $$\chi^2$$ test.
+For hypothesis testing, if $$\lambda$$ is a likelihood ratio of a particular form, then the quantity $$-2 log(\lambda)$$ is $$\chi^2$$ distributed when the data sample is large enough. So giving that $$-2 log(\lambda) \sim \chi^2$$ we can test the hypothesis $$H_1$$ against the alternative hypothesis $$H_2$$.
 
-For hypothesis testing? If $$\lambda$$ is a likelihood ratio of a particular form, then the quantity $$-2 log(\lambda)$$  is asymptotically $$\chi^2$$ distributed. So we can use to test the hypothesis $$H_1$$ against the alternative hypothesis $$H_2$$.
+In the next section we are going to apply the likelihood ratio to find collocation in a case law corpus.
 
 # Sample use case on Judilibre Open Data
-The Court of Cassation initiated the JUDILIBRE project aimed at the design and in-house development of a search engine in the corpus of case law, making it available to the public in the spirit of the decree on the Open Data of court decisions.
+If you are interested in data extraction, you'd like to have a look at the python generated swagger client available [here](https://github.com/ClementBM/judilibre-eda/tree/main/judilibre_client).
+
+The French court of cassation initiated the JUDILIBRE project aimed at the design and in-house development of a search engine in the corpus of case law, making it available to the public.
+
+After extracting an arbitrary part of the corpus through the search engine API, I persisted the results in a [json line file](https://github.com/ClementBM/judilibre-eda/blob/main/judilibre_eda/dataset.jsonl).
 
 ## Word Cloud
 
+Just a quick look at a word cloud illustration of the dataset:
+
 ![Corpus Word Cloud](/assets/2023-01-18/corpus-wordcloud.png)
 
-## Bigram Collocation
+## Bigram collocation
+The method [`collocation_2`](https://github.com/ClementBM/judilibre-eda/blob/main/judilibre_eda/collocations.py#L53) enable us to find collocations and ordered them following the negative log likelihood score: 
+
 ```python
 collocation_2(judilibre_text, method="llr", stop_words=stop_words)
 ```
-
-For example, the bigram **cour d'appel** is 14000 times more likely under the hypothesis that **d'appel** is more likely to follow **cour** than its base rate of occurrence would suggest.
 
 ```shell
 {"cour d'appel": 14779.656345618061,
@@ -191,7 +202,11 @@ For example, the bigram **cour d'appel** is 14000 times more likely under the hy
  "d'un acte": 947.6827965402367}
 ```
 
-Pointwise mutual information
+The bigram **cour d'appel** is more than 14000 times more likely under the $$H_2$$ hypothesis (**d'appel** is more likely to follow **cour**) than its base rate of occurrence would suggest.
+
+
+## Pointwise mutual information
+It may be interesting to look at the collocations ranked by the pointwise mutual information, another hypothesis test method:
 
 ```python
 collocation_2(judilibre_text, method="pmi", stop_words=stop_words)
@@ -221,6 +236,7 @@ collocation_2(judilibre_text, method="pmi", stop_words=stop_words)
 ```
 
 ## P-value
+If we want a more detailed output we can use the [`detailed_collocation_2`](https://github.com/ClementBM/judilibre-eda/blob/main/judilibre_eda/collocations.py#L22) function:
 
 |    | $$w_1$$       |   $$\vert w_1 \vert$$ | $$w_2$$         |   $$ \vert w_2 \vert $$ |     score |   p-value |
 |---:|:----------|------------:|:------------|------------:|----------:|----------:|
