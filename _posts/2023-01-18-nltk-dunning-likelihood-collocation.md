@@ -7,10 +7,10 @@ categories: [theory]
 tags: [NLTK, NLP, statistic, collocation]
 ---
 
-![Grape vine fruit](/assets/2023-01-18/pexels-maur%C3%ADcio-mascaro-9192252.jpg)
+![Grape vine fruit](/assets/2023-01-18/pexels-maur%C3%ADcio-mascaro-9192252.jpg){: width="100%"  }
 
 In this post, I'll try to explain what a collocation is, how we can retrieve collocations from a text corpus, and how to interpret the results.
-The main theory explaination of this post is largely inspired by part 5.3.4 of the [Foundations of Statistical Natural Language, Manning and Schütze](https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22), not to say excessively copied.
+The main theory explaination of this post is largely inspired (not to say outrageously copied!) by part 5.3.4 of the [Foundations of Statistical Natural Language, Manning and Schütze](https://nlp.stanford.edu/fsnlp/promo/colloc.pdf#page=22).
 
 After the boring theory, we'll apply this technic to a french case law dataset. All the code is available in the following git repository [judilibre-eda](https://github.com/ClementBM/judilibre-eda).
 
@@ -108,12 +108,12 @@ In applying the likelihood ratio test to collocation discovery, we examine the f
 * First hypothesis is $$ H_1 : Pr(w_2 \vert w_1) = p = Pr(w_2 \vert \bar{w_1} ) $$
 * Second hypothesis is $$ H_2 : Pr(w_2 \vert w_1) = p_1 \ne p_2 = Pr(w_2 \vert \bar{w_1} ) $$
 
+![Collocation spaces](/assets/2023-01-18/collocation-spaces.drawio.png){: width="30%" style="float: right" }
+
 Given $$c_1 = \vert w_1 \vert$$, $$c_2 = \vert w_2 \vert$$ and $$c_{12} = \vert w_{12} \vert$$ are the number of occurences of the corresponding grapheme and $$N = \vert \Omega \vert $$ the total number of tokens/words in the corpus, we define the probability of having this two words adjacent, and the opposite probability:
 
 * $$Pr(w_2 \vert w_1) = p_1 = { c_{12} \over c_1 } $$,
 * $$Pr(w_2 \vert \bar{w_1} ) = p_2 = { c_2 - c_{12} \over N - c_1 } $$.
-
-![Collocation spaces](/assets/2023-01-18/collocation-spaces.drawio.png)
 
 The next table shows the probability of having words $$w_2$$ and $$w_1$$ adjacent, and the probability of having word $$w_2$$ not adjacent to $$w_1$$.
 
