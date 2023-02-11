@@ -7,22 +7,44 @@ categories: [study]
 tags: [chocolate, correlation]
 ---
 
-![Chocolate consumption](/assets/2023-01-25/chocolate_consumption.png){: width="100%"  }
+![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
 In this post, we briefly analyse a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
 
-The author of the study stated that given the results of a study showing that rats improved cognitive performance after the administration of a cocoa polyphenolic, that it could be rather similar for human, enhancing or at least reducing natural senility due to aging.
+The author of the study stated that given the results of a study showing that rats improved cognitive performance after the administration of a cocoa polyphenolic, it should enhance human cognition or at least reducing natural senility due to aging.
 
 > Improved cognitive performance with the administration of a cocoa polyphenolic extract has even been reported in aged WistarUnilever rats.
 >
 > Bisson JF, Nejdi A, Rozan P, Hidalgo S, Lalonde R, Messaoudi M. Effects of long-term administration of a cocoa polyphenolic extract (Acticoa powder) on cognitive performances in aged rats.
 
-As stated in the note, the author take the *total number of Nobel laureates per capita* as a "surrogate". Concordance, dependance between Nobel Prices per capita and cognitive performance of a population, without knowing exactly what cognitive performance means and how is it measured.
+As stated in the note, the author take the *total number of Nobel laureates per capita* as a "surrogate" to cognitive performance. Dependance between Nobel Prices per capita and cognitive performance of a population, without knowing exactly what cognitive performance means and how is it measured. It presupposed that the number of *Nobel laureates per capita* is a dependent (concordant ?) of the average cognitive performance of a country.
 
 > Conceivably, however, the total number of Nobel laureates per capita could serve as a surrogate end point reflecting the proportion with superior cognitive function and thereby give us some measure of the overall cognitive function of a given country.
 >
 > Author
 
+- [Note short description](#note-short-description)
+- [Study limitations given by the note](#study-limitations-given-by-the-note)
+  - [Dependence between chocolate laureate consumption and mean consumption](#dependence-between-chocolate-laureate-consumption-and-mean-consumption)
+  - [Time dependent variables](#time-dependent-variables)
+  - [Correlation VS Causation](#correlation-vs-causation)
+- [Methodology analysis](#methodology-analysis)
+  - [Nobel Price per capita as an indicator](#nobel-price-per-capita-as-an-indicator)
+    - [Mean aged of Nobel Prices winners](#mean-aged-of-nobel-prices-winners)
+    - [Cognitive function](#cognitive-function)
+  - [Access to chocolate](#access-to-chocolate)
+    - [Price - Wealth](#price---wealth)
+    - [Habits - Culture](#habits---culture)
+    - [Quality - Concentration of cocoa polyphenolic](#quality---concentration-of-cocoa-polyphenolic)
+  - [Reproductibility and sampled data](#reproductibility-and-sampled-data)
+    - [Only 23 countries out of more than 200](#only-23-countries-out-of-more-than-200)
+    - [Chocolate consumption data from a Swiss Food Company](#chocolate-consumption-data-from-a-swiss-food-company)
+  - [Dependency metric pearson coefficient](#dependency-metric-pearson-coefficient)
+- [Retry](#retry)
+- [Sources](#sources)
+
+
+# Note short description
 The source of the data:
 * per capita Nobel laureates
 * per capita yearly chocolate consumption (swiss company private? data)
@@ -31,68 +53,80 @@ The source of the data:
 * Hypothesis 1: chocolate consumption improve significantly cognitive function
 * Hypothesis 2: chocolate consumption **does not significantly** improve cognitive function
 
-
-> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
-
 > Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
 
-## Study Limitations
+> It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
+
+
+# Study limitations given by the note
+
+## Dependence between chocolate laureate consumption and mean consumption
 
 > The present data are based on country averages, and the specific chocolate intake of individual Nobel laureates of the past and present remains unknown.
 > 
 > The cumulative dose of chocolate that is needed to sufficiently increase the odds of being asked to travel to Stockholm is uncertain.
-> 
+
+## Time dependent variables
 > This research is evolving, since both the number of Nobel laureates and chocolate consumption are time-dependent variables and change from year to year.
 
-## Conclusions
+## Correlation VS Causation
+> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
 
-> It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
+# Methodology analysis
 
-# Comments
+## Nobel Price per capita as an indicator
+Nobel price is about Chemistry, Literature, Peace, Physics, and Physiology or Medicine. It doesn't encompass Mathematic since Alfred Nobel wasn't a fan of mathematicians. 
 
-## Nobel Price Country unequal distribution 
-Show a distribution of Nobel Price by country.
-
-![alt](/assets/2023-01-25/chocolate_consumption_by_country.png)
-
-Nobel Peace Prize, biaised until 1990
 Include Abel Prize, mathematic outside of the Nobel scope
+
+Nobel Peace Prize, biaised until 1990, Nobel Peace Center in Oslo
+> From the 1990s onwards, many prizes were awarded for human rights, and the peace prize became truly global
 
 Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
 
-Nobel Peace Center in Oslo
-> From the 1990s onwards, many prizes were awarded for human rights, and the peace prize became truly global
- 
-![...](/assets/2023-01-25/nobel-country-per-capita.png)
-
-## Mean aged of Nobel Prices winners
+### Mean aged of Nobel Prices winners
 A short exploratory analysis of the population of nobel price laureates shows that laureates have around sixty years old or more.
 
-Moyenne glissante of laureates
+Moving average of laureates, only 6% of laureates are female.
 
-Only 6% of laureates are female.
+### Cognitive function
+Cognitive function is certainly dependent on a lot of variables.
+
+![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
 
 ## Access to chocolate
-Price, Quantity, Quality, Black ?
+As chocolate is a non-necessary goods, unlike rice or eggs, inhabitant in difficult situations, may not priorities chocolate consumption if they are already struggling to find a decent everyday meal.
 
-Culture
+### Price - Wealth
+If chocolate consumption is mainly dependent on average wealth, than chocolate consumption wouldn't be a "fiable" measure because of its high dependent nature. Wealth sensitive.
 
-## Reproductibility
+### Habits - Culture
+Chocolate consumption may also be culture sensitive.
+
+Price and habits might "influence" chocolate consumption but theses factors are not a big deal.
+
+### Quality - Concentration of cocoa polyphenolic
+Average consumption per capita need to .. 
+High consumption of chocolate with a low polyphenolic concentration, might invalidate study. At the contrary a low consumption of chocolate with a high polyphenolic concentration... 
+
+## Reproductibility and sampled data
 Giving the data used during the study is not available, it's hard to reproduce the same result.
 
-## Chosen metric: pearson coefficient
+### Only 23 countries out of more than 200
+Adapt r statistic, relative to this country sample?
+
+### Chocolate consumption data from a Swiss Food Company
+
+## Dependency metric pearson coefficient
 r=0.791, P<0.0001
 
 Missing a confidence interval
 
-## Only 23 countries out of 200
-Adapt r statistic, relative to this country sample?
+# Retry
 
-## Ambitious conclusion
-(Chemistry, Literature, Peace, Physics, and Physiology or Medicine)
+![alt](/assets/2023-01-25/chocolate-consumption-per-capita.png)
 
-Cognitive function is certainly dependant on a lot of variables.
-
+![alt](/assets/2023-01-25/nobel-country-per-capita.png)
 
 # Sources
 * [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
@@ -108,5 +142,6 @@ Cognitive function is certainly dependant on a lot of variables.
 * https://www.numbeo.com/food-prices/
 * https://ourworldindata.org/grapher/cost-calorie-sufficient-diet?country=USA~BHR~GBR~IND~CHN~BRA~ZAF~FRA~TCD
 * https://ideas.ted.com/the-steep-price-we-pay-for-cheap-chocolate/
+* https://altoida.com/blog/defining-the-6-key-domains-of-cognitive-function/
 
 ![alt](/assets/2023-01-25/nelson-mandela.jpg)
