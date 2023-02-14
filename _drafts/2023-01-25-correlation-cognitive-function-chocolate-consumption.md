@@ -143,5 +143,3 @@ Missing a confidence interval
 * https://ourworldindata.org/grapher/cost-calorie-sufficient-diet?country=USA~BHR~GBR~IND~CHN~BRA~ZAF~FRA~TCD
 * https://ideas.ted.com/the-steep-price-we-pay-for-cheap-chocolate/
 * https://altoida.com/blog/defining-the-6-key-domains-of-cognitive-function/
-
-![alt](/assets/2023-01-25/nelson-mandela.jpg)

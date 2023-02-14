@@ -25,7 +25,7 @@ After the boring theory, we'll apply this technic to a french case law dataset. 
   - [Co-occurrence VS Collocation](#co-occurrence-vs-collocation)
   - [Co-occurence and semantic field](#co-occurence-and-semantic-field)
   - [Principal approaches of finding collocations](#principal-approaches-of-finding-collocations)
-- [Dunning likelihood ratio](#dunning-likelihood-ratio)
+- [Dunning likelihood collocation score](#dunning-likelihood-collocation-score)
   - [Advantages of likelihood ratio](#advantages-of-likelihood-ratio)
 - [Sample use case on Judilibre Open Data](#sample-use-case-on-judilibre-open-data)
   - [Word Cloud](#word-cloud)
@@ -98,7 +98,7 @@ There are various and complementary ways to look for collocations:
 
 In the remaining parts of this post, we are going to focus on hypothesis testing and more specifically on the likelihood ratio test.
 
-# Dunning likelihood ratio
+# Dunning likelihood collocation score
 Likelihood ratios are more appropriate for sparse data than the $$\chi^2$$ test. But they also have the advantage that the statistic we are computing, a likelihood ratio, is more interpretable than the $$\chi^2$$ statistic. 
 
 At the end, the likelihood ratio is simply a number that tells us how much more likely one hypothesis is than the other. 
