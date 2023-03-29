@@ -20,4 +20,9 @@ Processing time is not a requirement in my case.
 ## Raw extraction
 
 ## Sources
-* 
+* https://pdfminersix.readthedocs.io/en/latest/tutorial/highlevel.html
+* https://github.com/py-pdf/benchmarks
+* trends/explore?q=pdf to text,pdf to text python&hl=fr
+* https://github.com/chrismattmann/tika-python
+* https://superuser.com/questions/198392/how-to-copy-text-out-of-a-pdf-without-losing-formatting
+* https://github.com/pymupdf/PyMuPDF
