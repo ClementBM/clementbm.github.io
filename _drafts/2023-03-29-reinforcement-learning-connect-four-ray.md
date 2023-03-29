@@ -8,11 +8,56 @@ tags: [reinforcement learning, ray, hugging face, gradio, multi agents]
 ---
 
 
-## Multi Agent
+In this post I'll demonstrate how to train an agent to play connect four, and deploy it on hugging face space with a gradio app.
 
-## Action Mask
+## Ray by Anyscale
+RLlib is an open-source library for reinforcement learning (RL), offering support for production-level, highly distributed RL workloads while maintaining unified and simple APIs for a large variety of industry applications. Whether you would like to train your agents in a multi-agent setup, purely from offline (historic) datasets, or using externally connected simulators, RLlib offers a simple solution for each of your decision making needs.
 
-## Wrap Petting Zoo Connect Four environment
+RLlib does not automatically install a deep-learning framework, but supports TensorFlow as well as PyTorch.
+
+ChatGPT developer OpenAI is using Ray, an open-source unified compute framework, to ease the infrastructure costs and complexity of training its large language models. Anyscale, the company behind Ray, 
+
+https://www.datanami.com/2023/02/10/anyscale-bolsters-ray-the-super-scalable-framework-used-to-train-chatgpt/
+
+Also use by Shopify...
+https://shopify.engineering/merlin-shopify-machine-learning-platform
+
+By Uber
+https://drive.google.com/file/d/1BS5lfXfuG5bnI8UM6FdUrR7CiSuWqdLn/view
+
+Ray is an open source framework that provides a simple, universal API for building distributed systems and tools to parallelize machine learning workflows. Ray is a large ecosystem of applications, libraries and tools dedicated to machine learning such as distributed scikit-learn, XGBoost, TensorFlow, PyTorch, etc.
+
+When using Ray, you get a cluster that enables you to distribute your computation across multiple CPUs and machines. In the following example, we train a model using Ray:
+
+## [Petting Zoo Connect Four environment](https://pettingzoo.farama.org/environments/classic/connect_four/)
+
+Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.
+
+| Key | Value |
+|--|--|
+| Agents | ['player_0', 'player_1'] |
+| Action Shape | (1,) |
+| Action Values | Discrete(7) |
+| Observation Shape | (6, 7, 2) |
+| Observation Values | [0,1] |
+
+turn-based games over environments, 
+
+## [RLlib PPO](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
+Proximal Policy Optimization (PPO)
+[paper](https://arxiv.org/abs/1707.06347) PPO’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib’s multi-GPU optimizer pins that data in GPU memory to avoid unnecessary transfers from host memory, substantially improving performance over a naive implementation. PPO scales out using multiple workers for experience collection, and also to multiple GPUs for SGD.
+
+## RLlib Multi Agent
+The mental model for multi-agent in RLlib is as follows: (1) Your environment (a sub-class of MultiAgentEnv) returns dictionaries mapping agent IDs (e.g. strings; the env can chose these arbitrarily) to individual agents’ observations, rewards, and done-flags. (2) You define (some of) the policies that are available up front (you can also add new policies on-the-fly throughout training), and (3) You define a function that maps an env-produced agent ID to any available policy ID, which is then to be used for computing actions for this particular agent.
+
+https://docs.ray.io/en/latest/rllib/rllib-env.html#multi-agent-and-hierarchical
+
+## RLlib PettingZoo Wrapper
+https://docs.ray.io/en/latest/rllib/rllib-env.html#pettingzoo-multi-agent-environments
+
+## RLlib Action Mask
+[Legal action mask](https://pettingzoo.farama.org/environments/classic/connect_four/#legal-actions-mask)
+The legal moves available to the current agent are found in the action_mask element of the dictionary observation. The action_mask is a binary vector where each index of the vector represents whether the action is legal or not. The action_mask will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ## Training Loop
 
