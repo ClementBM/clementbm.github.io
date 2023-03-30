@@ -9,20 +9,18 @@ tags: [reinforcement learning, ray, hugging face, gradio, multi agents]
 
 ![Red Hot Peppers](/assets/2023-03-29/chili-g100503ee3_1280.jpg){: width="100%"  }
 
-In this post I'll demonstrate how to train an agent to play connect four, and deploy it on hugging face space with a gradio app.
-If you want to learn about the underlying mechanism of reinforcement learning, you'd better look at another post.
+In this post I'll demonstrate how to train an agent to play connect four using reinforcement learning. Then I'll show you how to integrate it in a gradio application and finally making it public by deploying it on hugging face space.
 
-Different than traditional machine learning such as supervised or unsupervised learning.
-Supervised learning: given x, predict y
-Unsupervised learning: given x, simplify y
+If you want to learn more about the underlying mechanisms of reinforcement learning, you'd better look at another post. This being said, just quick remainder of the basic concept. In reinforcement learning (RL), an agent makes observations and takes actions within an environment, and in return it receives rewards. Its objective is to learn to act in a way that will maximize its expected rewards over time.
+With RL, an agent can be trained to
+* control a robot
+* regulate house temperature, thermostat
+* drive a car, intelligent transportation system (ITS)
+* make recommandation, recommender system
 
-If your not familiar with reinforcement learning, just a quick introduction, to get the basic concepts. In RL, a software agent makes observations and takes actions within an environment, and in return it receives rewards.
-Its objective is to learn to act in a way that will maximize its expected rewards over time.
-
-* controlling a robot
-* thermostat
-* self driving car
-* recommender system
+Reinforcement learning is different than traditional machine learning such as supervised or unsupervised learning:
+* Supervised learning try to predict y, given x 
+* Unsupervised learning try to simplify y, given x
 
 - [Technical Stack](#technical-stack)
   - [Poetry](#poetry)
@@ -44,7 +42,16 @@ Its objective is to learn to act in a way that will maximize its expected reward
 
 # Technical Stack
 
-## Poetry
+## [Poetry](https://python-poetry.org/)
+Python packaging and dependency management made easy 
+Having an insight of your project's dependencies is just one command away.
+Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Poetry offers a lockfile to ensure repeatable installs, and can build your project for distribution.
+
+Poetry requires Python 3.7+. It is multi-platform and the goal is to make it work equally well on Linux, macOS and Windows.
+
+Committing this file to VC is important because it will cause anyone who sets up the project to use the exact same versions of the dependencies that you are using. Your CI server, production machines, other developers in your team, everything and everyone runs on the same dependencies, which mitigates the potential for bugs affecting only some parts of the deployments. Even if you develop alone, in six months when reinstalling the project you can feel confident the dependencies installed are still working even if your dependencies released many new versions since then. (See note below about using the update command.)
+
+Powered by [Vercel](https://vercel.com/).
 
 ## Ray by Anyscale
 RLlib is an open-source library for reinforcement learning (RL), offering support for production-level, highly distributed RL workloads while maintaining unified and simple APIs for a large variety of industry applications. Whether you would like to train your agents in a multi-agent setup, purely from offline (historic) datasets, or using externally connected simulators, RLlib offers a simple solution for each of your decision making needs.
