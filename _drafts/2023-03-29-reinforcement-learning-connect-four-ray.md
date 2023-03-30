@@ -7,13 +7,32 @@ categories: [project]
 tags: [reinforcement learning, ray, hugging face, gradio, multi agents]
 ---
 
+![Red Hot Peppers](/assets/2023-03-29/chili-g100503ee3_1280.jpg){: width="100%"  }
 
 In this post I'll demonstrate how to train an agent to play connect four, and deploy it on hugging face space with a gradio app.
 
+- [Technical Stack](#technical-stack)
+  - [Ray by Anyscale](#ray-by-anyscale)
+  - [Petting Zoo Connect Four environment](#petting-zoo-connect-four-environment)
+- [Agent and Training](#agent-and-training)
+  - [RLlib PPO](#rllib-ppo)
+  - [RLlib Multi Agent](#rllib-multi-agent)
+  - [RLlib PettingZoo Wrapper](#rllib-pettingzoo-wrapper)
+  - [RLlib Action Mask](#rllib-action-mask)
+  - [Training Loop](#training-loop)
+- [Deploy](#deploy)
+  - [Gradio App](#gradio-app)
+  - [Create Hugging Face Space](#create-hugging-face-space)
+  - [Git LFS](#git-lfs)
+- [Play against the agent](#play-against-the-agent)
+- [Sources](#sources)
+
+
+# Technical Stack
 ## Ray by Anyscale
 RLlib is an open-source library for reinforcement learning (RL), offering support for production-level, highly distributed RL workloads while maintaining unified and simple APIs for a large variety of industry applications. Whether you would like to train your agents in a multi-agent setup, purely from offline (historic) datasets, or using externally connected simulators, RLlib offers a simple solution for each of your decision making needs.
 
-RLlib does not automatically install a deep-learning framework, but supports TensorFlow as well as PyTorch.
+RLlib does not automatically install a deep-learning framework, but supports TensorFlow as well as PyTorch. XGBoost 
 
 ChatGPT developer OpenAI is using Ray, an open-source unified compute framework, to ease the infrastructure costs and complexity of training its large language models. Anyscale, the company behind Ray, 
 
@@ -43,6 +62,7 @@ Connect Four is a 2-player turn based game, where players must connect four of t
 
 turn-based games over environments, 
 
+# Agent and Training
 ## [RLlib PPO](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
 Proximal Policy Optimization (PPO)
 [paper](https://arxiv.org/abs/1707.06347) PPO’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib’s multi-GPU optimizer pins that data in GPU memory to avoid unnecessary transfers from host memory, substantially improving performance over a naive implementation. PPO scales out using multiple workers for experience collection, and also to multiple GPUs for SGD.
@@ -60,15 +80,29 @@ https://docs.ray.io/en/latest/rllib/rllib-env.html#pettingzoo-multi-agent-enviro
 The legal moves available to the current agent are found in the action_mask element of the dictionary observation. The action_mask is a binary vector where each index of the vector represents whether the action is legal or not. The action_mask will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
 
 ## Training Loop
+Using ray tune
 
+Hyperparameter tuning
+
+Tensorboard
+```shell
+tensorboard --logdir {logdir}
+```
+
+Ray Dashboard, monitoring the ray nodes, resources status (gpu, cpu, heap), graphana
+
+
+# Deploy
 ## Gradio App
 
 ## Create Hugging Face Space
 
 ## Git LFS
 
+# Play against the agent
+
 <script	type="module" src="https://gradio.s3-us-west-2.amazonaws.com/3.23.0/gradio.js"></script>
 
 <gradio-app src="https://clementbm-connectfour.hf.space"></gradio-app>
 
-## Sources
+# Sources
