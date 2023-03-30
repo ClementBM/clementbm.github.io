@@ -9,30 +9,33 @@ tags: [reinforcement learning, ray, hugging face, gradio, multi agents]
 
 ![Red Hot Peppers](/assets/2023-03-29/chili-g100503ee3_1280.jpg){: width="100%"  }
 
-In this post I'll demonstrate how to train an agent to play connect four using reinforcement learning. Then I'll show you how to integrate it in a gradio application and finally making it public by deploying it on hugging face space.
+In this post I'll demonstrate how to train an agent to play [connect four](https://pettingzoo.farama.org/environments/classic/connect_four/) using [reinforcement learning](https://en.wikipedia.org/wiki/Reinforcement_learning). Then I'll show you how to integrate it in a [gradio application](https://www.gradio.app/) and finally making it public by deploying it on [Hugging Face space](https://huggingface.co/docs/hub/spaces).
 
-If you want to learn more about the underlying mechanisms of reinforcement learning, you'd better look at another post. This being said, just quick remainder of the basic concept. In reinforcement learning (RL), an agent makes observations and takes actions within an environment, and in return it receives rewards. Its objective is to learn to act in a way that will maximize its expected rewards over time.
-With RL, an agent can be trained to
+If you want to learn more about the underlying mechanisms of reinforcement learning, you'd better look somewhere else. A good starting point would be [Deep Reinforcement Learning by Udacity](https://github.com/udacity/deep-reinforcement-learning) course or the RL section in [Hands-On Machine Learning by Aurélien Geron](https://github.com/ageron/handson-ml3/blob/main/18_reinforcement_learning.ipynb). This being said, in the RL field, an agent is an observer of an environment that takes actions given the environment state. In return the environment assigns a reward to the agent. The objective of the agent is to learn to act in a way that will maximize its expected rewards over time.
+
+With RL, an agent can be trained to:
 * control a robot
-* regulate house temperature, thermostat
-* drive a car, intelligent transportation system (ITS)
-* make recommandation, recommender system
+* regulate house temperature as a thermostat
+* drive a car in an intelligent transportation system (ITS)
+* make recommandation in a recommender system
 
-Reinforcement learning is different than traditional machine learning such as supervised or unsupervised learning:
-* Supervised learning try to predict y, given x 
-* Unsupervised learning try to simplify y, given x
+Reinforcement learning is different than traditional machine learning such as supervised or unsupervised learning. Supervised Learning tries to predict or classify y, given x. Unsupervised Learning tries to simplify y, given x. Whereas Reinforcement Learning tries to choose the "best" actions given an uncertain environment.
+
+The code is available at [Hugging Face](https://huggingface.co/spaces/ClementBM/connectfour/tree/main), and you may be able to clone the repository with the following command:
+```shell
+git clone https://huggingface.co/spaces/ClementBM/connectfour
+```
 
 - [Technical Stack](#technical-stack)
   - [Poetry](#poetry)
-  - [Ray by Anyscale](#ray-by-anyscale)
+  - [Ray \& RLlib](#ray--rllib)
   - [Petting Zoo](#petting-zoo)
 - [Agent, Environment and Training](#agent-environment-and-training)
-  - [RLlib PPO](#rllib-ppo)
-  - [RLlib Multi Agent](#rllib-multi-agent)
+  - [Proximal Policy Optimization (PPO) Agent](#proximal-policy-optimization-ppo-agent)
   - [RLlib PettingZoo Wrapper](#rllib-pettingzoo-wrapper)
   - [RLlib Action Mask](#rllib-action-mask)
   - [RLlib Training Loop](#rllib-training-loop)
-- [Deploy (free of charge)](#deploy-free-of-charge)
+- [Integration and deployment (free of charge)](#integration-and-deployment-free-of-charge)
   - [Gradio App](#gradio-app)
   - [Create a Space at Hugging Face](#create-a-space-at-hugging-face)
   - [Git LFS](#git-lfs)
@@ -43,42 +46,57 @@ Reinforcement learning is different than traditional machine learning such as su
 # Technical Stack
 
 ## [Poetry](https://python-poetry.org/)
-Python packaging and dependency management made easy 
-Having an insight of your project's dependencies is just one command away.
-Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you. Poetry offers a lockfile to ensure repeatable installs, and can build your project for distribution.
+`Poetry` is a packaging and dependency management system in python powered by [Vercel](https://vercel.com/). It makes virtual environments easy to handle and it's multi-platform: Linux, macOS and Windows.
+You just declare the libraries your project depends on and `Poetry` manage installs and updates for you.
 
-Poetry requires Python 3.7+. It is multi-platform and the goal is to make it work equally well on Linux, macOS and Windows.
+`Poetry` has also a lockfile to ensure repeatable installs (on your CI server, or other developer machines), and consistency when deployed on production machines.
 
-Committing this file to VC is important because it will cause anyone who sets up the project to use the exact same versions of the dependencies that you are using. Your CI server, production machines, other developers in your team, everything and everyone runs on the same dependencies, which mitigates the potential for bugs affecting only some parts of the deployments. Even if you develop alone, in six months when reinstalling the project you can feel confident the dependencies installed are still working even if your dependencies released many new versions since then. (See note below about using the update command.)
+## [Ray](https://www.ray.io/) & [RLlib](https://www.ray.io/rllib)
+`Ray` is an open source framework powered by Anyscale that provides a simple, universal API for building distributed systems and tools to parallelize machine learning workflows. The framework is a large ecosystem of applications, libraries and tools dedicated to machine learning. It also integrates with [multiple libraries for distributed execution](https://docs.ray.io/en/latest/ray-overview/ray-libraries.html): scikit-learn, XGBoost, TensorFlow, PyTorch, Hugging Face, spaCy, LightGBM, Horovod, ...
 
-Powered by [Vercel](https://vercel.com/).
+`RLlib` is part of the `Ray` ecosystem as a reinforcement learning library. It offers high scalability and a unified API for a variety of applications. `RLlib` natively supports TensorFlow, TensorFlow Eager, and PyTorch, but most of its internals are framework agnostic. `RLlib` has a number of state-of-the-art RL algorithms implemented.
 
-## Ray by Anyscale
-RLlib is an open-source library for reinforcement learning (RL), offering support for production-level, highly distributed RL workloads while maintaining unified and simple APIs for a large variety of industry applications. Whether you would like to train your agents in a multi-agent setup, purely from offline (historic) datasets, or using externally connected simulators, RLlib offers a simple solution for each of your decision making needs.
+Some well known industry actors use ray:
+* [ChatGPT developer OpenAI is using Ray](https://www.datanami.com/2023/02/10/anyscale-bolsters-ray-the-super-scalable-framework-used-to-train-chatgpt/) for training large language models
+* at [Shopify](https://shopify.engineering/merlin-shopify-machine-learning-platform) to build Merlin, the Shopify's machine learning platform
+* at [Uber](https://drive.google.com/file/d/1BS5lfXfuG5bnI8UM6FdUrR7CiSuWqdLn/view) for large scale deep learning training and tuning
 
-RLlib does not automatically install a deep-learning framework, but supports TensorFlow as well as PyTorch.
+## [Petting Zoo](https://pettingzoo.farama.org/)
+`PettingZoo` is a Python library for conducting research in multi-agent reinforcement learning. It's powered by the [Farama foundation](https://github.com/Farama-Foundation), a nonprofit organization working to develop and maintain open source reinforcement learning tools.
 
-ChatGPT developer OpenAI is using Ray, an open-source unified compute framework, to ease the infrastructure costs and complexity of training its large language models. Anyscale, the company behind Ray, 
+It has different types of environment:
+* Multi-player Atari 2600 games (cooperative, competitive and mixed sum)
+* Classic: Classical games including card games, board games, etc.
+* ...
 
-https://www.datanami.com/2023/02/10/anyscale-bolsters-ray-the-super-scalable-framework-used-to-train-chatgpt/
+# Agent, Environment and Training
+An RLlib environment consists of:
 
-Also use by Shopify...
-https://shopify.engineering/merlin-shopify-machine-learning-platform
+* all possible actions (action space)
+* a complete description of the environment, nothing hidden (state space)
+* an observation by the agent of certain parts of the state (observation space)
+* reward, which is the only feedback the agent receives per action.
 
-By Uber
-https://drive.google.com/file/d/1BS5lfXfuG5bnI8UM6FdUrR7CiSuWqdLn/view
-
-Ray is an open source framework that provides a simple, universal API for building distributed systems and tools to parallelize machine learning workflows. Ray is a large ecosystem of applications, libraries and tools dedicated to machine learning such as distributed scikit-learn, XGBoost, TensorFlow, PyTorch, Hugging Face, spaCy, LightGBM, Horovod
-
-When using Ray, you get a cluster that enables you to distribute your computation across multiple CPUs and machines. In the following example, we train a model using Ray:
+The model that tries to maximize the expected sum over all future rewards is called a policy.
+The policy is a function mapping the environment’s observations to an action to take, usually written $$\Pi(s(t)) -> a(t)$$. Following diagram illustrate the iterative learning process.
 
 ![alt](/assets/2023-03-29/rllib-key-concepts.png)
 
-The simulation iterations of action -> reward -> next state -> train -> repeat, until the end state, is called an episode, or in RLlib, a rollout.
+The simulation iterations of action -> reward -> next state -> train -> repeat, until the end state, is called an episode, or in RLlib, a `rollout`.
 
+## [Proximal Policy Optimization (PPO) Agent](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
+Algorithms bring all RLlib components together, making learning of different tasks accessible via RLlib’s Python API and its command line interface (CLI). Each Algorithm class is managed by its respective AlgorithmConfig, for example to configure a PPO instance, you should use the PPOConfig class. An Algorithm sets up its rollout workers and optimizers, and collects training metrics. Algorithms also implement the Tune Trainable API for easy experiment management.
 
-## [Petting Zoo](https://pettingzoo.farama.org/environments/classic/connect_four/)
+[paper](https://arxiv.org/abs/1707.06347) PPO’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib’s multi-GPU optimizer pins that data in GPU memory to avoid unnecessary transfers from host memory, substantially improving performance over a naive implementation. PPO scales out using multiple workers for experience collection, and also to multiple GPUs for SGD.
 
+The mental model for multi-agent in RLlib is as follows:
+1. Your environment (a sub-class of MultiAgentEnv) returns dictionaries mapping agent IDs (e.g. strings; the env can chose these arbitrarily) to individual agents’ observations, rewards, and done-flags.
+2. You define (some of) the policies that are available up front (you can also add new policies on-the-fly throughout training), and
+3. You define a function that maps an env-produced agent ID to any available policy ID, which is then to be used for computing actions for this particular agent.
+
+https://docs.ray.io/en/latest/rllib/rllib-env.html#multi-agent-and-hierarchical
+
+## RLlib PettingZoo Wrapper
 Connect Four is a 2-player turn based game, where players must connect four of their tokens vertically, horizontally or diagonally. The players drop their respective token in a column of a standing grid, where each token will fall until it reaches the bottom of the column or reaches an existing token. Players cannot place a token in a full column, and the game ends when either a player has made a sequence of 4 tokens, or when all 7 columns have been filled.
 
 | Key | Value |
@@ -94,17 +112,8 @@ turn-based games over environments,
 Sparse rewards are infrequent as the name implies. Sparse rewards could be given only after many steps, say when an agent wins a game, or completes a desired task.
 Deterministic rewards are those rewards that always occur when an agent reaches a certain state and a certain control is taken.
 
-# Agent, Environment and Training
-## [RLlib PPO](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
-Proximal Policy Optimization (PPO)
-[paper](https://arxiv.org/abs/1707.06347) PPO’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib’s multi-GPU optimizer pins that data in GPU memory to avoid unnecessary transfers from host memory, substantially improving performance over a naive implementation. PPO scales out using multiple workers for experience collection, and also to multiple GPUs for SGD.
+https://pettingzoo.farama.org/environments/classic/connect_four/
 
-## RLlib Multi Agent
-The mental model for multi-agent in RLlib is as follows: (1) Your environment (a sub-class of MultiAgentEnv) returns dictionaries mapping agent IDs (e.g. strings; the env can chose these arbitrarily) to individual agents’ observations, rewards, and done-flags. (2) You define (some of) the policies that are available up front (you can also add new policies on-the-fly throughout training), and (3) You define a function that maps an env-produced agent ID to any available policy ID, which is then to be used for computing actions for this particular agent.
-
-https://docs.ray.io/en/latest/rllib/rllib-env.html#multi-agent-and-hierarchical
-
-## RLlib PettingZoo Wrapper
 https://docs.ray.io/en/latest/rllib/rllib-env.html#pettingzoo-multi-agent-environments
 
 ## RLlib Action Mask
@@ -124,7 +133,7 @@ tensorboard --logdir {logdir}
 Ray Dashboard, monitoring the ray nodes, resources status (gpu, cpu, heap), graphana
 
 
-# Deploy (free of charge)
+# Integration and deployment (free of charge)
 ## Gradio App
 
 ## Create a Space at Hugging Face
