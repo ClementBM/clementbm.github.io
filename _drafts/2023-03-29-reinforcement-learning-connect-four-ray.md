@@ -73,14 +73,16 @@ It has different types of environment:
 * ...
 
 # Agent, Environment and Training
-`Algorithm` class is the cornerstone RLlib components. Each `Algorithm` subclass is managed by a `AlgorithmConfig`. An Algorithm sets up its `rollout workers` and `optimizers`, and collects training metrics.
+`Algorithm` class is the cornerstone of RLlib components. An `Algorithm` sets up its `rollout workers` and `optimizers`, and collects training metrics. In RLlib a `rollout` is an episode, or game of of connect four.
 
-The model that tries to maximize the expected sum over all future rewards is called a policy.
-The policy is a function mapping the environment’s observations to an action to take, usually written $$\Pi(s(t)) -> a(t)$$. Following diagram illustrate the iterative learning process.
+The `Algorithm` has a policy, which is in other words a model that tries to maximize the expected sum over all future rewards.
+
+The model/policy maps an observation of the environment to an action: $$\Pi(s(t)) -> a(t)$$.
+
+Following diagram illustrate the iterative learning process.
 
 ![alt](/assets/2023-03-29/rllib-key-concepts.png)
 
-The simulation iterations of action -> reward -> next state -> train -> repeat, until the end state, is called an episode, or in RLlib, a `rollout`.
 
 ## [Proximal Policy Optimization (PPO) Agent](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
 
@@ -146,7 +148,6 @@ tensorboard --logdir {logdir}
 ```
 
 Ray Dashboard, monitoring the ray nodes, resources status (gpu, cpu, heap), graphana
-
 
 # Integration and deployment (free of charge)
 ## Gradio App
