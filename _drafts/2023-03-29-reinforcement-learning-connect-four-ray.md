@@ -26,6 +26,8 @@ All the code for this project is available at [Hugging Face](https://huggingface
 git clone https://huggingface.co/spaces/ClementBM/connectfour
 ```
 
+
+**Table of contents**
 - [Technical Stack](#technical-stack)
   - [Poetry](#poetry)
   - [Ray \& RLlib](#ray--rllib)
@@ -37,6 +39,7 @@ git clone https://huggingface.co/spaces/ClementBM/connectfour
   - [RLlib Training Loop](#rllib-training-loop)
 - [Integration and deployment (free of charge)](#integration-and-deployment-free-of-charge)
   - [Gradio App](#gradio-app)
+  - [Export policy model as ONNX](#export-policy-model-as-onnx)
   - [Create a Space at Hugging Face](#create-a-space-at-hugging-face)
   - [Git LFS](#git-lfs)
 - [Play against the agent](#play-against-the-agent)
@@ -93,6 +96,13 @@ https://docs.ray.io/en/latest/rllib/rllib-env.html#multi-agent-and-hierarchical
 Policy
 ![model](/assets/2023-03-29/model.onnx.png){: width="300" style="float: right; padding:15px"  }
 
+Actor-Critic algorithm: a family of RL algorithms that combine Policy Gradients with Deep Q-Networks. An Actor-Critic agent contains two neural networks: a policy net and a DQN. The DQN is trained normally, by learning from the agent's experiences. The policy net learns differently (and much faster), than in regular Policy Gradient: instead of estimating the value of each action by going through multiple episodes, then summing the future discounted rewards for each action, and finalyy normalizing them, the agent (actor) relies on the action values estimated by the DQN (critic). It's a bit like an athlete (the agent) learning with the help of a coach (the DQN).
+
+A2C: multiple agents learn in parallel, exploring different copies of the environment. At regular intervals, each agent pushes some weight updates to a master network, then it pulls the latest weights from that network. Each agent thus contributes to improving the master network and benefits from what the other agents have learned. Moreover, instead of estimating the Q-Values, the DQN estimates the advantage ot each action which stabilies training. All model updates are synchronous, so gradient updates are perormed over larger batches, which allows the model to better utilize the power of the GPU.
+
+PPO: based on A2C that clips the loss function to avoid excessively large weight updates (which often lea to training instabilities). PPO is a simplification of the previous TRPO algorithm.
+OpenAI made the new in April 2019 with their AI agent OpenAI Five, based on PPO, which defeated the world champions at the multiplayer fame Dota 2.
+
 ## RLlib PettingZoo Wrapper
 An RLlib environment consists of:
 
@@ -141,9 +151,12 @@ Ray Dashboard, monitoring the ray nodes, resources status (gpu, cpu, heap), grap
 # Integration and deployment (free of charge)
 ## Gradio App
 
+## Export policy model as ONNX
+
 ## Create a Space at Hugging Face
 
 ## Git LFS
+
 
 # Play against the agent
 
