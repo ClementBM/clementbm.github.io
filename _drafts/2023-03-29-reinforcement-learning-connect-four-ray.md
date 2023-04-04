@@ -38,16 +38,16 @@ git clone https://huggingface.co/spaces/ClementBM/connectfour
   - [Petting Zoo](#petting-zoo)
 - [Agent, Environment and Training](#agent-environment-and-training)
   - [Proximal Policy Optimization (PPO) Agent](#proximal-policy-optimization-ppo-agent)
-  - [RLlib wrapper around PettingZoo Connect Four](#rllib-wrapper-around-pettingzoo-connect-four)
-  - [RLlib Action Mask](#rllib-action-mask)
-  - [Opponents](#opponents)
-  - [RLlib Training Loop](#rllib-training-loop)
+  - [Environment wrapper around PettingZoo Connect Four](#environment-wrapper-around-pettingzoo-connect-four)
+  - [Legal Action Mask](#legal-action-mask)
+  - [A league of opponents](#a-league-of-opponents)
+  - [Training Loop with Ray Tune](#training-loop-with-ray-tune)
+  - [Ray monitoring with Prometheus/Grafana](#ray-monitoring-with-prometheusgrafana)
+  - [Export the policy's model as ONNX](#export-the-policys-model-as-onnx)
 - [Integration and deployment (free of charge)](#integration-and-deployment-free-of-charge)
-  - [Gradio App](#gradio-app)
-  - [Export policy model as ONNX](#export-policy-model-as-onnx)
+  - [Demo Interface with Gradio App](#demo-interface-with-gradio-app)
   - [Create a Space at Hugging Face](#create-a-space-at-hugging-face)
-  - [Git LFS](#git-lfs)
-- [Sources](#sources)
+  - [Git Large File Storage (LFS)](#git-large-file-storage-lfs)
 
 
 # Technical Stack
@@ -57,6 +57,8 @@ git clone https://huggingface.co/spaces/ClementBM/connectfour
 You just declare the libraries your project depends on and `Poetry` manage installs and updates for you.
 
 `Poetry` has also a lockfile to ensure repeatable installs (on your CI server, or other developer machines), and consistency when deployed on production machines.
+
+[Here](https://github.com/ClementBM/basic-python-repository-template) you can access a template repository (with poetry) that I built. It's a good starting point if you want to give poetry a try.
 
 ## [Ray](https://www.ray.io/) & [RLlib](https://www.ray.io/rllib)
 `Ray` is an open source framework powered by Anyscale that provides a simple, universal API for building distributed systems and tools to parallelize machine learning workflows. The framework is a large ecosystem of applications, libraries and tools dedicated to machine learning. It also integrates with [multiple libraries for distributed execution](https://docs.ray.io/en/latest/ray-overview/ray-libraries.html): scikit-learn, XGBoost, TensorFlow, PyTorch, Hugging Face, spaCy, LightGBM, Horovod, ...
@@ -108,7 +110,7 @@ A2C: multiple agents learn in parallel, exploring different copies of the enviro
 PPO: based on A2C that clips the loss function to avoid excessively large weight updates (which often lea to training instabilities). PPO is a simplification of the previous TRPO algorithm.
 OpenAI made the new in April 2019 with their AI agent OpenAI Five, based on PPO, which defeated the world champions at the multiplayer game Dota 2.
 
-## RLlib wrapper around PettingZoo Connect Four
+## Environment wrapper around PettingZoo Connect Four
 Connect Four is a 2-player turn-based game. The players drop their tokens in a column of a standing grid, where each token fall until it reaches the bottom of the column or is stopped by an existing token. Players have to connect four of their tokens vertically, horizontally or diagonally. The game ends when a player has made a sequence of 4 tokens or when all columns have been filled, or if a player makes an illegal move.
 
 The [PettingZoo Connect Four game environment](https://pettingzoo.farama.org/environments/classic/connect_four/) has to be wrapped before using it with RLlib API.
@@ -117,16 +119,16 @@ Once it's converted into an [rllib MultiAgentEnv](https://docs.ray.io/en/latest/
 
 The connect four environment is described as follow:
 
-| Key | Value | Description |
+| Property | Value | Description |
 |--|--|--|
 | Agent | ["player_0", "player_1"] | Two players. |
 | Action | [0..6] | The list of all possible actions, the action space. |
 | Observation | (6, 7, 2) [0,1] | A complete description of the environment, nothing is hidden in the state space. In this game, what's the players see (the observation state) is the same as the state space. Nothing is hidden. |
 | Reward | [-1,0,1] | The reward is the feedback the agent receives per action. In this game, rewards are sparse, which means they are given when the game ends. Winner receives 1, looser receives -1, the ties get 0, cheater gets -1 and the other 0 |
 
-Note that the wrapper has some important limitations:
-1. All agents have the same `action_spaces` and `observation_spaces`.
-2. Environments are positive sum games (-> Agents are expected to cooperate to maximize reward). This isn't a hard restriction, it just that standard algorithms aren't expected to work well in highly competitive games.
+The `RLlib` environment wrapper has some limitations:
+1. All agents must have the same `action_spaces` and `observation_spaces`
+2. Environments should be positive sum games, that is agents are expected to cooperate to maximize reward. Indeed standard algorithms don't perform well in highly competitive games.
 
 ```python
 from pettingzoo.classic import connect_four_v3
@@ -138,7 +140,10 @@ env_creator = lambda config: connect_four_v3.env(render_mode="rgb_array")
 register_env("connect4", lambda config: Connect4Env(env_creator(config)))
 ```
 
-Overrides `reset()` method of [PettingZooEnv](https://github.com/ray-project/ray/blob/master/rllib/env/wrappers/pettingzoo_env.py):
+I had to tweak the `PettingZooEnv` class to make it work with the `connect_four_v3` environment:
+
+* I override the `reset()` method of [PettingZooEnv](https://github.com/ray-project/ray/blob/master/rllib/env/wrappers/pettingzoo_env.py)
+* as well as the `render()` method
 
 ```python
 @PublicAPI
@@ -147,10 +152,9 @@ class Connect4Env(PettingZooEnv):
   def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None):
     # In base class =>
     # info = self.env.reset(seed=seed, return_info=True, options=options)
-    info = self.env.reset(seed=seed, options=options)
+    self.env.reset(seed=seed, options=options)
     return (
-      {self.env.agent_selection: self.env.observe(self.env.agent_selection)},
-      info or {},
+      {self.env.agent_selection: self.env.observe(self.env.agent_selection)}, {},
     )
   def render(self):
     # In base class =>
@@ -158,33 +162,24 @@ class Connect4Env(PettingZooEnv):
     return self.env.render()
 ```
 
-## RLlib Action Mask
-Players cannot place a token in a full column, and 
+## Legal Action Mask
 
-[Legal action mask](https://pettingzoo.farama.org/environments/classic/connect_four/#legal-actions-mask)
-The legal moves available to the current agent are found in the action_mask element of the dictionary observation. The action_mask is a binary vector where each index of the vector represents whether the action is legal or not. The action_mask will be all zeros for any agent except the one whose turn it is. Taking an illegal move ends the game with a reward of -1 for the illegally moving agent and a reward of 0 for all other agents.
+As the rules of connect four sometimes prohibit the players from playing in a certain column of the grid, the observation dictionary contains a [`action_mask`](https://pettingzoo.farama.org/environments/classic/connect_four/#legal-actions-mask) element, where the legal moves available to the current player are defined. The `action_mask` is a binary vector where each index of the vector represents whether the action is legal or not.
 
-[TorchActionMaskModel](https://github.com/ray-project/ray/blob/master/rllib/examples/models/action_mask_model.py#L69)
+To make the policy support the action mask, the policy's model need to be adapted. For this, I merely copy/paste the [ActionMaskModel](https://github.com/ray-project/ray/blob/master/rllib/examples/models/action_mask_model.py#L69) defined in RLlib's examples.
 
 ```python
+from ray.rllib.models.torch.fcnet import FullyConnectedNetwork
+from ray.rllib.utils.torch_utils import FLOAT_MIN
+from ray.rllib.utils.framework import try_import_torch
+
+torch, nn = try_import_torch()
+
 class Connect4MaskModel(TorchModelV2, nn.Module):
-  def __init__(
-    self,
-    obs_space,
-    action_space,
-    num_outputs,
-    model_config,
-    name,
-    **kwargs,
-  ):
-    orig_space = getattr(obs_space, "original_space", obs_space)
+  def __init__(self, obs_space, action_space, num_outputs, model_config, name, **kwargs):
+    # ... init stuffs ...
 
-    TorchModelV2.__init__(
-      self, obs_space, action_space, num_outputs, model_config, name, **kwargs
-    )
-    nn.Module.__init__(self)
-
-    self.internal_model = TorchFC(
+    self.internal_model = FullyConnectedNetwork(
       orig_space["observation"],
       action_space,
       num_outputs,
@@ -210,145 +205,125 @@ class Connect4MaskModel(TorchModelV2, nn.Module):
     return self.internal_model.value_function()
 ```
 
-## Opponents
+## A league of opponents
+Connect Four is competitive game in which players want to win the most games. As the standard algorithms aren't expected to work well in competitive environment, it is not recommended to train both player's policies at once.
+The main idea is to frequently make frozen version of the learning policy, and then add the frozen version to the league of opponents. As a starting point, I also added several basic heuristics for the learning policy to play against. Some of which acts randomly or plays the same column each turn.
+
 ```python
 class AlwaysSameHeuristic(HeuristicBase):
-  """
-  Pick a random move and stick with it for the entire episode.
-  """
   _rand_choice = random.choice(range(7))
 
   def _do_compute_actions(self, obs_batch):
-    def select_action(legal_action):
-      legal_choices = np.arange(len(legal_action))[legal_action == 1]
+    return [self.select_action(x) for x in obs_batch["action_mask"]], [], {}
 
-      if self._rand_choice not in legal_choices:
-        self._rand_choice = np.random.choice(legal_choices)
+  def select_action(self, legal_action):
+    legal_choices = np.arange(len(legal_action))[legal_action == 1]
 
-      return self._rand_choice
-    return [select_action(x) for x in obs_batch["action_mask"]], [], {}
+    if self._rand_choice not in legal_choices:
+      self._rand_choice = np.random.choice(legal_choices)
+
+    return self._rand_choice
 ```
 
-Playing against old version of itself
-
-
-Adding with the help of a CallbackFunction
+To manage the league of opponent's policies, I adapted the callback class defined in this [rllib example](https://github.com/ray-project/ray/blob/master/rllib/examples/self_play_with_open_spiel.py). My `SelfPlayCallback` class looks like this:
 
 ```python
 
 def create_self_play_callback(win_rate_thr, opponent_policies, opponent_count=10):
-    class SelfPlayCallback(DefaultCallbacks):
-        win_rate_threshold = win_rate_thr
+  class SelfPlayCallback(DefaultCallbacks):
+    def __init__(self):
+      super().__init__()
+      self.current_opponent = 0
+      self.opponent_policies = deque(opponent_policies, maxlen=opponent_count)
+      self.policy_to_remove = None
+      self.win_rate_threshold = win_rate_thr
+      self.frozen_policies = {
+        "always_same": AlwaysSameHeuristic,
+        "linear": LinearHeuristic,
+        "beat_last": BeatLastHeuristic,
+        "random": RandomHeuristic,
+      }
 
-        def __init__(self):
-            # init logic ...
+    def on_train_result(self, *, algorithm, result, **kwargs):
+        result["win_rate"] = self.get_win_rate(result)
 
-        def on_train_result(self, *, algorithm, result, **kwargs):
-            """Called at the end of Algorithm.train().
+        if result["win_rate"] > self.win_rate_threshold:
+          if len(self.opponent_policies) == self.opponent_policies.maxlen:
+            self.policy_to_remove = self.opponent_policies[0]
 
-            Args:
-                algorithm: Current Algorithm instance.
-                result: Dict of results returned from Algorithm.train() call.
-                    You can mutate this object to add additional metrics.
-                kwargs: Forward compatibility placeholder.
-            """
-            main_rew = result["hist_stats"].pop("policy_learned_reward")
-            opponent_rew = result["hist_stats"].pop("episode_reward")
+          new_pol_id = self.get_new_policy_id()
+          self.add_policy(new_pol_id, algorithm)
+        else:
+          print("Not good enough... Keep learning ...")
 
-            won = 0
-            for r_main, r_opponent in zip(main_rew, opponent_rew):
-                if r_main > r_opponent:
-                    won += 1
-            win_rate = won / len(main_rew)
+        result["league_size"] = len(self.opponent_policies) + 1
 
-            result["win_rate"] = win_rate
-            print(f"Iter={algorithm.iteration} win-rate={win_rate}")
+    def on_evaluate_end(self, *, algorithm, evaluation_metrics, **kwargs):
+      if self.policy_to_remove is not None:
+        algorithm.remove_policy(
+          self.policy_to_remove,
+          policy_mapping_fn=self.create_policy_mapping_fn(),
+        )
+        self.policy_to_remove = None
+        algorithm.workers.sync_weights()
+    
+    def add_policy(self, new_pol_id, algorithm):
+      if new_pol_id in list(self.frozen_policies.keys()):
+        new_policy = algorithm.add_policy(
+          policy_id=new_pol_id,
+          policy_cls=self.frozen_policies[new_pol_id],
+          policy_mapping_fn=self.create_policy_mapping_fn(),
+        )
+      else:
+        new_policy = algorithm.add_policy(
+          policy_id=new_pol_id,
+          policy_cls=type(algorithm.get_policy("learned")),
+          policy_mapping_fn=self.create_policy_mapping_fn(),
+        )
+        learned_state = algorithm.get_policy("learned").get_state()
+        new_policy.set_state(learned_state)
 
-            if win_rate > self.win_rate_threshold:
-                if len(self.opponent_policies) == self.opponent_policies.maxlen:
-                    self.policy_to_remove = self.opponent_policies[0]
+      algorithm.workers.sync_weights()
 
-                new_pol_id = None
-                while new_pol_id is None:
-                    if np.random.choice(range(6)) == 0:
-                        new_pol_id = np.random.choice(list(self.frozen_policies.keys()))
-                    else:
-                        self.current_opponent += 1
-                        new_pol_id = f"learned_v{self.current_opponent}"
+    def get_new_policy_id(self):
+      new_pol_id = None
+      while new_pol_id is None:
+        if np.random.choice(range(6)) == 0:
+          new_pol_id = np.random.choice(list(self.frozen_policies.keys()))
+        else:
+          self.current_opponent += 1
+          new_pol_id = f"learned_v{self.current_opponent}"
 
-                    if new_pol_id in self.opponent_policies:
-                        new_pol_id = None
-                    else:
-                        self.opponent_policies.append(new_pol_id)
+        if new_pol_id in self.opponent_policies:
+          new_pol_id = None
+        else:
+          self.opponent_policies.append(new_pol_id)
+      return new_pol_id
 
-                print("Non trainable policies", list(self.opponent_policies))
+    def get_win_rate(self, result):
+      main_rew = result["hist_stats"].pop("policy_learned_reward")
+      opponent_rew = result["hist_stats"].pop("episode_reward")
 
-                def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-                    return (
-                        "learned"
-                        if episode.episode_id % 2 == int(agent_id[-1:])
-                        else np.random.choice(list(self.opponent_policies))
-                    )
+      won = 0
+      for r_main, r_opponent in zip(main_rew, opponent_rew):
+          if r_main > r_opponent:
+              won += 1
+      return won / len(main_rew)
+    
+    def create_policy_mapping_fn(self):
+      def policy_mapping_fn(agent_id, episode, worker, **kwargs):
+        return (
+          "learned"
+          if episode.episode_id % 2 == int(agent_id[-1:])
+          else np.random.choice(list(self.opponent_policies))
+        )
+      return policy_mapping_fn
 
-                print(
-                    f"Iter={algorithm.iteration} Adding new opponent to the mix ({new_pol_id}). League size {len(self.opponent_policies) + 1}"
-                )
-
-                if new_pol_id in list(self.frozen_policies.keys()):
-                    new_policy = algorithm.add_policy(
-                        policy_id=new_pol_id,
-                        policy_cls=self.frozen_policies[new_pol_id],
-                        policy_mapping_fn=policy_mapping_fn,
-                    )
-                else:
-                    new_policy = algorithm.add_policy(
-                        policy_id=new_pol_id,
-                        policy_cls=type(algorithm.get_policy("learned")),
-                        policy_mapping_fn=policy_mapping_fn,
-                    )
-                    learned_state = algorithm.get_policy("learned").get_state()
-                    new_policy.set_state(learned_state)
-                algorithm.workers.sync_weights()
-
-            else:
-                print("Not good enough... Keep learning ...")
-
-            result["league_size"] = len(self.opponent_policies) + 1
-
-        def on_evaluate_end(self, *, algorithm, evaluation_metrics, **kwargs):
-            """Runs when the evaluation is done.
-
-            Runs at the end of Algorithm.evaluate().
-
-            Args:
-                algorithm: Reference to the algorithm instance.
-                evaluation_metrics: Results dict to be returned from algorithm.evaluate().
-                    You can mutate this object to add additional metrics.
-                kwargs: Forward compatibility placeholder.
-            """
-
-            def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-                return (
-                    "learned"
-                    if episode.episode_id % 2 == int(agent_id[-1:])
-                    else np.random.choice(list(self.opponent_policies))
-                )
-
-            if self.policy_to_remove is not None:
-                print("Remove ", self.policy_to_remove, "from opponent policies")
-                algorithm.remove_policy(
-                    self.policy_to_remove,
-                    policy_mapping_fn=policy_mapping_fn,
-                )
-                self.policy_to_remove = None
-                algorithm.workers.sync_weights()
-
-    return SelfPlayCallback
-
+  return SelfPlayCallback
 ```
 
-## RLlib Training Loop
-Using `ray.tune`
+## Training Loop with Ray Tune
+Finally I define a configuration for the PPO algorithm and then use the power of `ray.tune` to manage the training loop.
 
 ```python
 config = (
@@ -380,11 +355,9 @@ config = (
 )
 ```
 
-Ray Dashboard, monitoring the ray nodes, resources status (gpu, cpu, heap), graphana
+Then I use ray tune api, and call the `fit()` method.
 
-[Prometheus setup](https://docs.ray.io/en/latest/ray-observability/ray-metrics.html)
-
-```shell
+```python
 results = tune.Tuner(
   "PPO",
   param_space=config.to_dict(),
@@ -395,59 +368,102 @@ results = tune.Tuner(
       checkpoint_score_order="max",
   )
 ).fit()
+```
+
+You can retrieve the best checkpoint by calling `first get_bet_result()` method and its checkpoint property:
+```python
 results.get_best_result(metric="win_rate", mode="max")
 ```
 
-Tensorboard
-```shell
-tensorboard --logdir ~/ray_results/
-```
+## Ray monitoring with Prometheus/Grafana
+Ray dashboard is a powerful way to monitor Ray application. You can monitor system-level metrics, the ray nodes, and resources status (gpu, cpu, heap).
 
-# Integration and deployment (free of charge)
-## Gradio App
+[This article](https://docs.ray.io/en/latest/ray-observability/ray-metrics.html) or [this one](https://www.anyscale.com/blog/monitoring-and-debugging-ray-workloads-ray-metrics) show you how to setup the monitoring system. Here are the main steps:
+* [Download](https://prometheus.io/download/) `prometheus` and unzip the archive
+* Once `Ray` has been running with export metrics enable (ray[default]), you should find a `prometheus.yml` config file at `/tmp/ray/session_latest/metrics/prometheus/`
+* 
 ```shell
-gradio connectfour/app.py
+cd <prometheus install directory>
+./prometheus --config.file=/tmp/ray/session_latest/metrics/prometheus/prometheus.yml
 ```
-## Export policy model as ONNX
+* Access the Prometheus server from the default url at http://localhost:9090
+* [Download Grafana](https://grafana.com/grafana/download)
+* Start the Grafana server with the default configuration file
+```shell
+cd <grafana install directory>
+./bin/grafana-server --config /tmp/ray/session_latest/metrics/grafana/grafana.ini web
+```
+* Access the Grafana server from the default url at http://localhost:3000
+
+Finally, have a look at the time series graph from the Ray dashboard. You can vizualize numerous utilization metrics such as CPU/GPU, memory usage, disk usage, object store usage, or network speed.
+![grafana ray dashboard](/assets/2023-03-29/grafana.gif){: width="60%"  }
+
+<br/>
+
+## Export the policy's model as ONNX
+Exporting the model in an open format make it easier to share and decouple from the training environment.
+Open Neural Network Exchange (ONNX) is an open format built to represent machine learning models.
+
+With `RLlib` you can export the model if you configure the AlgorithmConfig like this:
 
 ```python
-config.evaluation(evaluation_interval=None)
+config.checkpointing(export_native_model_files=True)
 ```
+
+And then saving the model as `onnx`:
 
 ```python
 algo = Algorithm.from_checkpoint(analysis.best_checkpoint)
 ppo_policy = algo.get_policy("learned")
 ppo_policy.export_model("models", onnx=11)
 ```
-`model.onnx`
 
-Vizualize model with [NETRON](https://netron.app/)
+Now the model is easily shareable, and you can even vizualize it with the online [NETRON app](https://netron.app/).
 
+# Integration and deployment (free of charge)
+## Demo Interface with Gradio App
+[Gradio App](https://www.gradio.app/demos/) is an open-source library which enables you to build an interface to show your experiments with a couple lines of code.
+Gradio is an easy way to demo your machine learning project with a web interface.
+
+In my case I use the `gradio.Blocks()` low-level API, that you can use to build web apps with flexible layouts and data flows:
+```python
+import gradio as gr
+gr.Blocks()
+...
+```
+
+The latest code I used for the Connect Four Gradio App is available [here](https://huggingface.co/spaces/ClementBM/connectfour/tree/main/connectfour) in the `app.py` file.
+
+Once you've created an interface, you can permanently host it on Hugging Face's servers and share it with anyone.
 ## Create a Space at Hugging Face
+Hugging Face Spaces are Git repositories that host application code for Machine Learning demos. You can build Spaces with Python libraries like Streamlit or Gradio or using Docker images.
+
+In our case we select Gradio space SDK
+![Create a Gradio Space](/assets/2023-03-29/hf-create-space.png)
+
+Then to tell the space which dependencies it needs, you may export the `requirements.txt` file with poetry:
 ```shell
 poetry export -f requirements.txt --output requirements.txt --without-hashes
 ```
 
-## Git LFS
-Do you have files larger than 10MB? Those files should be tracked with git-lfs, which you can initialize with:
+## Git Large File Storage (LFS)
+Last thing before pushing your repository to HF Spaces is to setup [git LFS](https://git-lfs.com/).
+If you have large model files (>10MB), or file with specific extensions like `.onnx`, they should be tracked with git-lfs.
 
-e to git-lfs.github.com and click Download.
-To install the file, run this command:
+You can initialize Git LFS by downloading it from [git-lfs.github.com](https://git-lfs.com/). And then run this install command:
 ```shell
 ./install.sh
 > Git LFS initialized.
 ```
 
-Download and install the Git command line extension. Once downloaded and installed, set up Git LFS for your user account by running: 
+Once installed, you can set up Git LFS for your user account by running
 ```shell
 git lfs install
 ```
 
-When you use Hugging Face to create a repository, Hugging Face automatically provides a list of common file extensions for common Machine Learning large files in the .gitattributes file, which git-lfs uses to efficiently track changes to your large files. 
+When you use Hugging Face to create a repository, Hugging Face automatically provides a list of common file extensions for common Machine Learning large files in the `.gitattributes` file, which git-lfs uses to efficiently track changes to your large files. 
 
 ```shell
 *.pkl filter=lfs diff=lfs merge=lfs -text
 *.onnx filter=lfs diff=lfs merge=lfs -text
 ```
-
-# Sources
