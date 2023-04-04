@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Reinforcement Learning with Ray and Connect Four"
-excerpt: "Reiforcement learning ray, connect four, hugging face space, multi agents, torch, gradio"
+title:  "How to train an agent to play Connect Four with Reinforcement Learning?"
+excerpt: "Train a PPO agent to play connect four with RLlib reinforcement learning framework, integrate it into a Gradio Web App and deploy it in a Hugging Face Space"
 date:   2023-03-29
 categories: [project]
-tags: [reinforcement learning, ray, hugging face, gradio, multi agents]
+tags: [reinforcement learning, rllib, hugging face, gradio, multi agents, torch, onnx, petting zoo, ppo]
 ---
 
 ![Red Hot Peppers](/assets/2023-03-29/chili-g100503ee3_1280.jpg){: width="100%"  }
@@ -86,29 +86,20 @@ An `Algorithm` also sets up its `rollout workers` and `optimizers`, and collects
 
 The following diagram illustrates the iterative learning process ([from RLlib documentation](https://docs.ray.io/en/latest/rllib/core-concepts.html)):
 
-![alt](/assets/2023-03-29/rllib-key-concepts.png)
+![RLlib key concept](/assets/2023-03-29/rllib-key-concepts.png)
 
 
 ## [Proximal Policy Optimization (PPO) Agent](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)
 
-[paper](https://arxiv.org/abs/1707.06347) PPO’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib’s multi-GPU optimizer pins that data in GPU memory to avoid unnecessary transfers from host memory, substantially improving performance over a naive implementation. PPO scales out using multiple workers for experience collection, and also to multiple GPUs for SGD.
+![PPO model](/assets/2023-03-29/model.onnx.png){: width="300" style="float: right; padding:15px"  }
 
-The mental model for multi-agent in RLlib is as follows:
-1. Your environment (a sub-class of MultiAgentEnv) returns dictionaries mapping agent IDs (e.g. strings; the env can chose these arbitrarily) to individual agents’ observations, rewards, and done-flags.
-2. You define (some of) the policies that are available up front (you can also add new policies on-the-fly throughout training), and
-3. You define a function that maps an env-produced agent ID to any available policy ID, which is then to be used for computing actions for this particular agent.
+Actor-Critic algorithm is a family of RL algorithms that combine policy gradients with Deep Q-Networks. An agent of this family contains two neural networks: a policy network and a DQN. The DQN is formed normally, learning from the experiences of the agent. The policy network learns differently than in normal Policy Gradient. Instead of estimating the value of each action by going through several episodes, summing the discounted future rewards for each action, then normalizing them, the actor agent relies on the action values estimated by the critical DQN. It's a bit like an athlete (the agent) who learns with the help of a coach (the DQN).
 
-https://docs.ray.io/en/latest/rllib/rllib-env.html#multi-agent-and-hierarchical
+A2C is part of the Actor-Critic family. With A2C several agents learn in parallel, by exploring different copies of the environment. At regular intervals, each agent forwards certain weight updates to a master network and then fetches the latest weights from that network. Each agent contributes to the improvement of the master network and benefits from what the other agents have learned. Additionally, instead of estimating Q-Values, DQN estimates the benefit of each action, which makes the training more stable. Model updates are synchronous, so gradient updates are performed in larger batches, allowing the model to make better use of GPU power.
 
-Policy
-![model](/assets/2023-03-29/model.onnx.png){: width="300" style="float: right; padding:15px"  }
+The [PPO](https://arxiv.org/abs/1707.06347) algorithm is based on A2C which cuts the loss function to avoid excessively large weight updates (source of instabilities). PPO is a simplification of the previous TRPO algorithm. In April 2019, the OpenAI PPO-based AI agent called "OpenAI Five", beat the world champions at the Dota 2 multiplayer game.
 
-Actor-Critic algorithm: a family of RL algorithms that combine Policy Gradients with Deep Q-Networks. An Actor-Critic agent contains two neural networks: a policy net and a DQN. The DQN is trained normally, by learning from the agent's experiences. The policy net learns differently (and much faster), than in regular Policy Gradient: instead of estimating the value of each action by going through multiple episodes, then summing the future discounted rewards for each action, and finalyy normalizing them, the agent (actor) relies on the action values estimated by the DQN (critic). It's a bit like an athlete (the agent) learning with the help of a coach (the DQN).
-
-A2C: multiple agents learn in parallel, exploring different copies of the environment. At regular intervals, each agent pushes some weight updates to a master network, then it pulls the latest weights from that network. Each agent thus contributes to improving the master network and benefits from what the other agents have learned. Moreover, instead of estimating the Q-Values, the DQN estimates the advantage ot each action which stabilies training. All model updates are synchronous, so gradient updates are perormed over larger batches, which allows the model to better utilize the power of the GPU.
-
-PPO: based on A2C that clips the loss function to avoid excessively large weight updates (which often lea to training instabilities). PPO is a simplification of the previous TRPO algorithm.
-OpenAI made the new in April 2019 with their AI agent OpenAI Five, based on PPO, which defeated the world champions at the multiplayer game Dota 2.
+> The [RLlib implementation of PPO](https://docs.ray.io/en/latest/rllib/rllib-algorithms.html#ppo)’s clipped objective supports multiple SGD passes over the same batch of experiences. RLlib's multi-GPU optimizer pins this data into GPU memory to avoid unnecessary transfers from host memory, improving performance over a naive implementation.
 
 ## Environment wrapper around PettingZoo Connect Four
 Connect Four is a 2-player turn-based game. The players drop their tokens in a column of a standing grid, where each token fall until it reaches the bottom of the column or is stopped by an existing token. Players have to connect four of their tokens vertically, horizontally or diagonally. The game ends when a player has made a sequence of 4 tokens or when all columns have been filled, or if a player makes an illegal move.
@@ -395,7 +386,7 @@ cd <grafana install directory>
 ```
 * Access the Grafana server from the default url at http://localhost:3000
 
-Finally, have a look at the time series graph from the Ray dashboard. You can vizualize numerous utilization metrics such as CPU/GPU, memory usage, disk usage, object store usage, or network speed.
+Finally, have a look at the time series graph from the Ray dashboard. You can visualize numerous utilization metrics such as CPU/GPU, memory usage, disk usage, object store usage, or network speed.
 ![grafana ray dashboard](/assets/2023-03-29/grafana.gif){: width="60%"  }
 
 <br/>
@@ -418,7 +409,7 @@ ppo_policy = algo.get_policy("learned")
 ppo_policy.export_model("models", onnx=11)
 ```
 
-Now the model is easily shareable, and you can even vizualize it with the online [NETRON app](https://netron.app/).
+Now the model is easily shareable, and you can even visualize it with the online [NETRON app](https://netron.app/).
 
 # Integration and deployment (free of charge)
 ## Demo Interface with Gradio App
