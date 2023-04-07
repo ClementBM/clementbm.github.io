@@ -4,7 +4,7 @@ title:  "Struggling with text content extraction from pdf files"
 excerpt: "How to get quality text content from pdf files without losing formating"
 date:   2023-03-16
 categories: [coding]
-tags: [time series, dtw, clustering]
+tags: [nlp, content extraction]
 ---
 
 ## Requirements
