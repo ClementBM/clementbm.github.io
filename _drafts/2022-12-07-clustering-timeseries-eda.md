@@ -43,20 +43,9 @@ Both clustering and PCA seek to simplify the data via a small number of summarie
 * Clustering looks to find homogeneous subgroups among the observations 
 
 
-## Nuclear France
-58 tranches répartie dans 19 centrales nucléaires
-Réacteur à eau pressurisée
-En france les centrales nucléaires contiennent 2 à 6 tranches et on des puissance différentes.
-Exemple: un réacteur de 900 MW produit de l'électricité pour 400 000 foyers.
 
-## Eolien
-Les plus grosses éoliennes font 3 MW
-
-## Taux de couverture
-Le taux de couverture représente le rapport entre les exportations et les importations de biens. Il mesure l'indépendance économique globale d'un état, ou en fonction d'une marchandise particulière. Si le résultat est proche ou égal à 100 %, alors les valeurs d'importations et d' exportations sont équivalentes.
-
-## Facteur de charge
-Le facteur de charge ou facteur d'utilisation d'une centrale électrique est le rapport entre l'énergie électrique effectivement produite sur une période donnée et l'énergie qu'elle aurait produite si elle avait fonctionné à sa puissance nominale durant la même période.
+## [Webstat](https://api.gouv.fr/les-api/webstat)
+Webstat est le portail statistique de la Banque de France. L'API Webstat permet d'accéder à plus de 35.000 séries statistiques de la Banque de France et de ses partenaires institutionnels. Obtenez simplement les données économiques et financières sur les entreprises françaises, la conjoncture régionale, le crédit et l'épargne, la monnaie ou la balance des paiements. Principales fonctionnalités:
 
 # References
 [1]	F. Petitjean, A. Ketterlin & P. Gancarski. A global averaging method for dynamic time warping, with applications to clustering. Pattern Recognition, Elsevier, 2011, Vol. 44, Num. 3, pp. 678-693
@@ -66,38 +55,3 @@ https://www.kaggle.com/code/izzettunc/introduction-to-time-series-clustering/not
 https://pyts.readthedocs.io/en/stable/auto_examples/approximation/plot_paa.html
 https://tslearn.readthedocs.io/en/stable/gen_modules/barycenters/tslearn.barycenters.dtw_barycenter_averaging.html
 https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient
-
-https://www.insee.fr/fr/statistiques/3973175#documentation
-https://odre.opendatasoft.com/explore/dataset/eco2mix-metropoles-tr/information/?disjunctive.libelle_metropole&disjunctive.nature&sort=-date&refine.date_heure=2022&dataChart=eyJxdWVyaWVzIjpbeyJjaGFydHMiOlt7InR5cGUiOiJsaW5lIiwiZnVuYyI6IlNVTSIsInNjaWVudGlmaWNEaXNwbGF5Ijp0cnVlLCJjb2xvciI6IiNFODUyNTIiLCJ5QXhpcyI6ImNvbnNvbW1hdGlvbiJ9XSwieEF4aXMiOiJkYXRlX2hldXJlIiwibWF4cG9pbnRzIjoyMDAsInRpbWVzY2FsZSI6Im1pbnV0ZSIsInNvcnQiOiIiLCJzZXJpZXNCcmVha2Rvd25UaW1lc2NhbGUiOiIiLCJjb25maWciOnsiZGF0YXNldCI6ImVjbzJtaXgtbWV0cm9wb2xlcy10ciIsIm9wdGlvbnMiOnsiZGlzanVuY3RpdmUubGliZWxsZV9tZXRyb3BvbGUiOnRydWUsImRpc2p1bmN0aXZlLm5hdHVyZSI6dHJ1ZSwic29ydCI6Ii1kYXRlIiwicmVmaW5lLmRhdGVfaGV1cmUiOiIyMDIyIn19fV0sImRpc3BsYXlMZWdlbmQiOnRydWUsImFsaWduTW9udGgiOnRydWV9
-https://www.data.gouv.fr/fr/datasets/donnees-du-signal-ecowatt-a-partir-du-01-09-2022/
-https://opendata.edf.fr/explore/?sort=modified&disjunctive.theme&disjunctive.publisher&disjunctive.keyword
-https://www.rte-france.com/eco2mix/synthese-des-donnees?type=consommation
-
-
-https://www.monde-diplomatique.fr/2021/02/DEBREGEAS/62795
-https://www.monde-diplomatique.fr/2021/11/BERNIER/64005
-https://www.monde-diplomatique.fr/2021/05/RIMBERT/63053
-
-
-## Nuclear monitor
-https://nuclear-monitor.fr/#/about
-https://github.com/ewoken/nuclear-monitor/blob/master/backend/src/services/types.js
-
-## Facteur de charges
-https://www.data.gouv.fr/fr/datasets/facteurs-de-charge-et-taux-de-couverture-nationaux-mensuels-eoliens-et-solaires-janvier-2012-a-septembre-2022/
-
-## RTE
-https://www.rte-france.com/synthese-hebdomadaire-consommation-electrique-francaise
-
-## Electricity Map
-https://app.electricitymaps.com/zone/IT-SO
-
-
-## Le reveilleur
-https://www.youtube.com/watch?v=HMystmGbctw
-
-# See reference in time series survey
-
-## Prix electricité
-https://opera-energie.com/prix-electricite-prix-du-kwh/
-https://www.fournisseurs-electricite.com/guides/prix/mwh-electricite
