@@ -17,7 +17,22 @@ Get a clean textual content out of a pdf file, which means:
 
 Processing time is not a requirement in my case.
 
+## Processing library
+https://github.com/hi-primus/optimus
+
 ## Raw extraction
+
+
+## Libraries for extracting web contents
+
+* [html2text](https://github.com/Alir3z4/html2text) - Convert HTML to Markdown-formatted text.
+* [lassie](https://github.com/michaelhelmick/lassie) - Web Content Retrieval for Humans.
+* [micawber](https://github.com/coleifer/micawber) - A small library for extracting rich content from URLs.
+* [newspaper](https://github.com/codelucas/newspaper) - News extraction, article extraction and content curation in Python.
+* [python-readability](https://github.com/buriy/python-readability) - Fast Python port of arc90's readability tool.
+* [requests-html](https://github.com/psf/requests-html) - Pythonic HTML Parsing for Humans.
+* [textract](https://github.com/deanmalmgren/textract) - Extract text from any document, Word, PowerPoint, PDFs, etc.
+
 
 ## Sources
 * https://pdfminersix.readthedocs.io/en/latest/tutorial/highlevel.html

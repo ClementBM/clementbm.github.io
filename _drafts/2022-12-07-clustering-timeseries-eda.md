@@ -42,10 +42,12 @@ Both clustering and PCA seek to simplify the data via a small number of summarie
 * PCA looks to find a low-dimensional representation of the observations that explain a good fraction of the variance
 * Clustering looks to find homogeneous subgroups among the observations 
 
+{% gist 109210aa102732b41dd8635b4b6a054e %}
 
 ## Silhouette
 float: Mean Silhouette Coefficient for all samples.
 
+{% gist 109210aa102732b41dd8635b4b6a054e slicing.py %}
 
 
 [1] [Peter J. Rousseeuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics 20: 53-65.](http://www.sciencedirect.com/science/article/pii/0377042787901257)
