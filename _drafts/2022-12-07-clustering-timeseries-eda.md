@@ -43,6 +43,15 @@ Both clustering and PCA seek to simplify the data via a small number of summarie
 * Clustering looks to find homogeneous subgroups among the observations 
 
 
+## Silhouette
+float: Mean Silhouette Coefficient for all samples.
+
+
+
+[1] [Peter J. Rousseeuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics 20: 53-65.](http://www.sciencedirect.com/science/article/pii/0377042787901257)
+[2] [Wikipedia entry on the Silhouette Coefficient](https://en.wikipedia.org/wiki/Silhouette_(clustering))
+
+
 
 ## [Webstat](https://api.gouv.fr/les-api/webstat)
 Webstat est le portail statistique de la Banque de France. L'API Webstat permet d'accéder à plus de 35.000 séries statistiques de la Banque de France et de ses partenaires institutionnels. Obtenez simplement les données économiques et financières sur les entreprises françaises, la conjoncture régionale, le crédit et l'épargne, la monnaie ou la balance des paiements. Principales fonctionnalités:
@@ -55,3 +64,4 @@ https://www.kaggle.com/code/izzettunc/introduction-to-time-series-clustering/not
 https://pyts.readthedocs.io/en/stable/auto_examples/approximation/plot_paa.html
 https://tslearn.readthedocs.io/en/stable/gen_modules/barycenters/tslearn.barycenters.dtw_barycenter_averaging.html
 https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient
+
