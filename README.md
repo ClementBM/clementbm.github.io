@@ -20,10 +20,10 @@
 
 ### 🛠 &nbsp;Tech Stack
 
-![SQL](https://github.com/devicons/devicon/blob/master/icons/microsoftsqlserver/microsoftsqlserver-plain-wordmark.svg)&nbsp;
-![Python](https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg)&nbsp;
-![R](https://github.com/devicons/devicon/blob/master/icons/r/r-original.svg)&nbsp;
-![C#](https://github.com/devicons/devicon/blob/master/icons/csharp/csharp-original.svg)&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original-wordmark.svg" title="Python" alt="Python" width="40" height="40"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/r/r-original.svg" title="R" alt="R" width="40" height="40"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/csharp/csharp-original.svg" title="C#" alt="C#" width="40" height="40"/>&nbsp;
+<img src="https://github.com/devicons/devicon/blob/master/icons/microsoftsqlserver/microsoftsqlserver-plain-wordmark.svg" title="SQL" alt="SQL" width="40" height="40"/>&nbsp;
 
 ---
 
@@ -34,5 +34,3 @@
 ![GitHub Streak](http://github-readme-streak-stats.herokuapp.com?user=ClementBM&theme=dark&background=000000)
 
 ![GitHub Statistics](https://github-readme-stats-eight-theta.vercel.app/api?username=ClementBM&show_icons=true&include_all_commits=true&count_private=true)
-
-
