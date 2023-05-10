@@ -7,13 +7,21 @@ categories: [study]
 tags: [time series, dtw, clustering]
 ---
 
-## Hypothesis
+- [Hypothesis](#hypothesis)
+- [Dynamic Time Warping metric](#dynamic-time-warping-metric)
+- [DBA DTW Barycenter Averaging](#dba-dtw-barycenter-averaging)
+- [On clustering](#on-clustering)
+- [Silhouette](#silhouette)
+- [Webstat](#webstat)
+- [References](#references)
+
+# Hypothesis
 Electricity generation, consumption data sources are not always used at 100% of their capacities due to:
 * maintenance
 * failures
 * power consumption needs
 
-## Dynamic Time Warping metric
+# Dynamic Time Warping metric
 
 Dynamic time warping (DTW) was introduced in order to overcome some of the restrictions of simpler similarity measures such as Euclidean distance.
 It is one of the most popular measures, The one-nearest neighbor classifier with the DTW metric is often considered to be the baseline algorithm for time series classification.
@@ -31,12 +39,12 @@ $$
 
 where $$\mathcal{P}$$ is the set of warping paths.
 
-## DBA DTW Barycenter Averaging
+# DBA DTW Barycenter Averaging
 DTW barycenter Averaging method estimated through Excpectation-Maximization algorithm.
 
 DBA was originally presented in [1]. This implementation is based on a idea from [2] (Majorize-Minimize Mean Algorithm).
 
-## On clustering
+# On clustering
 With clustering we try to find subgroups within the dataset. This is an unsupervised problem because we are trying to discover structure, distinct cluster for instance, on the basis of a data set. On the other hand, the goal in supervised problems, is to try to predict some outcome vector or label.
 Both clustering and PCA seek to simplify the data via a small number of summaries, but their mechanisms are different:
 * PCA looks to find a low-dimensional representation of the observations that explain a good fraction of the variance
@@ -44,7 +52,7 @@ Both clustering and PCA seek to simplify the data via a small number of summarie
 
 {% gist 109210aa102732b41dd8635b4b6a054e %}
 
-## Silhouette
+# Silhouette
 float: Mean Silhouette Coefficient for all samples.
 
 {% gist 109210aa102732b41dd8635b4b6a054e slicing.py %}
@@ -55,7 +63,7 @@ float: Mean Silhouette Coefficient for all samples.
 
 
 
-## [Webstat](https://api.gouv.fr/les-api/webstat)
+# [Webstat](https://api.gouv.fr/les-api/webstat)
 Webstat est le portail statistique de la Banque de France. L'API Webstat permet d'accéder à plus de 35.000 séries statistiques de la Banque de France et de ses partenaires institutionnels. Obtenez simplement les données économiques et financières sur les entreprises françaises, la conjoncture régionale, le crédit et l'épargne, la monnaie ou la balance des paiements. Principales fonctionnalités:
 
 # References

@@ -7,7 +7,14 @@ categories: [coding]
 tags: [nlp, content extraction]
 ---
 
-## Requirements
+- [Requirements](#requirements)
+- [Processing library](#processing-library)
+- [Raw extraction](#raw-extraction)
+- [Libraries for extracting web contents](#libraries-for-extracting-web-contents)
+- [Sources](#sources)
+
+
+# Requirements
 Get a clean textual content out of a pdf file, which means:
 * Paragraphs
 * Sections
@@ -17,13 +24,13 @@ Get a clean textual content out of a pdf file, which means:
 
 Processing time is not a requirement in my case.
 
-## Processing library
+# Processing library
 https://github.com/hi-primus/optimus
 
-## Raw extraction
+# Raw extraction
 
 
-## Libraries for extracting web contents
+# Libraries for extracting web contents
 
 * [html2text](https://github.com/Alir3z4/html2text) - Convert HTML to Markdown-formatted text.
 * [lassie](https://github.com/michaelhelmick/lassie) - Web Content Retrieval for Humans.
@@ -34,7 +41,7 @@ https://github.com/hi-primus/optimus
 * [textract](https://github.com/deanmalmgren/textract) - Extract text from any document, Word, PowerPoint, PDFs, etc.
 
 
-## Sources
+# Sources
 * https://pdfminersix.readthedocs.io/en/latest/tutorial/highlevel.html
 * https://github.com/py-pdf/benchmarks
 * trends/explore?q=pdf to text,pdf to text python&hl=fr
