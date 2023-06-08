@@ -6,4 +6,4 @@ vendor
 Gemfile.lock
 rafts
 links.log
-.vscode
+# .vscode

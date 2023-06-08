@@ -1,0 +1,17 @@
+{
+    "editor.tabSize": 4,
+    "files.exclude": {
+        ".mypy_cache": true,
+        ".pytest_cache": true,
+        ".venv": true,
+        "**/__pycache__": true,
+        ".jekyll-cache/**": true,
+        "_site": true
+    },
+    "files.watcherExclude": {
+        ".venv/**": true,
+        "**/__pycache__/**": true,
+        ".mypy_cache/**": true,
+        ".pytest_cache/**": true,
+    }
+}

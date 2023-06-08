@@ -32,6 +32,8 @@ As stated in the note, the author take the *total number of Nobel laureates per 
   - [Nobel Price per capita as an indicator](#nobel-price-per-capita-as-an-indicator)
     - [Mean aged of Nobel Prices winners](#mean-aged-of-nobel-prices-winners)
     - [Cognitive function](#cognitive-function)
+    - [Sources of Flavonoids](#sources-of-flavonoids)
+    - [Nobel Laureates](#nobel-laureates)
   - [Access to chocolate](#access-to-chocolate)
     - [Price - Wealth](#price---wealth)
     - [Habits - Culture](#habits---culture)
@@ -92,10 +94,27 @@ Moving average of laureates, only 6% of laureates are female.
 ### Cognitive function
 Cognitive function is certainly dependent on a lot of variables.
 
+> For optimal cognitive function and intellectual achievement, it's crucial to maintain a balanced diet, engage in regular physical activity, get enough sleep, manage stress levels, and pursue intellectual stimulation through education and learning opportunities. These factors, along with a supportive environment and access to resources, are more likely to contribute to intellectual achievement than chocolate consumption alone.
+
 ![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
+
+### Sources of Flavonoids
+
+ChatGPT
+> The potential benefits of flavonoids can also be obtained from other dietary sources like fruits, vegetables, and teas.
+
+### Nobel Laureates
+
+ChatGPT
+> Intellectual or academic achievements.
+> 
+> There are numerous other factors at play, such as investment in education, research infrastructure, socioeconomic conditions, and cultural values, that have a more significant impact on the number of Nobel laureates in a given country.
 
 ## Access to chocolate
 As chocolate is a non-necessary goods, unlike rice or eggs, inhabitant in difficult situations, may not priorities chocolate consumption if they are already struggling to find a decent everyday meal.
+
+ChatGPT
+> Chocolate consumption is primarily influenced by cultural, economic, and personal preferences.
 
 ### Price - Wealth
 If chocolate consumption is mainly dependent on average wealth, than chocolate consumption wouldn't be a "fiable" measure because of its high dependent nature. Wealth sensitive.
@@ -108,6 +127,9 @@ Price and habits might "influence" chocolate consumption but theses factors are 
 ### Quality - Concentration of cocoa polyphenolic
 Average consumption per capita need to .. 
 High consumption of chocolate with a low polyphenolic concentration, might invalidate study. At the contrary a low consumption of chocolate with a high polyphenolic concentration... 
+
+ChatGPT comments on:
+> Moreover, it's worth considering that chocolate is often consumed in various forms, ranging from dark chocolate with high cocoa content to milk chocolate with added sugars and fats. The health benefits associated with chocolate are primarily attributed to dark chocolate with higher cocoa content, as it contains a higher concentration of flavonoids and fewer added ingredients.
 
 ## Reproductibility and sampled data
 Giving the data used during the study is not available, it's hard to reproduce the same result.
