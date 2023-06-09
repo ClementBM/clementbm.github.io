@@ -9,9 +9,9 @@ tags: [chocolate, correlation]
 
 ![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
-In this post, we briefly analyse a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
+In this post, we briefly analyze a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
 
-According to a study showing that rats improved cognitive performance after the administration of a cocoa polyphenolic,
+According to another study showing that rats improved their cognitive performances after the administration of a cocoa polyphenolic,
 the author tested the hypothesis whether chocolate consumption enhance human cognition.
 
 As stated in the note, the author took the *total number of Nobel laureates per capita* as a "surrogate" to cognitive performance.
@@ -52,9 +52,9 @@ The results of the study:
 
 The correlation result of $$r = 0.791$$ tend to go in the direction of a linear correlation between the chocolate consumption and the number of laureates per capita.
 
-We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the variety of the ensemble of all (~200) countries?
+We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the variety of all (~200) countries?
 
-Thereafter three other limitations are listed by the author itself of the study.
+Thereafter three other limitations are listed by the note's author himself.
 
 **Dependence between chocolate laureate consumption and mean consumption**
 
@@ -71,11 +71,11 @@ Thereafter three other limitations are listed by the author itself of the study.
 # Cognitive function and Nobel Price per capita
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
 
-The following diagram by *Jane S. Paulsen* shows some of them by category:
+The following diagram by *Jane S. Paulsen* shows some of them grouped by category:
 
 ![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
 
-Cognitive function of a human being may be dependent on diet, physical activity, sleep quality and quantity, stress levels and intellectual stimulation.
+Cognitive function of a human being may be dependent on diet, physical activity, sleep, stress levels and intellectual stimulation.
 
 All of these mighty possible factors are dependant at different proportion of the wealth of a person, and by extent to his/her access to learning/cultural resources.
 
@@ -86,9 +86,9 @@ Is the **Nobel laureates per capita** a good indicator of cognitive performance?
 
 The Nobel price rewards notable contribution of scientists (accross the globe) in the advance of the knowledge. Rewards span accross the fields of chemistry, literature, peace, physics and medicine. It doesn't encompass the field of mathematic since Alfred Nobel, the creator of the Nobel's price, wasn't really in good terms with mathematicians.
 
-Caution shoud be taken specifically onNobel Peace Prize. According to the Nobel Peace Center in Oslo, this prize is biaised toward the western countries until the 1990's: "From the 1990s onwards, many prizes were awarded for human rights, and the peace prize became truly global". As for the field of mathematic, we could argue that the study is missing the Abel Prize, the Nobel equivalent in the scope of mathematic.
+Caution shoud be taken specifically on the Nobel Peace Prize. Indeed, according to the Nobel Peace Center in Oslo, this prize is biaised toward the western countries until the 1990's: "From the 1990s onwards, many prizes were awarded for human rights, and the peace prize became truly global". As for the field of mathematic, we could argue that the study is missing the Abel Prize, the Nobel equivalent in the scope of mathematic.
 
-The note presupposed that the number of **Nobel laureates per capita** is a concordant with the average cognitive performance of a country.
+The note presupposed that the number of **Nobel laureates per capita** is concordant with the average cognitive performance of a country.
 
 > Conceivably, however, the total number of Nobel laureates per capita could serve as a surrogate end point reflecting the proportion with superior cognitive function and thereby give us some measure of the overall cognitive function of a given country.
 > 
