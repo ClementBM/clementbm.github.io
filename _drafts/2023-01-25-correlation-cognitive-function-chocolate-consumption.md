@@ -14,7 +14,11 @@ In this post, we briefly analyze a note on [Chocolate Consumption, Cognitive Fun
 According to another study showing that rats improved their cognitive performances after the administration of a cocoa polyphenolic,
 the author tested the hypothesis whether chocolate consumption enhance human cognition.
 
-As stated in the note, the author took the *total number of Nobel laureates per capita* as a "surrogate" to cognitive performance.
+No clinical trial was lead by the author, actually, as stated in the note, the author took the *total number of Nobel laureates per capita* as a "surrogate" to cognitive performance, and chocolate consumption came from [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/).
+
+> "If you can’t change the world with cookies, how can you change the world?”
+> 
+> Pat Murphy
 
 **Table of contents**
 - [Description of the note](#description-of-the-note)
@@ -39,8 +43,7 @@ In the following section, I make a brief description of the three pages note of 
 
 # Description of the note
 
-* **Hypothesis 1**: chocolate consumption improve significantly cognitive function
-* **Hypothesis 2**: chocolate consumption **does not significantly** improve cognitive function
+* **Hypothesis**: chocolate consumption improve significantly cognitive function
 
 The source of the data:
 * Per capita Nobel laureates
@@ -49,10 +52,12 @@ The source of the data:
 The results of the study:
 * Pearson correlation factor $$r = 0.791$$
 * Confidence $$\text{p-value} < 0.0001$$
+  * Null hypothesis: the correlation is equal to 0
+  * Alternate hypothesis: the correlation is not equal to 0 
 
 The correlation result of $$r = 0.791$$ tend to go in the direction of a linear correlation between the chocolate consumption and the number of laureates per capita.
 
-We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the variety of all (~200) countries?
+We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the variety of all (>200) countries?
 
 Thereafter three other limitations are listed by the note's author himself.
 
@@ -67,6 +72,65 @@ Thereafter three other limitations are listed by the note's author himself.
 
 **Correlation VS Causation**
 > Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
+
+Although the p-value is really low $$ p < 0.001 $$, we are almost sure that we can reject the null hypothesis, that the correlation is not equalt to zero :).
+
+Confience interval of the correlation coefficient r
+
+$$
+\text{P}( r \in [r_1, r_2] ) \ge 95% 
+$$
+
+Taking the parameter z:
+
+$$
+z = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right)
+$$
+
+$$
+s_z = { 1 \over \sqrt{n -3}}
+$$
+
+confidence interval of $$z$$ for 95% is then:
+
+$$
+[ z_1 = z - 2 s_z; z_2 = z + 2 s_z]
+$$
+
+Then the confidence interval of $$r$$ is:
+
+$$
+r_i = { \exp{(2 z_i)} - 1 \over \exp{(2 z_i)} + 1 }\text{, with } i \in [1, 2]
+$$
+
+```python
+r = 0.791
+z = math.log((1 + r) / (1 - r)) / 2
+# z = 1.074
+
+n = 23
+s_z = 1 / math.sqrt(n - 3)
+# s_z = 0.226
+```
+
+```python
+z_1, z_2 = z - 2 * s_z, z + 2 * s_z
+# z_1, z_2 = 0.741, 1.407
+```
+
+```python
+def z_to_r(z):
+  return (math.exp(2 * z) - 1) / (math.exp(2 * z) + 1)
+
+r_1, r_2 = z_to_r(z_1), z_to_r(z_2)
+# r_1, r_2 = 0.630, 0.887
+```
+
+So the confidence interval is:
+
+$$
+\text{P}( r \in [0.630, 0.887] ) \ge 95% 
+$$
 
 # Cognitive function and Nobel Price per capita
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
@@ -164,10 +228,10 @@ Missing a confidence interval
 Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
 
 # Sources
-https://www.radiofrance.fr/franceinter/podcasts/la-terre-au-carre/la-terre-au-carre-du-mardi-10-janvier-2023-8979117
-
+* [Radio France Podcast](https://www.radiofrance.fr/franceinter/podcasts/la-terre-au-carre/la-terre-au-carre-du-mardi-10-janvier-2023-8979117)
 * [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
-* [Evolution of National Nobel Prize Shares in the 20th Century (by Juergen Schmidhuber)](https://people.idsia.ch/~juergen/all.html)https://people.idsia.ch/~juergen/nobelshare.pdf
+* [Evolution of National Nobel Prize Shares in the 20th Century (by Juergen Schmidhuber)](https://people.idsia.ch/~juergen/all.html)
+* https://people.idsia.ch/~juergen/nobelshare.pdf
 * https://www.liberation.fr/sciences/des-prix-nobel-toujours-tres-masculins-et-de-plus-en-plus-ages-20211011_YKTNPXRUZVB7FBWZCANHTWHAOQ/
 * https://public.opendatasoft.com/explore/dataset/nobel-prize-laureates/table/?flg=fr&disjunctive.category
 * https://en.wikipedia.org/wiki/List_of_countries_by_Nobel_laureates_per_capita
