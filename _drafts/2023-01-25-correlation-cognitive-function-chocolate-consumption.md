@@ -14,7 +14,7 @@ In this post, we briefly analyze a note on [Chocolate Consumption, Cognitive Fun
 According to another study showing that rats improved their cognitive performances after the administration of a cocoa polyphenolic,
 the author tested the hypothesis whether chocolate consumption enhance human cognition.
 
-No clinical trial was lead by the author, actually, as stated in the note, the author took the *total number of Nobel laureates per capita* as a "surrogate" to cognitive performance, and chocolate consumption came from [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/).
+As no clinical trial was lead by the author, the *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance, and chocolate consumption estimation came three different sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
 
 > "If you can’t change the world with cookies, how can you change the world?”
 > 
@@ -36,6 +36,7 @@ No clinical trial was lead by the author, actually, as stated in the note, the a
   - [Chocolate consumption data from a Swiss Food Company](#chocolate-consumption-data-from-a-swiss-food-company)
   - [Retry attempt](#retry-attempt)
 - [Dependency metric pearson coefficient](#dependency-metric-pearson-coefficient)
+- [An humble improvement](#an-humble-improvement)
 - [Conclusion](#conclusion)
 - [Sources](#sources)
 
@@ -47,7 +48,7 @@ In the following section, I make a brief description of the three pages note of 
 
 The source of the data:
 * Per capita Nobel laureates
-* Per capita yearly chocolate consumption (swiss company private? data) of 23 countries
+* Per capita yearly chocolate consumption of 23 countries
 
 The results of the study:
 * Pearson correlation factor $$r = 0.791$$
@@ -73,15 +74,26 @@ Thereafter three other limitations are listed by the note's author himself.
 **Correlation VS Causation**
 > Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
 
-Although the p-value is really low $$ p < 0.001 $$, we are almost sure that we can reject the null hypothesis, that the correlation is not equalt to zero :).
+On observe au 18ème siècle une remise en question du principe de causalité. La causalité apparait plus comme une caractéristique de la pensée humaine que comme une notion inhérente aux phénomènes naturels.
 
-Confience interval of the correlation coefficient r
+Auguste Comte est d'ailleurs catégorique à ce propos: pour lui la recherche des causes relève de la seule métaphysique "en considérant comme absoluement inaccessible et vide de sens pour nous nous la recherche de ce qu'on appelle les causes, soit premières, soit finales". L'important est de pouvoir déterminer des variables en amont de la maladie sur lesquelles on est susceptible d'agir dans un but de prévention ou de guérison.
+
+En simplifiant à l'extrême, la méthode expérimental consiste à:
+* faire un bilan des variables ayant une actions sur le système étudié
+* trouver une situation dans laquelle toutes ces variables sont fixés, sauf deux
+* à faire varier l'une de ces deux variables et à observer l'évolution conjointe de l'autre
+
+Although the p-value is really low $$ p < 0.0001 $$, extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero.
+
+However on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient r. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
+
+Defining the confidence interval at 95%, as the following probability:
 
 $$
 \text{P}( r \in [r_1, r_2] ) \ge 95% 
 $$
 
-Taking the parameter z:
+In the case of the coefficient of Pearson, we define the parameter z:
 
 $$
 z = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right)
@@ -91,7 +103,7 @@ $$
 s_z = { 1 \over \sqrt{n -3}}
 $$
 
-confidence interval of $$z$$ for 95% is then:
+The confidence interval of $$z$$ for 95% is then:
 
 $$
 [ z_1 = z - 2 s_z; z_2 = z + 2 s_z]
@@ -102,6 +114,8 @@ Then the confidence interval of $$r$$ is:
 $$
 r_i = { \exp{(2 z_i)} - 1 \over \exp{(2 z_i)} + 1 }\text{, with } i \in [1, 2]
 $$
+
+Hereafter are the numerical calculation in python.
 
 ```python
 r = 0.791
@@ -126,7 +140,7 @@ r_1, r_2 = z_to_r(z_1), z_to_r(z_2)
 # r_1, r_2 = 0.630, 0.887
 ```
 
-So the confidence interval is:
+Finally the confidence interval is:
 
 $$
 \text{P}( r \in [0.630, 0.887] ) \ge 95% 
@@ -220,9 +234,13 @@ Adapt r statistic, relative to this country sample?
 ![alt](/assets/2023-01-25/nobel-country-per-capita.png)
 
 # Dependency metric pearson coefficient
-r=0.791, P<0.0001
 
-Missing a confidence interval
+Only considering linear correlation, what about Spearman coefficient?
+
+# An humble improvement
+As the number of variables affecting the cognitive performance are multiple, we might want to group the coutries by socio-economic similarity before making a correlation analysis.
+
+
 
 # Conclusion
 Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
