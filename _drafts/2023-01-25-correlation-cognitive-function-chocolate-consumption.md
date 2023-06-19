@@ -11,10 +11,9 @@ tags: [chocolate, correlation]
 
 In this post, we briefly analyze a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
 
-According to another study showing that rats improved their cognitive performances after the administration of a cocoa polyphenolic,
-the author tested the hypothesis whether chocolate consumption enhance human cognition.
+The author wanted to test whether chocolate consumption enhance human cognition. Indeed, according to a prior study, rats improved their cognitive performances after the administration of a cocoa polyphenolic.
 
-As no clinical trial was lead by the author, the *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance, and chocolate consumption estimation came three different sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
+As no clinical trial was lead, the study was purely observational. The author maked use of open data. The *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance (first awards given in 1901 until 2011, the date of the note's publication, span of 110 years), and chocolate consumption estimation came from three different sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
 
 > "If you can’t change the world with cookies, how can you change the world?”
 > 
@@ -31,12 +30,20 @@ As no clinical trial was lead by the author, the *total number of Nobel laureate
   - [Price - Wealth](#price---wealth)
   - [Habits - Culture](#habits---culture)
   - [Quality - Concentration of cocoa polyphenolic](#quality---concentration-of-cocoa-polyphenolic)
+  - [Correlation between average consumption and laureate's consumption](#correlation-between-average-consumption-and-laureates-consumption)
 - [Reproductibility and sampled data](#reproductibility-and-sampled-data)
   - [Only 23 countries out of more than 200](#only-23-countries-out-of-more-than-200)
-  - [Chocolate consumption data from a Swiss Food Company](#chocolate-consumption-data-from-a-swiss-food-company)
+  - [Timespan diversity](#timespan-diversity)
+  - [Chocolate consumption data](#chocolate-consumption-data)
   - [Retry attempt](#retry-attempt)
 - [Dependency metric pearson coefficient](#dependency-metric-pearson-coefficient)
+- [Underlying mechanism](#underlying-mechanism)
 - [An humble improvement](#an-humble-improvement)
+  - [Is the number of countries enough given the total number of countries?](#is-the-number-of-countries-enough-given-the-total-number-of-countries)
+  - [Grouping](#grouping)
+  - [Use cross validation](#use-cross-validation)
+  - [Confounding variable](#confounding-variable)
+  - [Spearman coefficient](#spearman-coefficient)
 - [Conclusion](#conclusion)
 - [Sources](#sources)
 
@@ -58,34 +65,13 @@ The results of the study:
 
 The correlation result of $$r = 0.791$$ tend to go in the direction of a linear correlation between the chocolate consumption and the number of laureates per capita.
 
-We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the variety of all (>200) countries?
-
-Thereafter three other limitations are listed by the note's author himself.
-
-**Dependence between chocolate laureate consumption and mean consumption**
-
-> The present data are based on country averages, and the specific chocolate intake of individual Nobel laureates of the past and present remains unknown.
-> 
-> The cumulative dose of chocolate that is needed to sufficiently increase the odds of being asked to travel to Stockholm is uncertain.
-
-**Time dependent variables**
-> This research is evolving, since both the number of Nobel laureates and chocolate consumption are time-dependent variables and change from year to year.
-
-**Correlation VS Causation**
-> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
-
-On observe au 18ème siècle une remise en question du principe de causalité. La causalité apparait plus comme une caractéristique de la pensée humaine que comme une notion inhérente aux phénomènes naturels.
-
-Auguste Comte est d'ailleurs catégorique à ce propos: pour lui la recherche des causes relève de la seule métaphysique "en considérant comme absoluement inaccessible et vide de sens pour nous nous la recherche de ce qu'on appelle les causes, soit premières, soit finales". L'important est de pouvoir déterminer des variables en amont de la maladie sur lesquelles on est susceptible d'agir dans un but de prévention ou de guérison.
-
-En simplifiant à l'extrême, la méthode expérimental consiste à:
-* faire un bilan des variables ayant une actions sur le système étudié
-* trouver une situation dans laquelle toutes ces variables sont fixés, sauf deux
-* à faire varier l'une de ces deux variables et à observer l'évolution conjointe de l'autre
+We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the diversity of all (>200) countries?
 
 Although the p-value is really low $$ p < 0.0001 $$, extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero.
 
-However on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient r. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
+However on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient $$r$$. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
+
+> Have confidence in intervals!
 
 Defining the confidence interval at 95%, as the following probability:
 
@@ -93,7 +79,7 @@ $$
 \text{P}( r \in [r_1, r_2] ) \ge 95% 
 $$
 
-In the case of the coefficient of Pearson, we define the parameter z:
+In the case of the Pearson's coefficient, we define the parameter $$z$$:
 
 $$
 z = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right)
@@ -103,7 +89,7 @@ $$
 s_z = { 1 \over \sqrt{n -3}}
 $$
 
-The confidence interval of $$z$$ for 95% is then:
+As $$z$$ has a normal distribution, the confidence interval of $$z$$ for 95% is:
 
 $$
 [ z_1 = z - 2 s_z; z_2 = z + 2 s_z]
@@ -215,6 +201,16 @@ It's worth considering that chocolate consumed in various forms, ranging from da
 
 The health benefits associated with chocolate are primarily attributed to dark chocolate with higher cocoa content, as it contains a higher concentration of flavonoids and fewer added ingredients.
 
+## Correlation between average consumption and laureate's consumption
+
+
+**Dependence between chocolate laureate consumption and mean consumption**
+
+> The present data are based on country averages, and the specific chocolate intake of individual Nobel laureates of the past and present remains unknown.
+> 
+> The cumulative dose of chocolate that is needed to sufficiently increase the odds of being asked to travel to Stockholm is uncertain.
+
+
 # Reproductibility and sampled data
 > Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
 > 
@@ -225,7 +221,16 @@ Giving the data used during the study is not available, it's hard to reproduce t
 ## Only 23 countries out of more than 200
 Adapt r statistic, relative to this country sample?
 
-## Chocolate consumption data from a Swiss Food Company
+## Timespan diversity
+
+**Time dependent variables**
+> This research is evolving, since both the number of Nobel laureates and chocolate consumption are time-dependent variables and change from year to year.
+
+Considering that the chocolate consumption really democratize at the end of the 19th century. As it was before, exclusively for the "elite", apart from the latin americans.. ?
+
+
+## Chocolate consumption data
+Try to find dark chocolate consumption rather than.
 
 ## Retry attempt
 
@@ -237,10 +242,79 @@ Adapt r statistic, relative to this country sample?
 
 Only considering linear correlation, what about Spearman coefficient?
 
+# Underlying mechanism
+**Correlation VS Causation**
+> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
+
+On observe au 18ème siècle une remise en question du principe de causalité. La causalité apparait plus comme une caractéristique de la pensée humaine que comme une notion inhérente aux phénomènes naturels.
+
+Auguste Comte est d'ailleurs catégorique à ce propos: pour lui la recherche des causes relève de la seule métaphysique "en considérant comme absoluement inaccessible et vide de sens pour nous nous la recherche de ce qu'on appelle les causes, soit premières, soit finales". L'important est de pouvoir déterminer des variables en amont de la maladie sur lesquelles on est susceptible d'agir dans un but de prévention ou de guérison.
+
+En simplifiant à l'extrême, la méthode expérimental consiste à:
+* faire un bilan des variables ayant une actions sur le système étudié
+* trouver une situation dans laquelle toutes ces variables sont fixés, sauf deux
+* à faire varier l'une de ces deux variables et à observer l'évolution conjointe de l'autre
+
+After fitting a regression model on let's say probability that a given person will suffer a heart attack, given that person's weight, cholesterol, and so on, it's tempting to interpret each variable on its own: reduse weight, cholestorel, ... and your heart attack risk will decrease by 30%.
+But that's not what the model says. The model says that people with cholesterol an weight within a certain range have 30% lower risk of heart attack; it doesn't say that if you put an overweight person on a diet and exercise routine, that person will be less likely to have a heart attack. You didn't collect data on that! You didn't intervene and change the weight and cholestoerol levels of volunteers to see what would happen.
+
+There could be a confounding variable here. Perhaps obesity and high cholesterol levels are merely symptoms of some other factor that also causes heart attacks; exercise and statin pills may fix them but perhaps not the heart attacks. The regression model says lower cholesterol means fewer heart attacks, but that's correlation, not causation.
+
 # An humble improvement
+
+## Is the number of countries enough given the total number of countries?
+
+23/193 ~ 11.9%
+
+If I make an experiment on 10% of the total population, sample size / total population size = 10% !!
+
+Sampling ratio: ratio between the sample and the population size.
+
+**Degree of accuracy desired**: Related to the subject of Power Analysis (which is beyond the scope of this site), this method requires the researcher to consider the acceptable margin of error and the confidence interval for their study.  The online resource from Raosoft and Raven Analytics uses this principle.
+
+**Degree of variability** (homogeneity/heterogeneity) in the population: As the degree of variability in the population increases, so too should the size of the sample increase.  The ability of the researcher to take this into account is dependent upon knowledge of the population parameters.
+
+**Sampling ratio** (sample size to population size): Generally speaking, the smaller the population, the larger the sampling ratio needed.  For populations under 1,000, a minimum ratio of 30 percent (300 individuals) is advisable to ensure representativeness of the sample.  For larger populations, such as a population of 10,000, a comparatively small minimum ratio of 10 percent (1,000) of individuals is required to ensure representativeness of the sample.
+
+Rule of thumb:
+> For populations under 1000, you need sampling ratio of 30% to be really accurate.
+
+## Grouping
 As the number of variables affecting the cognitive performance are multiple, we might want to group the coutries by socio-economic similarity before making a correlation analysis.
 
+Although the grouping won't flatten the wealth level of the countries among each group. In consequence, the correlation test may still find some link between the two variables of interset.
 
+Moreover, isn't it a very naty trick, that somewhat is like data manipulation.
+
+## Use cross validation
+To test how well your model fits the data, use a separate dataset or a procedure such as cross-validation.
+
+## Confounding variable
+Watch out for confounding variables that could cause misleading or reversed results, a in Simpson's paradox.
+
+TODO: page 76
+
+## Spearman coefficient
+
+L'intensité de la liaison linéaire entre deux variables continues peut être mesuré par le coefficient de corrélation linéaire (ou r de Pearson).
+La liaison:
+* nulle si le coefficient de corrélation est 0 (nuage de points circulaires ou parallèle à un des deux axes correspondant aux variables)
+* parfaite si le coefficient de corrélation est de + ou - 1 (nuage de points rectiligne)
+* forte si le coefficient de corrélation est supérieur en valeur absolue à 0.8 (nuage elliptique allongé)
+
+Le coefficient de corrélation linéaire est positif lorque les deux variables évoluent dans le mêe sens: les deux augment  ou diminuent ensemble. Un coefficient de corrélation négatif indique une variation inverse: l'une augmente quand l'autre diminue.
+
+Mais une liaison non linéaire, a fortiori non monotone, n'est pas toujours mesurable par le coefficient de corrélation linéaire de Pearson. C'est ainsi le cas d'une liaison parabolique (de degré 2). De plus en présence de valeurs eceptionnelles, de points aberrants, même une liaison linéaire peut ne pas être détectée par le coefficient de Pearson.
+Exemple: d'Anscombe
+
+Tandis que le coefficient de corrélation linéaire de Pearson n'est utilisable qu'avec des variables continues, le coefficient de corrélation de rangs (ou rho) de Spearman permet de mesurer la liaison entredeux variables qui peuvent être continues, discrète ou ordinales. Même pour des variables continues le rho de Spearman est préférable au r de Pearson quand les variables ont des valeurs extrêmes ou ne suivent pas une loi normale. En outre, le rho de Spearman détecte bien toutes les liaison monotones, même non linéaire.
+
+On a toujours intérêt à comparer les deux coefficient de Pearson et Spearman, le second étant utilisable dans un plus grand nombre de situations:
+* si r > rho: on est peut être en présence de valeurs exceptionnelles (?????)
+* si r < rho: on est peut être en présence d'une liaison non linéaire
+
+Ce qui fait la robustesse de ce test est que le rho de Spearman est calculé sur les rangs des valeurs des variables, et non sur les valeurs elles-mêmes, ce qui lui permet de s'affranchir de l'hypothèse contraignante de normalité des variables: c'est un test non-paramétrique.
+Le test de Spearman est considéré comme imparfait lorsqu'une variables présente de nombreux ex-aequo dans la population.
 
 # Conclusion
 Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
@@ -262,3 +336,5 @@ Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The g
 * https://ourworldindata.org/grapher/cost-calorie-sufficient-diet?country=USA~BHR~GBR~IND~CHN~BRA~ZAF~FRA~TCD
 * https://ideas.ted.com/the-steep-price-we-pay-for-cheap-chocolate/
 * https://altoida.com/blog/defining-the-6-key-domains-of-cognitive-function/
+* [marginal effect](https://medium.com/analytics-vidhya/logistic-regression-using-python-a5044843a504)
+* [marginal effects](https://www.statisticshowto.com/marginal-effects/)
