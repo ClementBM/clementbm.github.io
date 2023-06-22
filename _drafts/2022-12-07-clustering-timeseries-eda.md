@@ -7,13 +7,21 @@ categories: [study]
 tags: [time series, dtw, clustering]
 ---
 
+> Clustering is the practice of finding hidden patterns or similar groups in data. (Roelofsen, 2018)
+
+Time Series Clustering is an unsupervised data mining technique for organizing data points into groups based on their similarity. The objective is to maximize data similarity within clusters and minimize it across clusters.
+
 - [Why clustering time series?](#why-clustering-time-series)
-- [The metric: Dynamic Time Warping](#the-metric-dynamic-time-warping)
-- [The prototype: DBA DTW Barycenter Averaging](#the-prototype-dba-dtw-barycenter-averaging)
-- [The preprocesing method: mean variance scaler](#the-preprocesing-method-mean-variance-scaler)
-- [The clustering algorithm: DBA(DTW Barycenter Averaging)-k-means](#the-clustering-algorithm-dbadtw-barycenter-averaging-k-means)
-- [The clustering evaluation: the Silhouette score](#the-clustering-evaluation-the-silhouette-score)
-- [The use case, data Webstat](#the-use-case-data-webstat)
+- [A generic clustering method](#a-generic-clustering-method)
+  - [1. The metric: Dynamic Time Warping](#1-the-metric-dynamic-time-warping)
+  - [2. The prototype: DTW Barycenter Averaging](#2-the-prototype-dtw-barycenter-averaging)
+  - [3. The preprocessing: Mean Variance Scaler](#3-the-preprocessing-mean-variance-scaler)
+  - [4. The algorithm: DBA-k-means](#4-the-algorithm-dba-k-means)
+  - [5. The evaluation: the Silhouette Score](#5-the-evaluation-the-silhouette-score)
+- [The use case, Webstat data](#the-use-case-webstat-data)
+  - [Featuretools](#featuretools)
+  - [PyCaret](#pycaret)
+  - [ydata-profiling](#ydata-profiling)
 - [References](#references)
 
 # Why clustering time series?
@@ -23,7 +31,16 @@ Both clustering and PCA seek to simplify the data via a small number of summarie
 * PCA looks to find a low-dimensional representation of the observations that explain a good fraction of the variance
 * Clustering looks to find homogeneous subgroups among the observations 
 
-# The metric: Dynamic Time Warping
+It is an exploratory technique in time-series visualization, in which we construct clusters as we consider the entire series as a whole. The main steps are:
+ 
+1. Determining a distance measure to quantify the similarity between observations 
+2. Prototype (summarizes characteristics of all series in a cluster),
+3. Preprocessing method
+4. Choosing the algorithm to obtain the cluster, most common partitional or hierarchical
+5. And evaluate the results (cluster validity indices, CVI)
+
+# A generic clustering method
+## 1. The metric: Dynamic Time Warping
 
 One of the most popular measures for time series, dynamic time warping (DTW) was introduced in order to overcome some of the restrictions of simpler similarity measures such as Euclidean distance:
 1. that only works with time series of equal lengths
@@ -48,25 +65,25 @@ $$
 
 where $$\mathcal{P}$$ is the set of warping paths.
 
-# The prototype: DBA DTW Barycenter Averaging
-DTW Barycenter Averaging method is estimated through Expectation-Maximization algorithm.
+## 2. The prototype: DTW Barycenter Averaging
+DTW Barycenter Averaging method or DBA method is estimated through Expectation-Maximization algorithm.
 
 DBA was originally presented in [1]. This implementation is based on a idea from [2] (Majorize-Minimize Mean Algorithm).
 
 The procedure is called DTW Barycenter Averaging, and is an iterative, global method. The latter means that the order in which the series enter the prototyping function does not affect the outcome.
 
-DBA requires a series to be used as reference (centroid), and it usually begins by randomly electing one of the series in the data. On each iteration, the DTW alignement between each series in the cluser $$C$$ and the centroid is computed.
+DBA requires a series to be used as reference (centroid), and it usually begins by randomly selecting one of the series in the data. On each iteration, the DTW alignement between each series in the cluser $$C$$ and the centroid is computed.
 
 {% gist 109210aa102732b41dd8635b4b6a054e %}
 
-# The preprocesing method: mean variance scaler
+## 3. The preprocessing: Mean Variance Scaler
 time series are preprocessed using TimeSeriesScalerMeanVariance. This scaler is such that each output time series has zero mean and unit variance. The assumption here is that the range of a given time series is uninformative and one only wants to compare shapes in an amplitude-invariant manner.
 
 This means that one cannot scale barycenters back to data range because each time series is scaled independently and there is hence no such thing as an overall data range.
 
 https://tslearn.readthedocs.io/en/stable/auto_examples/clustering/plot_kmeans.html#sphx-glr-auto-examples-clustering-plot-kmeans-py
 
-# The clustering algorithm: DBA(DTW Barycenter Averaging)-k-means
+## 4. The algorithm: DBA-k-means
 K nearest neighboor
 One nearest neigboor
 
@@ -78,7 +95,7 @@ Partitional clustering algorithms commonly work in the following way. First, $$k
 
 Partitional clustering procedures are stochastic due to their random start. Thus, it is common practice to test different random starts to evaluate local optima and choose the best result out of all repetitions. It tends to produce spherical clusters, but has a lower complexity, so it can be applied to very large datasets.
 
-# The clustering evaluation: the Silhouette score
+## 5. The evaluation: the Silhouette Score
 float: Mean Silhouette Coefficient for all samples.
 
 For any data point $$ i \in C_I $$ let $$a(\cdot)$$ be a measure of how well $$i$$ is assigned to its cluster, the smaller the value the better the assignement:
@@ -114,19 +131,31 @@ In many cases, these CVIs can be used to evaluate the result of a clustering alg
 > Knowing which CVI will work best cannot be determined a priori, so they should be tested for each specific application. Many CVIs can be utilized and compared to each other, maybe using a majority vote to decide on a final result, but here is no best CVI, and it is important to conceptually understand what a given CVI measerues in order to appropriately interpret its results.
 
 
-> Furthermore, it should be noted that, due to additional distance and/or centroid calculations, computing CVIs can be prohibitive in some cases. For example, the SIlhouette index effectively needs the whole distance matrix between the original series to be calculated.
+> Furthermore, it should be noted that, due to additional distance and/or centroid calculations, computing CVIs can be prohibitive in some cases. For example, the Silhouette index effectively needs the whole distance matrix between the original series to be calculated.
 
 {% gist 109210aa102732b41dd8635b4b6a054e slicing.py %}
-
 
 * [Peter J. Rousseeuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics 20: 53-65.](http://www.sciencedirect.com/science/article/pii/0377042787901257)
 * [Wikipedia entry on the Silhouette Coefficient](https://en.wikipedia.org/wiki/Silhouette_(clustering))
 
-
-# The use case, data [Webstat](https://api.gouv.fr/les-api/webstat)
+# The use case, [Webstat](https://api.gouv.fr/les-api/webstat) data
 Webstat est le portail statistique de la Banque de France. L'API Webstat permet d'accéder à plus de 35.000 séries statistiques de la Banque de France et de ses partenaires institutionnels. Obtenez simplement les données économiques et financières sur les entreprises françaises, la conjoncture régionale, le crédit et l'épargne, la monnaie ou la balance des paiements.
 
 Principales fonctionnalités: 
+
+## Featuretools
+When performing feature engineering with temporal data, carefully selecting the data that is used for any calculation is paramount. By annotating dataframes with a Woodwork time index column and providing a cutoff time during feature calculation, Featuretools will automatically filter out any data after the cutoff time before running any calculations.
+
+https://docs.featuretools.com/en/stable/getting_started/handling_time.html
+
+## PyCaret
+* [PyCaret Documentation](https://pycaret.gitbook.io/docs/)
+* [Look for silhouette score diagram](https://nbviewer.org/github/pycaret/examples/blob/main/PyCaret%202%20Clustering.ipynb)
+
+## [ydata-profiling](https://github.com/ydataai/ydata-profiling)
+Time-Series: including different statistical information relative to time dependent data such as auto-correlation and seasonality, along ACF and PACF plots.
+
+[Time Series EDA](https://towardsdatascience.com/how-to-do-an-eda-for-time-series-cbb92b3b1913)
 
 # References
 * F. Petitjean, A. Ketterlin & P. Gancarski. A global averaging method for dynamic time warping, with applications to clustering. Pattern Recognition, Elsevier, 2011, Vol. 44, Num. 3, pp. 678-693
