@@ -79,15 +79,15 @@ $$
 \text{P}( r \in [r_1, r_2] ) \ge 95% 
 $$
 
-In the case of the Pearson's coefficient, we define the parameter $$z$$:
+In the case of the Pearson's coefficient, we define the parameter $$z$$ the Fisher transformation:
 
 $$
-z = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right)
+z(r) = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right) = \text{arctanh} (r)
 $$
 
-$$
-s_z = { 1 \over \sqrt{n -3}}
-$$
+$$z$$ approximately follows a normal distribution with
+* $$mean(z) = \text{arctanh} (\rho) $$ and
+* standard error $$s_z = { 1 \over \sqrt{n -3}}$$
 
 As $$z$$ has a normal distribution, the confidence interval of $$z$$ for 95% is:
 
@@ -221,6 +221,20 @@ Giving the data used during the study is not available, it's hard to reproduce t
 ## Only 23 countries out of more than 200
 Adapt r statistic, relative to this country sample?
 
+How do we estimate the number of sample needed for being powered.
+Calculate the power of the study:
+
+$$
+H_0: \rho = 0 \\
+H_a: \rho = r \ne 0
+$$
+
+$$
+n = C_{\beta} { 4 \over \left [ \ln { 1 - r  \over 1 + r } \right ]^2 } + 3
+$$
+
+Thus, with 23 sample size, we have almost 99.8% chance of concluding that the correlation coefficient is different than zero when the correlation coefficient is 0.791.
+
 ## Timespan diversity
 
 **Time dependent variables**
@@ -338,3 +352,5 @@ Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The g
 * https://altoida.com/blog/defining-the-6-key-domains-of-cognitive-function/
 * [marginal effect](https://medium.com/analytics-vidhya/logistic-regression-using-python-a5044843a504)
 * [marginal effects](https://www.statisticshowto.com/marginal-effects/)
+* [Pearson Correlation Coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
+* 
