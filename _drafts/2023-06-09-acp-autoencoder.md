@@ -11,4 +11,5 @@ tags: []
   * minimize error
   * maximize standard deviation
 * Auto encoder
-* ...
+* Likelyhood Maximum optimization
+

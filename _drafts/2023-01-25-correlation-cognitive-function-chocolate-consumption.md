@@ -31,15 +31,15 @@ As no clinical trial was lead, the study was purely observational. The author ma
   - [Habits - Culture](#habits---culture)
   - [Quality - Concentration of cocoa polyphenolic](#quality---concentration-of-cocoa-polyphenolic)
   - [Correlation between average consumption and laureate's consumption](#correlation-between-average-consumption-and-laureates-consumption)
-- [Reproductibility and sampled data](#reproductibility-and-sampled-data)
+- [Sample data](#sample-data)
   - [Only 23 countries out of more than 200](#only-23-countries-out-of-more-than-200)
   - [Timespan diversity](#timespan-diversity)
   - [Chocolate consumption data](#chocolate-consumption-data)
-  - [Retry attempt](#retry-attempt)
+- [Retry attempt](#retry-attempt)
 - [Dependency metric pearson coefficient](#dependency-metric-pearson-coefficient)
 - [Underlying mechanism](#underlying-mechanism)
 - [An humble improvement](#an-humble-improvement)
-  - [Is the number of countries enough given the total number of countries?](#is-the-number-of-countries-enough-given-the-total-number-of-countries)
+  - [Is the number of sample countries enough?](#is-the-number-of-sample-countries-enough)
   - [Grouping](#grouping)
   - [Use cross validation](#use-cross-validation)
   - [Confounding variable](#confounding-variable)
@@ -51,13 +51,13 @@ In the following section, I make a brief description of the three pages note of 
 
 # Description of the note
 
-* **Hypothesis**: chocolate consumption improve significantly cognitive function
+**The hypothesis**: chocolate consumption improves cognitive function
 
-The source of the data:
+**The data:**
 * Per capita Nobel laureates
 * Per capita yearly chocolate consumption of 23 countries
 
-The results of the study:
+**The results:**
 * Pearson correlation factor $$r = 0.791$$
 * Confidence $$\text{p-value} < 0.0001$$
   * Null hypothesis: the correlation is equal to 0
@@ -65,11 +65,13 @@ The results of the study:
 
 The correlation result of $$r = 0.791$$ tend to go in the direction of a linear correlation between the chocolate consumption and the number of laureates per capita.
 
-We can already comment that the small number of countries of the dataset could be an issue. Are the set of 23 countries a good representation of the diversity of all (>200) countries?
+We can already comment that the small number of countries of the dataset could be an issue. Two questions can be raised:
+* Is the set of 23 countries a good representation of the diversity of the 195 recognized countries?
+* Are there enough countries in the chosen sample?
 
-Although the p-value is really low $$ p < 0.0001 $$, extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero.
+The p-value is really low $$ p < 0.0001 $$, which is extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero. In other word, it is highly unlikely that the observed correlation is only due to chance.
 
-However on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient $$r$$. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
+However, on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient $$r$$. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
 
 > Have confidence in intervals!
 
@@ -132,18 +134,35 @@ $$
 \text{P}( r \in [0.630, 0.887] ) \ge 95% 
 $$
 
+The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have an effect on human cognition functions.
+
 # Cognitive function and Nobel Price per capita
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
+
+> As the LLM or foundational language models exhibit impressive generative capabilities, as the production of language is a part of the multitudes of cognitive functions, we could surely ask ourselves, is ChatGPT improving our cognitive functions, and therefore augment our likelihood to obtain a nobel prices?
 
 The following diagram by *Jane S. Paulsen* shows some of them grouped by category:
 
 ![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
+
+We can ask ChatGPT, what are the factors likely to influence cognitive function of humans.
 
 Cognitive function of a human being may be dependent on diet, physical activity, sleep, stress levels and intellectual stimulation.
 
 All of these mighty possible factors are dependant at different proportion of the wealth of a person, and by extent to his/her access to learning/cultural resources.
 
 It is not clear to what proportion each of these factors influence the cognitive function, but it is clear that the dark chocolate consumption along with the diet are not the only factors that have an impact on the cognitive performance of a person.
+
+Well, as we could imagine, dark chocolate along with the alimentary diet of a person, is not the only factor influencing her cognitive functions. Well then, it's a really common paradigm in medical hypothesis testing. 
+
+Commonly what the bio-statistician do is:
+* make a sumup of all the variables having an influence on the system at hand
+* finnd a solution/situation where all theses variabl are fixed except the two being tested
+* make that variable chhange, and observe the joint evolution of the other
+
+However, even we might have done the listing of the variables influencing the cognitive function, how do we constrain all the other variables (diet, say physical activity, sleep, stress levels ...), are they constants among the chosen sample of countries?
+
+Trying to answer this question, raise a ton of other questions. We begin to feel the complexity of the study, and that a "simple" correlation coefficient is probably not a sufficient statistic to give some light on this.
 
 ## Indicator of cognitive performance
 Is the **Nobel laureates per capita** a good indicator of cognitive performance?
@@ -211,7 +230,7 @@ The health benefits associated with chocolate are primarily attributed to dark c
 > The cumulative dose of chocolate that is needed to sufficiently increase the odds of being asked to travel to Stockholm is uncertain.
 
 
-# Reproductibility and sampled data
+# Sample data
 > Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
 > 
 > It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
@@ -219,6 +238,10 @@ The health benefits associated with chocolate are primarily attributed to dark c
 Giving the data used during the study is not available, it's hard to reproduce the same result.
 
 ## Only 23 countries out of more than 200
+Unrepresentative samples: Hypothesis testing results can be limited by the representativeness of the sample, as unrepresentative samples can lead to biased results.
+
+Limited to sample data: Hypothesis testing relies on analyzing sample data to draw conclusions about population parameters. The accuracy of the conclusions is influenced by the representativeness and size of the sample. If the sample is not truly representative of the population or is too small, the results may not be generalizable.
+
 Adapt r statistic, relative to this country sample?
 
 How do we estimate the number of sample needed for being powered.
@@ -246,7 +269,9 @@ Considering that the chocolate consumption really democratize at the end of the 
 ## Chocolate consumption data
 Try to find dark chocolate consumption rather than.
 
-## Retry attempt
+# Retry attempt
+
+Problem of reproducibility, the author not making available data used during his testing...
 
 ![alt](/assets/2023-01-25/chocolate-consumption-per-capita.png)
 
@@ -257,6 +282,10 @@ Try to find dark chocolate consumption rather than.
 Only considering linear correlation, what about Spearman coefficient?
 
 # Underlying mechanism
+Results of significance tests are based on probabilities and as such cannot be expressed with full certainty. When a test shows that a difference is statistically significant, then it simply suggests that the difference is probably not due to chance.
+
+Test do not explain the reasons as to why does the difference exist, say between the means of the two samples. They simply indicate whether the difference is due to fluctuations of sampling or because of other reasons but the tests do not tell us as to which is/are the other reason(s) causing the difference.
+
 **Correlation VS Causation**
 > Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
 
@@ -276,7 +305,7 @@ There could be a confounding variable here. Perhaps obesity and high cholesterol
 
 # An humble improvement
 
-## Is the number of countries enough given the total number of countries?
+## Is the number of sample countries enough?
 
 23/193 ~ 11.9%
 
@@ -307,6 +336,8 @@ To test how well your model fits the data, use a separate dataset or a procedure
 Watch out for confounding variables that could cause misleading or reversed results, a in Simpson's paradox.
 
 TODO: page 76
+
+Confounding variables: The presence of confounding variables can affect the validity of hypothesis testing results, as they can affect the relationship between the variables being tested.
 
 ## Spearman coefficient
 
