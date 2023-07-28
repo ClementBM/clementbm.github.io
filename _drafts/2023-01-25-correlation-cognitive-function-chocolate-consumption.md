@@ -9,7 +9,9 @@ tags: [chocolate, correlation]
 
 ![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
-In this post, we briefly analyze a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
+When I was still studying, I once made a english slide presentation about the innovation, (TODO retrouver le presentation)
+
+In this post, we talk about a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
 
 The author wanted to test whether chocolate consumption enhance human cognition. Indeed, according to a prior study, rats improved their cognitive performances after the administration of a cocoa polyphenolic.
 
@@ -134,7 +136,11 @@ $$
 \text{P}( r \in [0.630, 0.887] ) \ge 95% 
 $$
 
-The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have an effect on human cognition functions.
+The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have an effect on human cognition functions. However, talking about correlation coefficient, saying that a correlation is superior to zero doesn't give that much information about the alternative hypothesis.
+
+Actually, we could have a similar p-value on a tiny correlation number, like let's say 0.1 . Although, it would need a larger sample size, TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1 ??
+
+So, stating that the correlation coefficient have a p-value close to zero, in other words: "I'm sure that my correlation coefficient is different than zero", doesn't give a lot of detail on the strength of the correlation (which is better described in the confidence interval)
 
 # Cognitive function and Nobel Price per capita
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
@@ -157,7 +163,7 @@ Well, as we could imagine, dark chocolate along with the alimentary diet of a pe
 
 Commonly what the bio-statistician do is:
 * make a sumup of all the variables having an influence on the system at hand
-* finnd a solution/situation where all theses variabl are fixed except the two being tested
+* find a solution/situation where all theses variabl are fixed except the two being tested
 * make that variable chhange, and observe the joint evolution of the other
 
 However, even we might have done the listing of the variables influencing the cognitive function, how do we constrain all the other variables (diet, say physical activity, sleep, stress levels ...), are they constants among the chosen sample of countries?
