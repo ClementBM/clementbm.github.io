@@ -8,6 +8,11 @@ permalink: /naatation/
 
 NAATation is a free Google Docs add-on that helps annotate climate/environmental litigation summaries on Google Doc.
 
+The following image is a screenshot of the add-on sidebar:
+![Screenshot of the document's add-on](addon-screenshot.png)
+
+This add-on enables the NAAT's voluteers to structure the information inside textual summaries of the climate trials. One can edit trial's attributes by selecting a piece of text and then click on the desired attribute in the add-on's sidebar. The user may also export the informed attributes in a given spreadsheet.
+
 ## Privacy Policy
 
 This Google Docs Add-on:

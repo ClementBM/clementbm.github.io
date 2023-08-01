@@ -39,6 +39,11 @@ As a last word of the report, I adviced the fake managing directors to eat more 
 The study was purely observational as no clinical trial was lead. The author maked use of open data. 
 The *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance. Chocolate consumption estimation came from three different data source published by chocolate actors like chocolate manufacturers, federations and associations.
 
+The flavonoid administration on laboratory rats helped reduce the natural senility due to aging:
+> Improved cognitive performance with the administration of a cocoa polyphenolic extract has even been reported in aged WistarUnilever rats.
+>
+> Bisson JF, Nejdi A, Rozan P, Hidalgo S, Lalonde R, Messaoudi M. Effects of long-term administration of a cocoa polyphenolic extract (Acticoa powder) on cognitive performances in aged rats.
+
 ![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
 **The hypothesis**: chocolate consumption improves cognitive function
@@ -57,9 +62,7 @@ A correlation coefficient of $$r = 0.791$$ indicates a positive and linear corre
 
 The p-value is really low $$ p < 0.0001 $$, which is extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero. In other word, it is highly unlikely that the observed correlation is only due to chance.
 
-
-
-However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis and neither give a lot of detail on the strength of the correlation. Actually, we could have a similar p-value on a tiny correlation number although it would need a larger sample size. (TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1?)
+However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis and neither give a lot of detail on the strength of the correlation. The result of the test do not explain the reasons as to why does the difference exist, do not tell us as to which is/are the other reason(s) causing the correlation. Actually, we could have a similar p-value on a tiny correlation number although it would need a larger sample size. (TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1?)
 To have a better grasp of the correlation at stake, let's calculate the confidence interval.
 
 # A little improvement of the statistical evidence
@@ -124,10 +127,6 @@ $$
 
 The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have a positive effect on human cognition functions. By the way, the author of the study didn't mention the confidence interval of the correlation coefficient.
 
-Results of significance tests are based on probabilities and as such cannot be expressed with full certainty. When a test shows that a difference is statistically significant, then it simply suggests that the difference is probably not due to chance.
-
-Test do not explain the reasons as to why does the difference exist, say between the means of the two samples. They simply indicate whether the difference is due to fluctuations of sampling or because of other reasons but the tests do not tell us as to which is/are the other reason(s) causing the difference.
-
 If the confidence interval gives us a little more faith in the note's postulate, there are a tons of other objections that can be made:
 * Isn't the chocolate consumption just an indicator of the wealth of a country? (which is also the case with the "laureates per capita", knowing that the occidental world has been in front of the scene for the last half millenium)
 * Is the sample set of countries enough to draw conclusion?
@@ -180,29 +179,17 @@ An indicator is just a measure of a phenomenon. They can be either the cause or 
 
 ![Conceptual model of the cocoa consumption effect on cognitive functions](/assets/2023-01-25/cocoa-cognition-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
 
-Chocolate, known by the Mayas as the "Theobroma cacao" (food of the gods), is a non-necessary goods, unlike rice or eggs, so inhabitant in difficult situations may not priorities chocolate consumption if they are already struggling to find a decent everyday meal. Even for wealthy inhabitants the local gastronomy has a huge impact on their consumption. As an example, the Chinese middle class doesn't consume that much of chocolate, unlike red wine, because they simply don't eat a lot of sweet in general. Last fact but not the least, remember which country invent the compass, the gunpowder, papermaking and printing? Well, China! And without any chocolate! This fact emphasize the great care to put everythings in an historical perspective. Did you see where does China lie on the correlation diagram?
-
-
-> Improved cognitive performance with the administration of a cocoa polyphenolic extract has even been reported in aged WistarUnilever rats.
->
-> Bisson JF, Nejdi A, Rozan P, Hidalgo S, Lalonde R, Messaoudi M. Effects of long-term administration of a cocoa polyphenolic extract (Acticoa powder) on cognitive performances in aged rats.
-
-The flavonoid administration on laboratory rats helped reduce the natural senility due to aging.
-
 Nonetheless the good starting point of the study, and because the *consumption of chocolate* and the *Nobel laureates per capita* are both indicators of the wealth of a (occidental) country, trying to prove that chocolate improve cognition on nation's statistics, comes to proves that wealthy countries are actually wealthy.
+
+> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
 
 It's like trying to find a correlation between the garbage indicator and the life expectancy, both are strongly related to the economic state of a country. Then there a good chance for them to seems correlated. Another good example of the omitted variable bias is the correlation between ice cream consumption and sunburn. There is a correlation, but does that mean ice cream consumption causes sunburn?
 
 ![Conceptual model of the ice cream consumption effect on sunburns](/assets/2023-01-25/icecream-sunburn-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
 
-It's worth considering that chocolate consumed in various forms, ranging from dark chocolate with high cocoa content to milk chocolate with added sugars and fats. The health benefits associated with chocolate are primarily attributed to dark chocolate with higher cocoa content, as it contains a higher concentration of flavonoids and fewer added ingredients. High consumption of chocolate with a low polyphenolic concentration, as well as a low consumption with a high polyphenolic concentration migth weakened the goodness of the indicator. Besides, the average consumption is not necessarily consistent with the laureates' consumption. By the way, the Flavonoids are not the exclusivity of the dark chocolate, they can also be found in fruits and vegetables, red wine, and teas, among other.
+It's also worth considering that cocoa is consumed in various forms, ranging from dark chocolate with high cocoa content to milk chocolate with added sugars and fats. The health benefits associated with chocolate are primarily attributed to dark chocolate with higher cocoa content, as it contains a higher concentration of flavonoids and fewer added ingredients. High consumption of chocolate with a low polyphenolic concentration, as well as a low consumption with a high polyphenolic concentration migth weakened the goodness of the indicator. Besides, the average consumption is not necessarily consistent with the laureates' consumption. By the way, the Flavonoids are not the exclusivity of the dark chocolate, they can also be found in fruits and vegetables, red wine, and teas, among other.
 
 > The present data are based on country averages, and the specific chocolate intake of individual Nobel laureates of the past and present remains unknown.
-> 
-> The cumulative dose of chocolate that is needed to sufficiently increase the odds of being asked to travel to Stockholm is uncertain.
-
-
-> Of course, a correlation between X and Y does not prove causation but indicates that either X influences Y, Y influences X, or X and Y are influenced by a common underlying mechanism.
 
 On observe au 18ème siècle une remise en question du principe de causalité. La causalité apparait plus comme une caractéristique de la pensée humaine que comme une notion inhérente aux phénomènes naturels.
 
@@ -218,6 +205,7 @@ But that's not what the model says. The model says that people with cholesterol 
 
 There could be a confounding variable here. Perhaps obesity and high cholesterol levels are merely symptoms of some other factor that also causes heart attacks; exercise and statin pills may fix them but perhaps not the heart attacks. The regression model says lower cholesterol means fewer heart attacks, but that's correlation, not causation.
 
+Chocolate, known by the Mayas as the "Theobroma cacao" (food of the gods), is a non-necessary goods, unlike rice or eggs, so inhabitant in difficult situations may not prioritize chocolate consumption if they are already struggling to find a decent everyday meal. Even for wealthy inhabitants the local gastronomy has a huge impact on their consumption. As an example, the Chinese middle class doesn't consume that much of chocolate, unlike red wine, because they simply don't eat a lot of sweet in general. Last fact but not the least, remember which country invent the compass, the gunpowder, the papermaking and printing? Well, China! And without any chocolate! This fact emphasize the great care to put everythings in an historical perspective. Did you see where does China lie on the correlation diagram?
 
 **Confounding variable**
 Watch out for confounding variables that could cause misleading or reversed results, a in Simpson's paradox.
