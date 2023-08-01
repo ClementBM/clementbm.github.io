@@ -7,19 +7,11 @@ categories: [study]
 tags: [chocolate, correlation]
 ---
 
-![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
+![Chocolate consumption](/assets/2023-01-25/chocolate-diva.jpg){: width="50%" style="margin-left: auto;margin-right: auto;display: block;"  }
 
-When I was still studying, I once made a english slide presentation about the innovation, (TODO retrouver le presentation)
+When I was studying at the university, I once made an english report on how to rethink the strategy of a sinking company. By way of this use case, we had to find new game planes for selling, innovate to find new customers and fulfill new customer needs. As a last word, I advice the fake managing directors to eat chocolate, to make them thinking out of the box.
 
-In this post, we talk about a note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli*.
-
-The author wanted to test whether chocolate consumption enhance human cognition. Indeed, according to a prior study, rats improved their cognitive performances after the administration of a cocoa polyphenolic.
-
-As no clinical trial was lead, the study was purely observational. The author maked use of open data. The *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance (first awards given in 1901 until 2011, the date of the note's publication, span of 110 years), and chocolate consumption estimation came from three different sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
-
-> "If you can’t change the world with cookies, how can you change the world?”
-> 
-> Pat Murphy
+The whole exercise was certainly boring, but as I was lurking on the internet in lack of inspiration, I found this note on [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf), by *Franz H. Messerli* published in the New England Journal of Medecine in 2012. In this paper, the author wanted to test whether chocolate consumption enhance human cognition. Indeed, according to a prior study, rats improved their cognitive performances after the administration of a cocoa polyphenolic.
 
 **Table of contents**
 - [Description of the note](#description-of-the-note)
@@ -49,14 +41,17 @@ As no clinical trial was lead, the study was purely observational. The author ma
 - [Conclusion](#conclusion)
 - [Sources](#sources)
 
-In the following section, I make a brief description of the three pages note of interest, published in the New England Journal of Medecine in 2012.
 
 # Description of the note
+The study was purely observational as no clinical trial was lead. The author maked use of open data. 
+The *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance. Chocolate consumption estimation came from three different data source published by chocolate actors like chocolate manufacturers or federation and association.
+
+![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
 **The hypothesis**: chocolate consumption improves cognitive function
 
 **The data:**
-* Per capita Nobel laureates
+* Per capita Nobel laureates on the last century
 * Per capita yearly chocolate consumption of 23 countries
 
 **The results:**
@@ -65,17 +60,12 @@ In the following section, I make a brief description of the three pages note of 
   * Null hypothesis: the correlation is equal to 0
   * Alternate hypothesis: the correlation is not equal to 0 
 
-The correlation result of $$r = 0.791$$ tend to go in the direction of a linear correlation between the chocolate consumption and the number of laureates per capita.
-
-We can already comment that the small number of countries of the dataset could be an issue. Two questions can be raised:
-* Is the set of 23 countries a good representation of the diversity of the 195 recognized countries?
-* Are there enough countries in the chosen sample?
+A correlation coefficient of $$r = 0.791$$ indicates a positive and linear correlation between the chocolate consumption and the number of laureates per capita.
 
 The p-value is really low $$ p < 0.0001 $$, which is extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero. In other word, it is highly unlikely that the observed correlation is only due to chance.
 
-However, on a such little set of countries, it could be valuable to get the confidence interval of the correlation coefficient $$r$$. By the way, do you have any use cases when there aren't good reasons to get a confidence interval?
-
-> Have confidence in intervals!
+However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis and neither give a lot of detail on the strength of the correlation. Actually, we could have a similar p-value on a tiny correlation number although it would need a larger sample size. (TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1?)
+To have a better grasp of the correlation at stake, let's calculate the confidence interval.
 
 Defining the confidence interval at 95%, as the following probability:
 
@@ -105,7 +95,7 @@ $$
 r_i = { \exp{(2 z_i)} - 1 \over \exp{(2 z_i)} + 1 }\text{, with } i \in [1, 2]
 $$
 
-Hereafter are the numerical calculation in python.
+Hereafter are the numerical calculation in python (skipping imports for readability):
 
 ```python
 r = 0.791
@@ -136,11 +126,13 @@ $$
 \text{P}( r \in [0.630, 0.887] ) \ge 95% 
 $$
 
-The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have an effect on human cognition functions. However, talking about correlation coefficient, saying that a correlation is superior to zero doesn't give that much information about the alternative hypothesis.
+The confidence interval doesn't cross the zero frontier, which is somewhat reassuring against the point of the author, that the chocolate does have an effect on human cognition functions. By the way, the author of the study didn't mention the confidence interval of the correlation coefficient.
 
-Actually, we could have a similar p-value on a tiny correlation number, like let's say 0.1 . Although, it would need a larger sample size, TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1 ??
-
-So, stating that the correlation coefficient have a p-value close to zero, in other words: "I'm sure that my correlation coefficient is different than zero", doesn't give a lot of detail on the strength of the correlation (which is better described in the confidence interval)
+If the confidence interval gives us a little more confidence, there are a tons of other objections that can be made:
+* Is diet the only factors having an impact on the cognitive performance of a person?
+* Is "nobel laureates per capita" a direct indicator of cognitive performance?
+* Is this dark chocolate?
+* Is the sample set of countries enough to draw conclusion?
 
 # Cognitive function and Nobel Price per capita
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
@@ -151,15 +143,11 @@ The following diagram by *Jane S. Paulsen* shows some of them grouped by categor
 
 ![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
 
-We can ask ChatGPT, what are the factors likely to influence cognitive function of humans.
+Dark chocolate along with the alimentary diet of a person, is not the only factor influencing her cognitive functions.
 
-Cognitive function of a human being may be dependent on diet, physical activity, sleep, stress levels and intellectual stimulation.
+Cognitive function of a human may be influenced by **diet**, **physical activity**, **sleep**, **stress levels** and **intellectual stimulation.** All of these factors are dependant at different proportion of the **wealth of a person**, and by extent to his/her access to **learning/cultural resources**. It is not clear to what proportion each of these factors influence the cognitive function, but it is clear that the dark chocolate consumption along with the diet are not the only factors that have an impact on the cognitive performance of a person.
 
-All of these mighty possible factors are dependant at different proportion of the wealth of a person, and by extent to his/her access to learning/cultural resources.
-
-It is not clear to what proportion each of these factors influence the cognitive function, but it is clear that the dark chocolate consumption along with the diet are not the only factors that have an impact on the cognitive performance of a person.
-
-Well, as we could imagine, dark chocolate along with the alimentary diet of a person, is not the only factor influencing her cognitive functions. Well then, it's a really common paradigm in medical hypothesis testing. 
+Well then, it's a really common paradigm in medical hypothesis testing. 
 
 Commonly what the bio-statistician do is:
 * make a sumup of all the variables having an influence on the system at hand
@@ -206,6 +194,8 @@ As chocolate is a non-necessary goods, unlike rice or eggs, inhabitant in diffic
 
 The consumption of chocolate is probably most influenced by cultural, economic, and personal preferences.
 
+As an example, 15 years ago Chinese, unlike red wine, the majority of chinese gastronomy doesn't make a lot of sweet meal. That's correlated with the taste of a population/country.
+
 ## Sources of Flavonoids
 
 Flavonoids are not the exclusivity of the dark chocolate. They can also be found in fruits and vegetables, red wine, and teas, among other.
@@ -237,6 +227,10 @@ The health benefits associated with chocolate are primarily attributed to dark c
 
 
 # Sample data
+We can already comment that the small number of countries of the dataset could be an issue. Two questions can be raised:
+* Is the set of 23 countries a good representation of the diversity of the 195 recognized countries?
+* Are there enough countries in the chosen sample?
+
 > Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
 > 
 > It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
@@ -271,6 +265,8 @@ Thus, with 23 sample size, we have almost 99.8% chance of concluding that the co
 
 Considering that the chocolate consumption really democratize at the end of the 19th century. As it was before, exclusively for the "elite", apart from the latin americans.. ?
 
+* first awards given in 1901 until 2011, the date of the note's publication, span of 110 years
+* [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
 
 ## Chocolate consumption data
 Try to find dark chocolate consumption rather than.
@@ -370,6 +366,13 @@ Le test de Spearman est considéré comme imparfait lorsqu'une variables présen
 # Conclusion
 Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
 
+
+> "If you can’t change the world with cookies, how can you change the world?”
+> 
+> Pat Murphy
+
+??? Change for the worse ???
+
 # Sources
 * [Radio France Podcast](https://www.radiofrance.fr/franceinter/podcasts/la-terre-au-carre/la-terre-au-carre-du-mardi-10-janvier-2023-8979117)
 * [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
@@ -390,4 +393,5 @@ Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The g
 * [marginal effect](https://medium.com/analytics-vidhya/logistic-regression-using-python-a5044843a504)
 * [marginal effects](https://www.statisticshowto.com/marginal-effects/)
 * [Pearson Correlation Coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
-* 
+* https://univ-droit.fr/recherche/actualites-de-la-recherche/parutions/48445-chocolat-100-droit
+* https://www.agro-media.fr/dossier/france-7e-rang-consommateurs-de-chocolat-24500.html
