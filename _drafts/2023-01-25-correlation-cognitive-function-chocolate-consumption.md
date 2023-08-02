@@ -275,9 +275,20 @@ There would be three good reasons to use the Spearman coefficient:
 
 Giving that the data used the study is not easily available, it is very hard to reproduce the exact same result. It's now more common to make available the data when publishing a paper.
 
-![alt](/assets/2023-01-25/chocolate-consumption-per-capita.png)
+![alt](/assets/2023-01-25/scatter-plot-on-retry-attempt.png)
 
-![alt](/assets/2023-01-25/nobel-country-per-capita.png)
+The sample size is 72, so we have a good sampling ratio.
+
+Pearson correlation
+* 0.306
+* p-value=2.87e-07
+* confidence interval=
+
+Spearman correlation
+* 0.654
+* p-value=
+* confidence interval=
+
 
 > "If you can’t change the world with cookies, how can you change the world?”
 > 
