@@ -18,13 +18,14 @@ As a last word of the report, I adviced the fake managing directors to eat more 
 **Table of contents**
 - [Description of the note](#description-of-the-note)
 - [A little improvement of the statistical evidence](#a-little-improvement-of-the-statistical-evidence)
-- [Research Design](#research-design)
+- [Contextual considerations](#contextual-considerations)
   - [Dark chocolate is not the only factor at play](#dark-chocolate-is-not-the-only-factor-at-play)
   - [Is Nobel laureates per capita a fair indicator of the cognitive performance of country?](#is-nobel-laureates-per-capita-a-fair-indicator-of-the-cognitive-performance-of-country)
   - [Two indicators (cocoa, cognition) of a confounding variable (country's wealth)?](#two-indicators-cocoa-cognition-of-a-confounding-variable-countrys-wealth)
-- [Execution](#execution)
+- [Statistical Considerations](#statistical-considerations)
   - [A very poor sample of wealthy countries](#a-very-poor-sample-of-wealthy-countries)
-  - [Dependency metric pearson coefficient](#dependency-metric-pearson-coefficient)
+  - [The timespan of the data is heterogenous](#the-timespan-of-the-data-is-heterogenous)
+  - [Which dependency metric to choose?](#which-dependency-metric-to-choose)
 - [Retry attempt and conclusion](#retry-attempt-and-conclusion)
 - [Resources](#resources)
   - [Cost of foods and chocolate](#cost-of-foods-and-chocolate)
@@ -127,7 +128,7 @@ If the confidence interval gives us a little more faith in the author's postulat
 * Is the set of countries enough to draw conclusions?
 * Is "nobel laureates per capita" a direct indicator of the mean cognitive performance of a country?
 
-# Research Design
+# Contextual considerations
 ## Dark chocolate is not the only factor at play
 
 According to the dictionnary, **cognition** is the "mental action or process of acquiring knowledge and understanding through thought, experience, and the senses". Cognition is multi-dimensional in the sense that it encompases all aspects of intellectual functions. Wikipedia's page on cognition lists multiple examples of such intellectual functions: perception, attention, thought, imagination, intelligence, memory, judgment and evaluation, reasoning, problem-solving and decision-making, comprehension and production of language.
@@ -144,7 +145,13 @@ If the study was experimental, the bio-statistician would have had to design the
 * find a solution/situation where all these variables are fixed except the two being tested
 * make the causing variable change, and observe the joint evolution of the other one
 
-Unfortunately, medical hypothesis testing requires a lot of time and resources. It's natural trying to get insight with already available indicators beforing choosing to give the go or nogo. As a consequence, doing a fair list of the variables influencing the cognitive function before calculating the correlation seems reasonable too. So that the result of the correlation, whatever this value is, can be put in perspective. How the other influencing variables (diet, physical activity, sleep, stress levels) fluctuate in the selected sample of countries and how do they impact the cognitive functions? Who knows...
+Unfortunately, medical hypothesis testing requires a lot of time and resources. It's natural trying to get insight with already available indicators beforing choosing to give the go or nogo.
+
+> Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
+>
+> Note's author
+
+As a consequence, doing a fair list of the variables influencing the cognitive function before calculating the correlation seems reasonable too. So that the result of the correlation, whatever this value is, can be put in perspective. How the other influencing variables (diet, physical activity, sleep, stress levels) fluctuate in the selected sample of countries and how do they impact the cognitive functions? Who knows...
 
 It's also worth considering that cocoa is consumed in various forms, ranging from dark chocolate with high cocoa content to milk chocolate with added sugars and fats. The health benefits associated with chocolate are primarily attributed to dark chocolate with higher cocoa content, as it contains a higher concentration of flavonoids and fewer added ingredients. High consumption of chocolate with a low polyphenolic concentration, as well as a low consumption with a high polyphenolic concentration migth weakened the goodness of the indicator. Besides, the average consumption is not necessarily consistent with the laureates' consumption. By the way, the Flavonoids are not the exclusivity of the dark chocolate, they can also be found in fruits and vegetables, red wine, and teas, among other.
 
@@ -163,7 +170,10 @@ Caution shoud be taken specifically on the Nobel Peace Prize. Indeed, according 
 
 The note presupposed that the number of **Nobel laureates per capita** is concordant with the average cognitive performance of a country. However a short exploratory analysis of the population of nobel price laureates shows that laureates have around sixty years old or more and that only 6% of laureates are female. Not very representative...
 
-Aren't there better indicators of the cognitive performance of a country? Well, there surely is. We could take the PISA worldwide ranking as an indicator. The Programme for International Student Assessment is the OECD's programme which measures 15-year-olds' ability to use their reading, mathematics and science knowledge and skills to meat real-life challenges. 
+Aren't there better indicators of the cognitive performance of a country? Well, there surely is. We could take the PISA worldwide ranking as an indicator. The Programme for International Student Assessment is the OECD's programme which measures 15-year-olds' ability to use their reading, mathematics and science knowledge and skills to meat real-life challenges.
+
+
+> Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
 
 ## Two indicators (cocoa, cognition) of a confounding variable (country's wealth)?
 
@@ -189,25 +199,22 @@ Even if chocolate intake is strongly correlated with cognitive function, it does
 >
 > Note's author
 
-In addition, chocolate is a rather luxury foods, it was known by the Mayas as the "Theobroma cacao" (food of the gods). As a non-necessary goods, unlike rice or eggs, inhabitant struggling to find a decent everyday meal may not prioritize chocolate consumption. Even for wealthy inhabitants the local gastronomy has a huge impact on their consumption. For instance, the Chinese middle class doesn't consume that much of chocolate, unlike red wine, because they simply don't eat a lot of sweet in general. Last fact but not the least, remember which country invent the compass, the gunpowder, the papermaking and printing? Well, China! And without any chocolate! This fact emphasize the great care to put everythings in an historical perspective. Did you see where China lies on the correlation diagram?
+In addition, chocolate is a rather luxury food, it was known by the Mayas as the "Theobroma cacao" (food of the gods). As a non-necessary goods, unlike rice or eggs, inhabitant struggling to find a decent everyday meal may not prioritize chocolate consumption. Even for wealthy inhabitants the local gastronomy has a huge impact on their consumption. For instance, the Chinese middle class doesn't consume that much of chocolate, unlike red wine, because they simply don't eat a lot of sweet in general. Last fact but not the least, remember which country invent the compass, the gunpowder, the papermaking and printing? Well, China! And without any chocolate! This fact emphasize the great care to put everythings in an historical perspective. Did you see where China lies on the correlation diagram?
 
 Chocolate consumption is probably an epiphenomenon of the wealth of (occidental) countries, which happen to have an inclination toward sweety foods and therefore are likely to appreciate the Maya beverage. At the same time, the wealthiest countries in the world for the last century (1900-2000) also happen to be in a large majority occidental (be carefull with the [Simpson's paradox](https://en.wikipedia.org/wiki/Simpson%27s_paradox)!)
 
+> It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
+>
+> Note's author
 
-# Execution
+# Statistical Considerations
 ## A very poor sample of wealthy countries
 
-At the level of the execution, the small number of countries could be an issue.
-* Are there enough countries in the chosen sample?
-* Is the set of 23 countries a good representation of the diversity of the 195 recognized countries?
+At the level of the statistical evidence, the small selection of countries could be an issue. Indeed, hypothesis testing relies on analyzing sample data to draw conclusions about all the population. The accuracy of the conclusions is influenced by the representativeness and the size of the sample. If the sample of countries is not truly representative of all the countries in the world the results may not be generalizable.
 
-> Obviously, these findings are hypothesis-generating only and will have to be tested in a prospective, randomized trial
-> 
-> It remains to be determined whether the consumption of chocolate is the underlying mechanism for the observed association with improved cognitive function.
+The researcher may have a minimum knowledge of the population parameters. For instance, the chocolate consumption fluctuates from 70 grams to 7000 grams per year per capita between Asian and European countries. With that variability in mind, the researcher usually consider increasing the sample size.
 
-Hypothesis testing relies on analyzing sample data to draw conclusions about all the population. The accuracy of the conclusions is influenced by the representativeness and the size of the sample. If the sample is not truly representative of the population or is too small, the results may not be generalizable.
-
-Generally we estimate the number of sample needed for being powered. To calculate the power of the study we can use:
+Concerning the degree of accuracy desired, the researcher may consider the acceptable margin of error and the confidence interval for the study. Generally we estimate the number of sample needed for being powered. To calculate the power needed for detecting a correlation coefficient of 0.79, we can use the following equations:
 
 $$
 H_0: \rho = 0 \\
@@ -218,83 +225,64 @@ $$
 n = C_{\beta} { 4 \over \left [ \ln { 1 - r  \over 1 + r } \right ]^2 } + 3
 $$
 
-Thus, with 23 sample size, we have almost 99.8% chance of concluding that the correlation coefficient is different than zero when the correlation coefficient is 0.791.
+* with $$n$$, the sample size
+* with $$r$$, the correlation coefficient that we'd like to detect
+* with $$C_{\beta}$$ a coefficient dependent on TODO
 
-With only 23 countries out of 193
+Thus, with a sample size of $$n=23$$ we have almost 99.8% chance of concluding that the correlation coefficient is different than zero when the correlation coefficient is 0.791.
 
+However there are less than 200 countries in the world, in such case, we should look at the sampling ratio. The sampling ratio is the sample size over the population size. Generally speaking, the smaller the population, the larger the sampling ratio needed. For populations under 1000, a common rule of thumb is to have a sampling ratio of 30% minimum to ensure representativeness of the sample.
 
-23/193 ~ 11.9%
+In the case of this study, the sampling is $$23/193 = 11.9\%$$. We would rather want to have 58 countries!
 
-If I make an experiment on 10% of the total population, sample size / total population size = 10% !!
+## The timespan of the data is heterogenous
 
-Sampling ratio: ratio between the sample and the population size.
-
-**Degree of accuracy desired**: Related to the subject of Power Analysis (which is beyond the scope of this site), this method requires the researcher to consider the acceptable margin of error and the confidence interval for their study.  The online resource from Raosoft and Raven Analytics uses this principle.
-
-**Degree of variability** (homogeneity/heterogeneity) in the population: As the degree of variability in the population increases, so too should the size of the sample increase.  The ability of the researcher to take this into account is dependent upon knowledge of the population parameters.
-
-**Sampling ratio** (sample size to population size): Generally speaking, the smaller the population, the larger the sampling ratio needed.  For populations under 1,000, a minimum ratio of 30 percent (300 individuals) is advisable to ensure representativeness of the sample.  For larger populations, such as a population of 10,000, a comparatively small minimum ratio of 10 percent (1,000) of individuals is required to ensure representativeness of the sample.
-
-Rule of thumb:
-> For populations under 1000, you need sampling ratio of 30% to be really accurate.
-
-
-Timespan is heterogenous and diverse.
-
-**Time dependent variables**
 > This research is evolving, since both the number of Nobel laureates and chocolate consumption are time-dependent variables and change from year to year.
+>
+> Note's author
 
-Considering that the chocolate consumption really democratize at the end of the 19th century. As it was before, exclusively for the "elite", apart from the latin americans.. ?
+Apart from the constantly evolving number of Nobel laureates and cocoa consumption, the open data used in the study has a huge timespan difference:
 
-* first awards given in 1901 until 2011, the date of the note's publication, span of 110 years
-* [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/), on a timespan of approximately 8 years, from 2004 to 2012.
+* For the Nobel laureates, first awards were given in 1901, so the timespan is 110 years, until the date of the note's publication
+* For the chocolate consumption, the timespan is more chaotic as it comes from multiple sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/). The data is gather on approximately 8 years, from 2004 to 2012.
 
-## Dependency metric pearson coefficient
+The calculation of the correlation is done between two phenomenons changing over time and on two very different timespan: 1901-2012 for the Nobels and 2004-2012 for the chocolate. Without saying it, we consider that the consumption of chocolate didn't change that much between 1901 and 2004.
 
-Only considering linear correlation, what about Spearman coefficient?
+## Which dependency metric to choose?
 
+The strength of a linear correlation between to continuous variable can be measured by Pearson correlation coefficient. The relationship is:
+* null if $$r=0$$
+* perfect if $$r=\mp 1$$
+* strong if $$ \lvert r \rvert >0.8$$
 
-L'intensité de la liaison linéaire entre deux variables continues peut être mesuré par le coefficient de corrélation linéaire (ou r de Pearson).
-La liaison:
-* nulle si le coefficient de corrélation est 0 (nuage de points circulaires ou parallèle à un des deux axes correspondant aux variables)
-* parfaite si le coefficient de corrélation est de + ou - 1 (nuage de points rectiligne)
-* forte si le coefficient de corrélation est supérieur en valeur absolue à 0.8 (nuage elliptique allongé)
+However a non linear relationship isn't always measurable by the Pearson correlation, for instance in the case of a parabolic relationship. In case of outlier, even a linear relationship may not be detected by the coefficient of Pearson. A famous diagram perfectly illustrates this. 
 
-Le coefficient de corrélation linéaire est positif lorque les deux variables évoluent dans le mêe sens: les deux augment  ou diminuent ensemble. Un coefficient de corrélation négatif indique une variation inverse: l'une augmente quand l'autre diminue.
+The four graphs known as the [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet), all share the same correlation coefficent of $$r=
+0.816$$, but each on looks very different:
 
-Mais une liaison non linéaire, a fortiori non monotone, n'est pas toujours mesurable par le coefficient de corrélation linéaire de Pearson. C'est ainsi le cas d'une liaison parabolique (de degré 2). De plus en présence de valeurs eceptionnelles, de points aberrants, même une liaison linéaire peut ne pas être détectée par le coefficient de Pearson.
-Exemple: d'Anscombe
+![Anscombe's quartet](/assets/2023-01-25/anscombes-quartet.svg)
 
-Tandis que le coefficient de corrélation linéaire de Pearson n'est utilisable qu'avec des variables continues, le coefficient de corrélation de rangs (ou rho) de Spearman permet de mesurer la liaison entredeux variables qui peuvent être continues, discrète ou ordinales. Même pour des variables continues le rho de Spearman est préférable au r de Pearson quand les variables ont des valeurs extrêmes ou ne suivent pas une loi normale. En outre, le rho de Spearman détecte bien toutes les liaison monotones, même non linéaire.
+> Numerical calculations are exact, but graphs are rough.
+>
+> Francis John Anscombe in "Graphs in Statistical Analysis". American Statistician. 27 (1): 17–21.
 
-On a toujours intérêt à comparer les deux coefficient de Pearson et Spearman, le second étant utilisable dans un plus grand nombre de situations:
-* si r > rho: on est peut être en présence de valeurs exceptionnelles (?????)
-* si r < rho: on est peut être en présence d'une liaison non linéaire
-
-Ce qui fait la robustesse de ce test est que le rho de Spearman est calculé sur les rangs des valeurs des variables, et non sur les valeurs elles-mêmes, ce qui lui permet de s'affranchir de l'hypothèse contraignante de normalité des variables: c'est un test non-paramétrique.
-Le test de Spearman est considéré comme imparfait lorsqu'une variables présente de nombreux ex-aequo dans la population.
+There would be three good reasons to use the Spearman coefficient:
+1. it enables us to measure a correlation between countinous, discrete or ordinal variables
+2. as the test is non parametric, it takes the ranks instead of the values, so it doesn't need the data to be normally distributed, and doesn't need the data to be free of outliers either
+3. and it is always good to compare both coefficients
 
 # Retry attempt and conclusion
 
-Giving the data used during the study is not available, it's hard to reproduce the same result.
-
-
-Problem of reproducibility, the author not making available data used during his testing...
+Giving that the data used the study is not easily available, it is very hard to reproduce the exact same result. It's now more common to make available the data when publishing a paper.
 
 ![alt](/assets/2023-01-25/chocolate-consumption-per-capita.png)
 
 ![alt](/assets/2023-01-25/nobel-country-per-capita.png)
 
-Geir Lundestad, Secretary of the Norwegian Nobel Committee in 2006, said, "The greatest omission in our 106-year history is undoubtedly that Mahatma Gandhi never received the Nobel Peace prize. Gandhi could do without the Nobel Peace prize, [but] whether Nobel committee can do without Gandhi is the question"
-
-> As the LLM or foundational language models exhibit impressive generative capabilities, as the production of language is a part of the multitudes of cognitive functions, we could surely ask ourselves, is ChatGPT improving our cognitive functions, and therefore augment our likelihood to obtain a nobel prices?
-
-
 > "If you can’t change the world with cookies, how can you change the world?”
 > 
 > Pat Murphy
 
-??? Change for the worse ???
 
 # Resources
 * [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
