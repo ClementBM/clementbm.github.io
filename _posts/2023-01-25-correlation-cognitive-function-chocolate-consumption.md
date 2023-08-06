@@ -22,7 +22,7 @@ As a last word of the report, I adviced the fake managing directors to eat more 
   - [Dark chocolate is not the only factor at play](#dark-chocolate-is-not-the-only-factor-at-play)
   - [Is Nobel laureates per capita a fair indicator of the cognitive performance of country?](#is-nobel-laureates-per-capita-a-fair-indicator-of-the-cognitive-performance-of-country)
   - [Two indicators (cocoa, cognition) of a confounding variable (country's wealth)?](#two-indicators-cocoa-cognition-of-a-confounding-variable-countrys-wealth)
-- [Statistical Considerations](#statistical-considerations)
+- [Statistical considerations](#statistical-considerations)
   - [A very poor sample of wealthy countries](#a-very-poor-sample-of-wealthy-countries)
   - [The timespan of the data is heterogenous](#the-timespan-of-the-data-is-heterogenous)
   - [Which dependency metric to choose?](#which-dependency-metric-to-choose)
@@ -58,7 +58,7 @@ A correlation coefficient of $$r = 0.791$$ indicates a positive and linear corre
 
 The p-value is really low $$ p < 0.0001 $$, which is extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero. In other word, it is highly unlikely that the observed correlation is only due to chance.
 
-However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis. Why is there a correlation? Which are the reasons causing it? And what is the strength of the correlation?. Actually, we could have a similar p-value on a tiny correlation ratio although it would need a larger sample size. (TODO: calculate the power for p=0.0001, and effect of 0.0 to 0.1?)
+However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis. Why is there a correlation? Which are the reasons causing it? And what is the strength of the correlation?. Actually, we could have a similar p-value on a tiny correlation ratio although it would need a larger sample size. (for $$\alpha=0.0001$$, and effect of 0.1 the sample size needed is 2070)
 To have a better grasp of the correlation at stake, let's calculate the confidence interval.
 
 # A little improvement of the statistical evidence
@@ -207,7 +207,7 @@ Chocolate consumption is probably an epiphenomenon of the wealth of (occidental)
 >
 > Note's author
 
-# Statistical Considerations
+# Statistical considerations
 ## A very poor sample of wealthy countries
 
 At the level of the statistical evidence, the small selection of countries could be an issue. Indeed, hypothesis testing relies on analyzing sample data to draw conclusions about all the population. The accuracy of the conclusions is influenced by the representativeness and the size of the sample. If the sample of countries is not truly representative of all the countries in the world the results may not be generalizable.
@@ -227,13 +227,13 @@ $$
 
 * with $$n$$, the sample size
 * with $$r$$, the correlation coefficient that we'd like to detect
-* with $$C_{\beta}$$ a coefficient dependent on TODO
+* with $$C_{\beta}$$ a coefficient dependent on the effect size and beta (type II error) 
 
 Thus, with a sample size of $$n=23$$ we have almost 99.8% chance of concluding that the correlation coefficient is different than zero when the correlation coefficient is 0.791.
 
-However there are less than 200 countries in the world, in such case, we should look at the sampling ratio. The sampling ratio is the sample size over the population size. Generally speaking, the smaller the population, the larger the sampling ratio needed. For populations under 1000, a common rule of thumb is to have a sampling ratio of 30% minimum to ensure representativeness of the sample.
+However there are less than 200 countries in the world, in such case, we should look at the sampling ratio. The sampling ratio is the sample size over the population size. Generally speaking, the smaller the population, the larger the sampling ratio needed. For populations under 1000, a common rule of thumb is to have a sampling ratio of 30% at least to ensure representativeness of the sample.
 
-In the case of this study, the sampling is $$23/193 = 11.9\%$$. We would rather want to have 58 countries!
+In the case of this study, the sampling is $$23/193 = 11.9\%$$. We would rather want to have 58 countries or more in our dataset!
 
 ## The timespan of the data is heterogenous
 
@@ -244,21 +244,18 @@ In the case of this study, the sampling is $$23/193 = 11.9\%$$. We would rather 
 Apart from the constantly evolving number of Nobel laureates and cocoa consumption, the open data used in the study has a huge timespan difference:
 
 * For the Nobel laureates, first awards were given in 1901, so the timespan is 110 years, until the date of the note's publication
-* For the chocolate consumption, the timespan is more chaotic as it comes from multiple sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/). The data is gather on approximately 8 years, from 2004 to 2012.
+* For the chocolate consumption, the timespan is more chaotic as it comes from multiple sources: [chocosuisse](https://www.chocosuisse.ch/fr/), [theobroma-cacao](https://www.theobroma-cacao.de/wissen/wirtschaft/international/konsum) and [caobisco](https://caobisco.eu/). The data is gathered on approximately 8 years, from 2004 to 2012.
 
-The calculation of the correlation is done between two phenomenons changing over time and on two very different timespan: 1901-2012 for the Nobels and 2004-2012 for the chocolate. Without saying it, we consider that the consumption of chocolate didn't change that much between 1901 and 2004.
+The calculation of the correlation is done between two phenomenons changing over time and on two very different periods of time: 1901-2012 for the Nobels and 2004-2012 for the chocolate. Without saying it, we consider that the consumption of chocolate didn't change that much between 1901 and 2004.
 
 ## Which dependency metric to choose?
 
-The strength of a linear correlation between to continuous variable can be measured by Pearson correlation coefficient. The relationship is:
+The strength of a linear correlation between two continuous variable can be measured by the Pearson correlation coefficient. The relationship is:
 * null if $$r=0$$
 * perfect if $$r=\mp 1$$
 * strong if $$ \lvert r \rvert >0.8$$
 
-However a non linear relationship isn't always measurable by the Pearson correlation, for instance in the case of a parabolic relationship. In case of outlier, even a linear relationship may not be detected by the coefficient of Pearson. A famous diagram perfectly illustrates this. 
-
-The four graphs known as the [Anscombe's quartet](https://en.wikipedia.org/wiki/Anscombe%27s_quartet), all share the same correlation coefficent of $$r=
-0.816$$, but each on looks very different:
+However a non linear relationship isn't always measurable by the Pearson correlation, for instance in the case of a parabolic relationship. If the dataset is somewhat linear but contains outliers, the linear relationship may not be detected by the coefficient of Pearson. The famous [four graphs](https://en.wikipedia.org/wiki/Anscombe%27s_quartet) of Anscombe illustrate this. They emphasize the variety of datasets that can share the same correlation coefficent of $$r=0.816$$:
 
 ![Anscombe's quartet](/assets/2023-01-25/anscombes-quartet.svg)
 
@@ -266,34 +263,30 @@ The four graphs known as the [Anscombe's quartet](https://en.wikipedia.org/wiki/
 >
 > Francis John Anscombe in "Graphs in Statistical Analysis". American Statistician. 27 (1): 17–21.
 
-There would be three good reasons to use the Spearman coefficient:
+So there would be three good reasons to use another famous correlatio metric known as the Spearman coefficient:
 1. it enables us to measure a correlation between countinous, discrete or ordinal variables
 2. as the test is non parametric, it takes the ranks instead of the values, so it doesn't need the data to be normally distributed, and doesn't need the data to be free of outliers either
-3. and it is always good to compare both coefficients
+3. and its' always nice to be able to compare both corraltion metrics
 
 # Retry attempt and conclusion
 
-Giving that the data used the study is not easily available, it is very hard to reproduce the exact same result. It's now more common to make available the data when publishing a paper.
+Giving that the data used by the author of the note is not easily available, it is very hard to reproduce the exact same result. I found some data on wikipedia for the Nobel laureates, and on `ourworldindata` for chocolate consumption. The whole code for this part is in [this notebook](https://github.com/ClementBM/sandbox/blob/main/chocolate-blogpost/eda.ipynb).
+
+Hereafter is the scatterplot with the regression line:
 
 ![alt](/assets/2023-01-25/scatter-plot-on-retry-attempt.png)
 
-The sample size is 72, so we have a good sampling ratio.
+The sample size is 72, so we have a sampling ratio of more than 37%.
 
-Pearson correlation
-* 0.306
-* p-value=2.87e-07
-* confidence interval=
+| | Pearson correlation | Spearman correlation |
+|--|--|--|
+| statistic | $$r=0.306$$ | $$\rho=0.654$$ |
+| p-value | $$2.87\text{e-}07$$ | $$3.54\text{e-}10$$ |
+| confidence interval | $$\text{P}( r \in [0.082, 0.500] ) \ge 95% $$ | $$\text{P}( r \in [0.499, 0.768] ) \ge 95% $$ |
 
-Spearman correlation
-* 0.654
-* p-value=
-* confidence interval=
+With a lower bound near zero (at 0.082), the strength of the Pearson correlation is way lower than in the note of interest ($$r=0.791$$). Nevertheless, the Spearman coefficient is a lot higher than the Pearson coefficient. It may be an indicator of a nonlinear relashionship and/or a outlier existence. The country of Santa Lucia is clearly an outlier here (at the top of the previous graph).
 
-
-> "If you can’t change the world with cookies, how can you change the world?”
-> 
-> Pat Murphy
-
+As the Spearman correlation coefficient give us a little more confidence in the relationship between the two variables, is chocolate really the answer here?
 
 # Resources
 * [Chocolate Consumption, Cognitive Function, and Nobel Laureates](https://www.biostat.jhsph.edu/courses/bio621/misc/Chocolate%20consumption%20cognitive%20function%20and%20nobel%20laurates%20(NEJM).pdf)
@@ -318,6 +311,7 @@ Spearman correlation
 * [Marginal Effects: Definition](https://www.statisticshowto.com/marginal-effects/)
 * [Pearson Correlation Coefficient](https://en.wikipedia.org/wiki/Pearson_correlation_coefficient)
 * [What is a confounding variable?](https://www.scribbr.com/methodology/confounding-variables/)
+* [Correlation Coefficient using z-transformation](https://www2.ccrb.cuhk.edu.hk/stat/other/correlation.htm)
 
 ## Data Sources
 * [Nobel Prize - Laureates](https://public.opendatasoft.com/explore/dataset/nobel-prize-laureates/table/?flg=fr&disjunctive.category)
