@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Analyzing a study on the correlation between chocolate consumption and cognitive function"
-excerpt: ""
-date:   2023-01-25
+title:  "Analyzing the correlation between chocolate consumption and cognitive functions"
+excerpt: "Reading a study on the relationship between chocolate consumption and Nobel laureates count by country, we'll try to figure out if chocolate consumption really helps cognitive functions to improve?"
+date:   2023-07-25
 categories: [study]
 tags: [chocolate, correlation]
 ---
 
-![Chocolate consumption](/assets/2023-01-25/chocolate-diva.jpg){: width="50%" style="margin-left: auto;margin-right: auto;display: block;"  }
+![Chocolate consumption](/assets/2023-07-25/chocolate-diva.jpg){: width="50%" style="margin-left: auto;margin-right: auto;display: block;"  }
 
 When I was studying at the university, I once made an english report on how to rethink the strategy of a sinking company. By way of this use case, we had to find new game planes for selling, innovate to find new customers and fulfill new customer needs.
 
@@ -40,7 +40,7 @@ As a last word of the report, I adviced the fake managing directors to eat more 
 The study was purely observational as no clinical trial was lead. The author maked use of open data. 
 The *total number of Nobel laureates per capita* were taken as a "surrogate" to cognitive performance. Chocolate consumption estimation came from three different data sources published by chocolate players: chocolate manufacturers, federations and associations.
 
-![Chocolate consumption](/assets/2023-01-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
+![Chocolate consumption](/assets/2023-07-25/chocolate-consumption-by-nobel-laureate.png){: width="100%"  }
 
 **The hypothesis**: chocolate consumption improves cognitive function
 
@@ -135,7 +135,7 @@ According to the dictionnary, **cognition** is the "mental action or process of 
 
 The following diagram by *Jane S. Paulsen* shows some of them grouped by category:
 
-![alt](/assets/2023-01-25/cognitive-function-Jane-s-Paulsen.jpg)
+![alt](/assets/2023-07-25/cognitive-function-Jane-s-Paulsen.jpg)
 
 Cognitive function of a human may be influenced by **diet**, **physical activity**, **sleep**, **stress levels** and **intellectual stimulation.** All of these factors are dependent at different proportion of the **wealth of a person**, and by extent to his/her access to **learning/cultural resources**. The environment in which a person lives inside his/her country, have a significant impact on his/her intellectual/academic achievements. Investment in education, research infrastructure, socioeconomic conditions, and cultural values are predominent.
 
@@ -186,12 +186,12 @@ Nonetheless the good starting point of the study, and because the *consumption o
 
 The presence of confounding variables can affect the validity of hypothesis testing results, as they can affect the relationship between the variables being tested. The cocoa supposedly have a positive effect on the cognitive function. But isn't the country wealth strongly impacting both phenomenons and their indicators? The following diagram illustrates this by showing a conceptual model of the variables:
 
-![Conceptual model of the cocoa consumption effect on cognitive functions](/assets/2023-01-25/cocoa-cognition-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
+![Conceptual model of the cocoa consumption effect on cognitive functions](/assets/2023-07-25/cocoa-cognition-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
 
 
 It's like trying to find a correlation between the garbage indicator and the life expectancy, both are strongly related to the economic state of a country. There is a good chance for them to be correlated. Another good example of the omitted variable bias is the correlation between ice cream consumption and sunburn. There IS a correlation, but does that mean ice cream consumption causes sunburn?
 
-![Conceptual model of the ice cream consumption effect on sunburns](/assets/2023-01-25/icecream-sunburn-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
+![Conceptual model of the ice cream consumption effect on sunburns](/assets/2023-07-25/icecream-sunburn-conceptual-model.png){: style="margin-left: auto;margin-right: auto;display: block;"}
 
 Even if chocolate intake is strongly correlated with cognitive function, it doesn't mean that an increase in chocolate consumption do enhance cognition. The correlation coeffient says that people eating more chocolate have better chance to have higher cognitive function; it doesn't say that you'll enhance your cognitive fonctions by eating more chocolate. Unlike the other study with Wistar-Unilever rats, the current study didn't intervene on the chocolate consumption of volunteers to see what would happen.
 
@@ -257,7 +257,7 @@ The strength of a linear correlation between two continuous variable can be meas
 
 However a non linear relationship isn't always measurable by the Pearson correlation, for instance in the case of a parabolic relationship. If the dataset is somewhat linear but contains outliers, the linear relationship may not be detected by the coefficient of Pearson. The famous [four graphs](https://en.wikipedia.org/wiki/Anscombe%27s_quartet) of Anscombe illustrate this. They emphasize the variety of datasets that can share the same correlation coefficent of $$r=0.816$$:
 
-![Anscombe's quartet](/assets/2023-01-25/anscombes-quartet.svg)
+![Anscombe's quartet](/assets/2023-07-25/anscombes-quartet.svg)
 
 > Numerical calculations are exact, but graphs are rough.
 >
@@ -274,7 +274,7 @@ Giving that the data used by the author of the note is not easily available, it 
 
 Hereafter is the scatterplot with the regression line:
 
-![alt](/assets/2023-01-25/scatter-plot-on-retry-attempt.png)
+![alt](/assets/2023-07-25/scatter-plot-on-retry-attempt.png)
 
 The sample size is 72, so we have a sampling ratio of more than 37%.
 
