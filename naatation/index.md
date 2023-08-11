@@ -11,7 +11,7 @@ NAATation is a free Google Doc™ add-on that helps annotate climate/environment
 The following image is a screenshot of the add-on sidebar:
 ![Screenshot of the document's add-on](addon-screenshot.png)
 
-This add-on enables NAAT's voluteers to structure the information inside textual summaries of the climate trials. One can edit trial's attributes by selecting a piece of text and then click on the desired attribute in the add-on's sidebar. The user may also export the informed attributes in a given spreadsheet.
+This add-on enables NAAT's volunteers to structure the information inside textual summaries of the climate trials. One can edit trial's attributes by selecting a piece of text and then click on the desired attribute in the add-on's sidebar. The user may also export the informed attributes in a given spreadsheet.
 
 ## Privacy Policy
 
