@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" >
+  <link rel="stylesheet" href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.dataTables.min.css" >
+  <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css" >
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" >
+  
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bulma.min.css">
+
+  <style>
+    td span.col-wrap {
+        display: inline-block;
+        max-width: 100%;
+        word-break: normal;
+        white-space: normal;
+    }
+  </style>
+</head>
+
+<body>
+    <table id="casetable" class="display compact cell-border hover responsive nowrap" width="100%"></table>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+    const apiUrl = "https://noco-db-production-b667.up.railway.app/api/v1/db/data/v1/NAAT/LegalCase" +
+        "?limit=100&shuffle=0&offset=0" + 
+        "&nested[Procedures][offset]=0" +
+        "&nested[Procedures][limit]=25" +
+        "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment" +
+        "&nested[Complainants][offset]=0" +
+        "&nested[Complainants][limit]=25" +
+        "&nested[Complainants][fields]=Name,AgentType" +
+        "&nested[ComplainantRecipients][offset]=0" +
+        "&nested[ComplainantRecipients][limit]=25" +
+        "&nested[ComplainantRecipients][fields]=Name,AgentType";
+    
+        const settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": encodeURI(apiUrl),
+            "method": "GET",
+            "headers": {
+                "xc-token": "KaTLqLyHqyp9HS0EzYAkex0c0Mb5OSCclW9pShI5"
+            }
+        };
+
+    function isNumeric(str) {
+        if (typeof str != "string") {
+            return false;
+        }
+        return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+    }
+
+    $(document).ready(function(){
+
+        $.ajax(settings).done(function (response) {
+
+            console.log(response["list"]);
+            
+            var dataArray = response["list"].map(function(x){
+                return [
+                    "",
+                    x["Title"],
+                    x["FactsDigest"],
+                    x["FactsDate"],
+                    x["AppealType"] != null ? x["AppealType"]["Name"]: "",
+                    x["CaseStatus"] != null ? x["CaseStatus"]["Name"]: "",
+                    x["Complainants"],
+                    x["ComplainantRecipients"],
+                    x["Procedures"]
+                ]
+            });
+
+            console.log(dataArray);
+
+            $("#casetable").DataTable({
+                columns: [
+                    { title: '' },
+                    { title: 'Titre' },
+                    { title: 'Faits' },
+                    { title: 'Date' },
+                    { title: 'Type' },
+                    { title: 'Statut' },
+                    { title: 'Demanderesses' },
+                    { title: 'Défenderesses' },
+                    { title: 'Procédure' }
+                ],
+                searchPanes: {
+                    cascadePanes: true
+                },
+                data: dataArray,
+                paging: false,
+                scrollCollapse: true,
+                scrollY: '680px',
+                dom: 'Plfrtip',
+                responsive: {
+                    details: {
+                        renderer: function ( api, rowIdx, columns ) {
+                            var data = $.map( columns, function ( col, i ) {
+                                
+                                if (col.hidden){
+                                    var rowDetails = "";
+                                    if (typeof(col.data) === 'object'){
+                                        rowDetails = Object.keys(col.data).filter(
+                                            (key) => isNumeric(key)
+                                        ).map(function(key){
+                                            if (typeof(col.data[key]) === 'undefined'){
+                                                return '<tr><td><span class="col-wrap">' + col.data[key] + '</span></td></tr>';
+                                            }
+                                            if (col.title == "Procédure") {
+                                                return '<tr><td><span class="col-wrap">' +
+                                                    "<strong>Date d'introduction:</strong> " + col.data[key]["IntroductionDate"] +  "<br/>" +
+                                                    "<strong>Date de décision:</strong> " + col.data[key]["DecisionDate"] +  "<br/>" +
+                                                    "<strong>Statut:</strong> " + 
+                                                        (col.data[key]["DecisionStatus"] ? col.data[key]["DecisionStatus"]["Name"] : null) + 
+                                                        "<br/>" +
+                                                    "<strong>Résumé:</strong> " + col.data[key]["Abstract"] + "<br/>" +
+                                                    "<strong>Solution:</strong> " + col.data[key]["Solution"] + "<br/>" +
+                                                    "<strong>Commentaire:</strong> " + col.data[key]["Comment"] + "<br/>" +
+                                                    "<strong>Fondements:</strong> " +
+                                                        Object.keys(col.data[key]["Grounds"]).filter((k) => isNumeric(k)).map((k) => col.data[key]["Grounds"][k]["Title"]).join(" & ") +
+                                                        "<br/>" +
+                                                    "<strong>Ressources:</strong> " +
+                                                        Object.keys(col.data[key]["Resources"]).filter((k) => isNumeric(k)).map((k) => col.data[key]["Resources"][k]["Title"]).join(" & ") +
+                                                        "<br/>" +
+                                                    '</span></td></tr>';
+                                            } else {
+                                                return '<tr><td><span class="col-wrap">' +
+                                                    col.data[key]["Name"] + " - " +
+                                                    col.data[key]["AgentType"]["Name"] + 
+                                                    '</span></td></tr>';
+                                            }
+                                        }).join("");
+
+                                        rowDetails = "<table>" + rowDetails + "</table>";
+                                    } else {
+                                        rowDetails = col.data;
+                                    }
+                                    
+                                    return '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                        '<td><strong>' + col.title + '</strong></td> '+
+                                        '<td><span class="col-wrap">' + rowDetails + '</span></td>'+
+                                    '</tr>';
+                                }
+                            }).join('');
+            
+                            return data ?
+                                $('<table/>').append( data ) :
+                                false;
+                        },
+                        target: 0,
+                    }
+                },
+                columnDefs: [
+                    {
+                        searchPanes: {
+                            show: true
+                        },
+                        targets: [3]
+                    },
+                    {
+                        searchPanes: {
+                            show: false
+                        },
+                        targets: [1,2,6,7,8]
+                    },
+                    {
+                        className: 'dtr-control arrow-left',
+                        orderable: false,
+                        target: 0
+                    }
+                ]
+        
+            })
+        });
+    });
+</script>
+
+
+</html>
