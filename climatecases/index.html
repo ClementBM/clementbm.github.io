@@ -38,7 +38,7 @@
 
 <script>
     const apiUrl = "https://noco-db-production-b667.up.railway.app/api/v1/db/data/v1/NAAT/LegalCase" +
-        "?limit=100&shuffle=0&offset=0" + 
+        "?limit=200&shuffle=0&offset=0" + 
         "&nested[Procedures][offset]=0" +
         "&nested[Procedures][limit]=25" +
         "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment" +
@@ -92,7 +92,7 @@
             $("#casetable").DataTable({
                 columns: [
                     { title: '' },
-                    { title: 'Titre' },
+                    { title: 'Titre', className: "all" },
                     { title: 'Faits' },
                     { title: 'Date' },
                     { title: 'Type' },
