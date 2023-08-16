@@ -11,7 +11,6 @@
   
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" >
   
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bulma.min.css">
 
@@ -26,9 +25,9 @@
 </head>
 
 <body>
+    <img id="loading" src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif" />
     <table id="casetable" class="display compact cell-border hover responsive nowrap" width="100%"></table>
 </body>
-
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -38,7 +37,7 @@
 
 <script>
     const apiUrl = "https://noco-db-production-b667.up.railway.app/api/v1/db/data/v1/NAAT/LegalCase" +
-        "?limit=200&shuffle=0&offset=0" + 
+        "?limit=1000&shuffle=0&offset=0" + 
         "&nested[Procedures][offset]=0" +
         "&nested[Procedures][limit]=25" +
         "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment" +
@@ -68,6 +67,7 @@
     }
 
     $(document).ready(function(){
+        $("#loading").show();
 
         $.ajax(settings).done(function (response) {
 
@@ -76,7 +76,7 @@
             var dataArray = response["list"].map(function(x){
                 return [
                     "",
-                    x["Title"],
+                    "<span class='col-wrap'>" + x["Title"] + "</span>",
                     x["FactsDigest"],
                     x["FactsDate"],
                     x["AppealType"] != null ? x["AppealType"]["Name"]: "",
@@ -187,7 +187,10 @@
                     }
                 ]
         
-            })
+            });
+
+            $("#loading").hide();
+
         });
     });
 </script>
