@@ -40,7 +40,7 @@
         "?limit=1000&shuffle=0&offset=0" + 
         "&nested[Procedures][offset]=0" +
         "&nested[Procedures][limit]=25" +
-        "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment" +
+        "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment,ResourceUrls" +
         "&nested[Complainants][offset]=0" +
         "&nested[Complainants][limit]=25" +
         "&nested[Complainants][fields]=Name,AgentType" +
@@ -78,7 +78,7 @@
                     "",
                     "<span class='col-wrap'>" + x["Title"] + "</span>",
                     x["FactsDigest"],
-                    x["FactsDate"],
+                    x["FactsYear"],
                     x["AppealType"] != null ? x["AppealType"]["Name"]: "",
                     x["CaseStatus"] != null ? x["CaseStatus"]["Name"]: "",
                     x["Complainants"],
@@ -94,7 +94,7 @@
                     { title: '' },
                     { title: 'Titre', className: "all" },
                     { title: 'Faits' },
-                    { title: 'Date' },
+                    { title: 'Année' },
                     { title: 'Type' },
                     { title: 'Statut' },
                     { title: 'Demanderesses' },
@@ -137,7 +137,9 @@
                                                         Object.keys(col.data[key]["Grounds"]).filter((k) => isNumeric(k)).map((k) => col.data[key]["Grounds"][k]["Title"]).join(" & ") +
                                                         "<br/>" +
                                                     "<strong>Ressources:</strong> " +
-                                                        Object.keys(col.data[key]["Resources"]).filter((k) => isNumeric(k)).map((k) => col.data[key]["Resources"][k]["Title"]).join(" & ") +
+                                                        Object.keys(col.data[key]["Resources"]).filter((k) => isNumeric(k)).map(function(k) {
+                                                            return "<a href='" + col.data[key]["ResourceUrls"][k] + "' >" + col.data[key]["Resources"][k]["Title"] + "</a>";
+                                                        }).join(" & ") +
                                                         "<br/>" +
                                                     '</span></td></tr>';
                                             } else {
