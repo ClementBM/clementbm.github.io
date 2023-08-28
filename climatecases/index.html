@@ -36,11 +36,11 @@
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 
 <script>
-    const apiUrl = "https://noco-db-production-b667.up.railway.app/api/v1/db/data/v1/NAAT/Case" +
+    const apiUrl = "https://noco-db-production-7b56.up.railway.app/api/v1/db/data/v1/NAAT/Case" +
         "?limit=1000&shuffle=0&offset=0" + 
-        "&nested[Procedures][offset]=0" +
-        "&nested[Procedures][limit]=25" +
-        "&nested[Procedures][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment,ResourceUrls" +
+        "&nested[Procedure][offset]=0" +
+        "&nested[Procedure][limit]=25" +
+        "&nested[Procedure][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment,ResourceUrls" +
         "&nested[Complainants][offset]=0" +
         "&nested[Complainants][limit]=25" +
         "&nested[Complainants][fields]=Name,AgentType" +
@@ -54,7 +54,7 @@
             "url": encodeURI(apiUrl),
             "method": "GET",
             "headers": {
-                "xc-token": "KaTLqLyHqyp9HS0EzYAkex0c0Mb5OSCclW9pShI5"
+                "xc-token": "v3IfiE0-xFz-kVAEGHnJzXCtuHuR1cvpYC0uTucz"
             }
         };
 
@@ -83,7 +83,7 @@
                     x["CaseStatus"] != null ? x["CaseStatus"]["Name"]: "",
                     x["Complainants"],
                     x["ComplainantRecipients"],
-                    x["Procedures"]
+                    x["Procedure"]
                 ]
             });
 
