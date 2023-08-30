@@ -18,10 +18,8 @@ In this post, I wanted to create a quick visualization tool to overview the hier
 You can filter the below datatable by clicking on a node of the graph, thus selecting a juridiction.
 The wheel zoom on the right side bar of the chart enables you to zoom in and zoom out.
 
-Have fun :scales:!
+Have fun!
+
+> Apologies for not display all the country flags, working on it...
 
 {% include sabincenter-cases-graph.html %}
-
-<br>
-<br>
-:heavy_exclamation_mark: Apologies for not display all the country flags, working on it...
