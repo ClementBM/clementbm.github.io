@@ -1,25 +1,34 @@
 ---
 layout: post
-title:  "Climate Cases by Juridiction Graph"
-excerpt: "A quick view into the jurisdictions involved in climate change litigation"
+title:  "Explore Global Climate Cases by Jurisdiction"
+excerpt: "A brief glance at the jurisdictions that are involved in climate change litigation, based on the cases recorded in the Sabin Center database"
 date:   2023-08-30
 categories: [project]
-tags: [bokeh, graph, climatecases, visualization]
+tags: [bokeh, graph, climate cases, visualization]
 ---
 
-[Sabin Center for climate change law](https://climate.law.columbia.edu/) maintains a database that gather litigation cases across the global.
+![Corn photo](/assets/2023-08-30/corn.jpg){: width="100%" style="margin-left: auto;margin-right: auto;display: block;"  }
 
-Created in 2011 the `Global Climate Change Litigation database` records cases that have a material issue of climate change law, policy, or science.
+# Context and Data
+The [Sabin Center for climate change law](https://climate.law.columbia.edu/) manages a database that compiles legal cases from around the world related to climate change litigation..
 
-Currently, about 800 cases are recorded. You can find the database and informations at this [link](https://climatecasechart.com/about/).
+Created in 2011, the **Global Climate Change Litigation Database** records cases involving material issue of climate change law, policy, or science.
 
-In this post, I wanted to create a quick visualization tool to overview the hierachy of juridictions and their associated cases.
+Currently, there are approximately 800 cases documented in the database. All the informations regarding the database can be located through this [link](https://climatecasechart.com/about/).
 
-You can filter the below datatable by clicking on a node of the graph, thus selecting a juridiction.
-The wheel zoom on the right side bar of the chart enables you to zoom in and zoom out.
+In this post, my aim was to develop a rapid visualization tool for providing an overview of jurisdictional hierarchies and their corresponding cases.
 
-Have fun!
+By clicking on a graph node (selecting a jurisdiction), you have the ability to filter the case's datatable below.
+Tap on the `Wheel Zoom` icon located in the sidebar on the right-hand side of the chart to activate the zoom in and zoom out functionalities.
 
-> Apologies for not display all the country flags, working on it...
+Wishing you a joyful legal exploration!
+
+> Apologies for not displaying all the country flags, working on it...
+
+# Interactive Graph
 
 {% include sabincenter-cases-graph.html %}
+
+# Resources
+* [Climate Case Chart by the Sabin Center of Climate Change Law](https://climatecasechart.com)
+* [Interactive visualizations with the Bokeh python library](https://bokeh.org/)
