@@ -9,53 +9,53 @@ tags: [time series, dtw, clustering]
 
 > Clustering is the practice of finding hidden patterns or similar groups in data. (Roelofsen, 2018)
 
-Time Series Clustering is an unsupervised data mining technique for organizing data points into groups based on their similarity. The objective is to maximize data similarity within clusters and minimize it across clusters.
+Time Series Clustering is an unsupervised data mining technique for organizing data series into groups based on their similarity. The objective is to maximize data similarity within clusters and minimize it across clusters.
 
 - [Why clustering time series?](#why-clustering-time-series)
-- [A generic clustering method](#a-generic-clustering-method)
+- [The Theory](#the-theory)
   - [1. The metric: Dynamic Time Warping](#1-the-metric-dynamic-time-warping)
   - [2. The prototype: DTW Barycenter Averaging](#2-the-prototype-dtw-barycenter-averaging)
   - [3. The preprocessing: Mean Variance Scaler](#3-the-preprocessing-mean-variance-scaler)
   - [4. The algorithm: DBA-k-means](#4-the-algorithm-dba-k-means)
   - [5. The evaluation: the Silhouette Score](#5-the-evaluation-the-silhouette-score)
-- [The use case, Webstat data](#the-use-case-webstat-data)
+- [The Application, Webstat data](#the-application-webstat-data)
   - [Featuretools](#featuretools)
   - [PyCaret](#pycaret)
   - [ydata-profiling](#ydata-profiling)
 - [References](#references)
 
 # Why clustering time series?
-With clustering we try to find subgroups within the dataset. This is an unsupervised problem because we are trying to discover structure, distinct cluster for instance, on the basis of a data set.
+Clustering is employed to identify subgroups within a dataset, constituting an unsupervised approach as it entails uncovering inherent structures, such as distinct clusters, within the dataset.
 
-Both clustering and PCA seek to simplify the data via a small number of summaries, but their mechanisms are different:
-* PCA looks to find a low-dimensional representation of the observations that explain a good fraction of the variance
-* Clustering looks to find homogeneous subgroups among the observations 
+Both clustering and PCA (Principal Component Analysis) aim to simplify data by summarizing it, yet their methods diverge:
+* PCA aims to discover a low-dimensional representation of the data points that can explain a good fraction of the variance.
+* Clustering, on the other hand, aims to identify homogeneous subgroups among the data points.
 
-It is an exploratory technique in time-series visualization, in which we construct clusters as we consider the entire series as a whole. The main steps are:
- 
+In the context of time-series visualization, clustering serves as an exploratory technique where we create clusters while considering the entire time series as a unified entity. The primary steps involved in this process are as follows:
+
 1. Determining a distance measure to quantify the similarity between observations 
 2. Prototype (summarizes characteristics of all series in a cluster),
 3. Preprocessing method
 4. Choosing the algorithm to obtain the cluster, most common partitional or hierarchical
 5. And evaluate the results (cluster validity indices, CVI)
 
-# A generic clustering method
+# The Theory
 ## 1. The metric: Dynamic Time Warping
 
-One of the most popular measures for time series, dynamic time warping (DTW) was introduced in order to overcome some of the restrictions of simpler similarity measures such as Euclidean distance:
-1. that only works with time series of equal lengths
-   1. this is not necessarily an advantage, as it has been shown that performing linear reinterpolation to obtain equal length may be appropriate if m and n do not vary significantly
-2. that compares the values of both time series at each point independently (as the values of time series are often time correlated with different lags)
+Dynamic Time Warping (DTW), among the most widely utilized measures for time series analysis, was developed to address certain limitations of simpler similarity metrics like the Euclidean distance:
 
-The one-nearest neighbor classifier with the DTW metric is often considered to be the baseline algorithm for time series classification.
+1. It has the ability to handle time series of varying lengths. This characteristic may not necessarily be an advantage, as studies have demonstrated that employing linear reinterpolation to obtain equal length may be appropriate when the lengths of the time series, denoted as 'm' and 'n', do not vary significantly.
+2. Unlike straightforward metrics, DTW doesn't merely compare the values of both time series point by point; it takes into account the temporal correlation between values, which often occurs with different lags.
 
-The DTW constructs a *mn* matrix of squared distances between points of both time series, which is then used as a cost matrix when searching for the cheapest path between (1,1) and (m,n). Path cost determines the similarity.
+DTW constructs a square matrix of size 'm x n', calculating squared distances between corresponding points of the two time series. This matrix serves as a cost matrix when searching for the most economical path between points (1,1) and (m,n), and this path's cost quantifies the similarity.
 
-* It's possible to normalize DTW given the step pattern, dividing the distance by n, m or n+m, depending on the step pattern and slope weighting.
-* It's possible to compare time series of different lengths.
-* It's sensitive to scaling, so the scaling methods will influence the metric and therefore the clustering results
-* For multivariate times series the *Dynamic Time Wraping* "metric" is sensitive to the normalization method
-* Time complexity is $$O(nm)$$
+Here are some noteworthy characteristics and considerations regarding DTW:
+
+* It can be normalized based on the chosen step pattern, involving division by 'n', 'm', or 'n+m', depending on the specific step pattern and slope weighting.
+* DTW permits the comparison of time series with dissimilar lengths.
+* It is sensitive to scaling, meaning that the scaling techniques applied will influence the metric and, consequently, the outcomes of clustering.
+* In the context of multivariate time series, the "Dynamic Time Warping" metric is influenced by the choice of normalization method.
+* The time complexity of DTW is proportional to 'O(nm)', where 'n' and 'm' represent the lengths of the compared time series.
 
 The dynamic time warping score is defined as the minimum cost among all the warping paths:
 
@@ -66,13 +66,11 @@ $$
 where $$\mathcal{P}$$ is the set of warping paths.
 
 ## 2. The prototype: DTW Barycenter Averaging
-DTW Barycenter Averaging method or DBA method is estimated through Expectation-Maximization algorithm.
+In the clustering domain, a prototype refers to a single time series that provides a condensed representation of all the series within a cluster. In our context, we employ the DBA method to derive this prototype.
 
-DBA was originally presented in [1]. This implementation is based on a idea from [2] (Majorize-Minimize Mean Algorithm).
+The DTW Barycenter Averaging method, or DBA method, necessitates the selection of a reference series, often referred to as a centroid, typically chosen randomly from the dataset. During each iteration of this method, the DTW alignment between each series within the cluster denoted as $$C$$ and the chosen centroid is calculated.
 
-The procedure is called DTW Barycenter Averaging, and is an iterative, global method. The latter means that the order in which the series enter the prototyping function does not affect the outcome.
-
-DBA requires a series to be used as reference (centroid), and it usually begins by randomly selecting one of the series in the data. On each iteration, the DTW alignement between each series in the cluser $$C$$ and the centroid is computed.
+DBA is an iterative, global method. The latter means that the order in which the series enter the prototyping function does not affect the outcome. It is estimated through Expectation-Maximization algorithm.
 
 {% gist 109210aa102732b41dd8635b4b6a054e %}
 
@@ -84,6 +82,9 @@ This means that one cannot scale barycenters back to data range because each tim
 https://tslearn.readthedocs.io/en/stable/auto_examples/clustering/plot_kmeans.html#sphx-glr-auto-examples-clustering-plot-kmeans-py
 
 ## 4. The algorithm: DBA-k-means
+The one-nearest neighbor classifier employing the DTW metric is often regarded as the foundational algorithm for time series classification.
+
+
 K nearest neighboor
 One nearest neigboor
 
@@ -138,7 +139,7 @@ In many cases, these CVIs can be used to evaluate the result of a clustering alg
 * [Peter J. Rousseeuw (1987). "Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis". Computational and Applied Mathematics 20: 53-65.](http://www.sciencedirect.com/science/article/pii/0377042787901257)
 * [Wikipedia entry on the Silhouette Coefficient](https://en.wikipedia.org/wiki/Silhouette_(clustering))
 
-# The use case, [Webstat](https://api.gouv.fr/les-api/webstat) data
+# The Application, [Webstat](https://api.gouv.fr/les-api/webstat) data
 Webstat est le portail statistique de la Banque de France. L'API Webstat permet d'accéder à plus de 35.000 séries statistiques de la Banque de France et de ses partenaires institutionnels. Obtenez simplement les données économiques et financières sur les entreprises françaises, la conjoncture régionale, le crédit et l'épargne, la monnaie ou la balance des paiements.
 
 Principales fonctionnalités: 

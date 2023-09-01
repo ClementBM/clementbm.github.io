@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Prevision of the Instragram engagement"
+title:  "Prevision of the Instagram engagement"
 excerpt: "Heterogeneous data"
 date:   2023-06-08
 categories: [project]

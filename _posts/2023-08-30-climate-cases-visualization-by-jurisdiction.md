@@ -10,7 +10,7 @@ tags: [bokeh, graph, climate cases, visualization]
 ![Corn photo](/assets/2023-08-30/corn.jpg){: width="100%" style="margin-left: auto;margin-right: auto;display: block;"  }
 
 # Context and Data
-The [Sabin Center for climate change law](https://climate.law.columbia.edu/) manages a database that compiles legal cases from around the world related to climate change litigation..
+The [Sabin Center for climate change law](https://climate.law.columbia.edu/) manages a database that compiles legal cases from around the world related to climate change litigation.
 
 Created in 2011, the **Global Climate Change Litigation Database** records cases involving material issue of climate change law, policy, or science.
 
