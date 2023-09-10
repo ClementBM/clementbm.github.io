@@ -21,6 +21,10 @@ Clustering is an unsupervised data mining technique for organizing data series i
 - [The Application, Webstat data](#the-application-webstat-data)
   - [Finding the best number of cluster](#finding-the-best-number-of-cluster)
   - [tf idf for comparing most proeminent tokens by cluster taken the time series names](#tf-idf-for-comparing-most-proeminent-tokens-by-cluster-taken-the-time-series-names)
+  - [Categories of tokens](#categories-of-tokens)
+    - [Post processing détails](#post-processing-détails)
+    - [Location, Region, Country](#location-region-country)
+    - [Economic field](#economic-field)
 - [References](#references)
 
 # Why clustering time series?
@@ -158,10 +162,29 @@ TODO: schéma intéressant sur https://nbviewer.org/github/pycaret/examples/blob
 
 ## tf idf for comparing most proeminent tokens by cluster taken the time series names
 
-TODO: supprimer certain tokens? "nombre cumulé sur 12 mois", "Flux cumulés 12 mois glissants", "Cumul annuel"
-TODO: modifier la fonction regex: retirer les () et [] en premier, ensuite découper selon les virgules
-TODO: ajouter le score tfidf
-TODO: signification acronymes: CVS, CJO, 
+## Categories of tokens
+
+### Post processing détails
+CVS: Correction des variations saisonnières / CVS / Désaisonnalisation
+CJO: Correction des effets de jours ouvrables (CJO)
+Valeur nominale
+
+Les séries mensuelles du commerce extérieur de biens - importations, exportations et soldes - sont susceptibles d’être affectées par des phénomènes récurrents de type saisonnier ainsi que par la composition du mois en jours ouvrables.
+
+https://lekiosque.finances.gouv.fr/site_fr/etudes/methode/traitement.asp
+
+### Location, Region, Country
+* Corse
+* Ile-de-France
+* Ensemble des départements d`Outre-Mer
+* Estonie
+* République Tchèque
+
+### Economic field
+* Agriculture
+* sylviculture et pêche
+* Transports et entreposage
+
 
 |   cluster |   size | series                                                                                                                     |
 |----------:|-------:|:---------------------------------------------------------------------------------------------------------------------------|

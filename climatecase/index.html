@@ -21,6 +21,11 @@
         word-break: normal;
         white-space: normal;
     }
+
+    td span.col-wrap.procedure {
+        border-top: 1px dotted;
+    }
+
   </style>
 </head>
 
@@ -40,7 +45,7 @@
         "?limit=1000&shuffle=0&offset=0" + 
         "&nested[Procedure][offset]=0" +
         "&nested[Procedure][limit]=25" +
-        "&nested[Procedure][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Resources,Comment,ResourceUrls" +
+        "&nested[Procedure][fields]=Abstract,IntroductionDate,DecisionDate,Solution,DecisionStatus,Grounds,Jurisdiction,Resources,Comment,ResourceUrls" +
         "&nested[Complainants][offset]=0" +
         "&nested[Complainants][limit]=25" +
         "&nested[Complainants][fields]=Name,AgentType" +
@@ -124,23 +129,24 @@
                                                 return '<tr><td><span class="col-wrap">' + col.data[key] + '</span></td></tr>';
                                             }
                                             if (col.title == "Procédure") {
-                                                return '<tr><td><span class="col-wrap">' +
-                                                    "<strong>Date d'introduction:</strong> " + col.data[key]["IntroductionDate"] +  "<br/>" +
-                                                    "<strong>Date de décision:</strong> " + col.data[key]["DecisionDate"] +  "<br/>" +
+                                                return '<tr><td><span class="col-wrap procedure">' +
+                                                    (col.data[key]["IntroductionDate"] ? "<strong>Date d'introduction:</strong> " + col.data[key]["IntroductionDate"] +  "<br/>" : "") +
+                                                    (col.data[key]["DecisionDate"] ? "<strong>Date de décision:</strong> " + col.data[key]["DecisionDate"] +  "<br/>" : "") +
+                                                    "<strong>Juridiction:</strong> " + (col.data[key]["Jurisdiction"] ? col.data[key]["Jurisdiction"]["Title"] : "") +  "<br/>" +
                                                     "<strong>Statut:</strong> " + 
-                                                        (col.data[key]["DecisionStatus"] ? col.data[key]["DecisionStatus"]["Name"] : null) + 
+                                                        (col.data[key]["DecisionStatus"] ? col.data[key]["DecisionStatus"]["Name"] : "") + 
                                                         "<br/>" +
                                                     "<strong>Résumé:</strong> " + col.data[key]["Abstract"] + "<br/>" +
-                                                    "<strong>Solution:</strong> " + col.data[key]["Solution"] + "<br/>" +
-                                                    "<strong>Commentaire:</strong> " + col.data[key]["Comment"] + "<br/>" +
-                                                    "<strong>Fondements:</strong> " +
+                                                    (col.data[key]["Solution"] ?"<strong>Solution:</strong> " + col.data[key]["Solution"] + "<br/>" : "") +
+                                                    (col.data[key]["Comment"] ?"<strong>Commentaire:</strong> " + col.data[key]["Comment"] + "<br/>" : "") +
+                                                    (col.data[key]["Grounds"].length > 0 ? "<strong>Fondements:</strong> " +
                                                         Object.keys(col.data[key]["Grounds"]).filter((k) => isNumeric(k)).map((k) => col.data[key]["Grounds"][k]["Title"]).join(" & ") +
-                                                        "<br/>" +
-                                                    "<strong>Ressources:</strong> " +
+                                                        "<br/>" : "") +
+                                                    (col.data[key]["Resources"].length > 0 ? "<strong>Ressources:</strong> " +
                                                         Object.keys(col.data[key]["Resources"]).filter((k) => isNumeric(k)).map(function(k) {
                                                             return "<a href='" + col.data[key]["ResourceUrls"][k] + "' >" + col.data[key]["Resources"][k]["Title"] + "</a>";
                                                         }).join(" & ") +
-                                                        "<br/>" +
+                                                        "<br/>" : "") +
                                                     '</span></td></tr>';
                                             } else {
                                                 return '<tr><td><span class="col-wrap">' +
