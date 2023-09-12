@@ -92,28 +92,8 @@ $$
 
 Hereafter are the numerical calculation in python (skipping imports for readability):
 
-```python
-r = 0.791
-z = math.log((1 + r) / (1 - r)) / 2
-# z = 1.074
+{% gist b697ea578532b2fbdae14b45793f679c confidence_interval_r.py %}
 
-n = 23
-s_z = 1 / math.sqrt(n - 3)
-# s_z = 0.226
-```
-
-```python
-z_1, z_2 = z - 2 * s_z, z + 2 * s_z
-# z_1, z_2 = 0.741, 1.407
-```
-
-```python
-def z_to_r(z):
-  return (math.exp(2 * z) - 1) / (math.exp(2 * z) + 1)
-
-r_1, r_2 = z_to_r(z_1), z_to_r(z_2)
-# r_1, r_2 = 0.630, 0.887
-```
 
 Finally the confidence interval is:
 
@@ -317,7 +297,7 @@ As the Spearman correlation coefficient give us a little more confidence in the 
 * [Nobel Prize - Laureates](https://public.opendatasoft.com/explore/dataset/nobel-prize-laureates/table/?flg=fr&disjunctive.category)
 * [List of countries by Nobel laureates per capita](https://en.wikipedia.org/wiki/List_of_countries_by_Nobel_laureates_per_capita)
 * [Food and Agriculture Organization of the UN](https://www.fao.org/faostat/en/#data)
-* [Cocoa ean consumtion per person, 2008](https://ourworldindata.org/grapher/chocolate-consumption-per-person?time=2008&country=AUS~DMA~NAM)
+* [Cocoa bean consumption per person, 2008](https://ourworldindata.org/grapher/chocolate-consumption-per-person?time=2008&country=AUS~DMA~NAM)
 * [31 Current Chocolate Statistics (Market Data 2023)](https://damecacao.com/chocolate-statistics)
 
 ## Chocolate international trades
