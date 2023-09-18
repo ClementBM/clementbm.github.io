@@ -16,7 +16,7 @@ Created in 2011, the **Global Climate Change Litigation Database** records cases
 
 Currently, there are approximately 800 cases documented in the database. All the informations regarding the database can be located through this [link](https://climatecasechart.com/about/).
 
-In this post, my aim was to develop a rapid visualization tool for providing an overview of jurisdictional hierarchies and their corresponding cases.
+In this post, my aim was to develop a rapid visualization tool for providing an overview of jurisdictions and their corresponding cases.
 
 By clicking on a graph node (selecting a jurisdiction), you have the ability to filter the case's datatable below.
 Tap on the `Wheel Zoom` icon located in the sidebar on the right-hand side of the chart to activate the zoom in and zoom out functionalities.
