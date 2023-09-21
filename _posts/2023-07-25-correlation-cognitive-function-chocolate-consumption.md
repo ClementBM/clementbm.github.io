@@ -78,7 +78,7 @@ $$z$$ approximately follows a normal distribution with
 * mean $$\bar{z} = \text{arctanh} (r) $$,
 * standard error $$s_z = { 1 \over \sqrt{n -3}}$$
 
-As $$z$$ has a normal distribution, the confidence interval of $$z$$ for 95% is:
+As $$z$$ has a normal distribution, the confidence interval of $$z$$ for 95%, $$z_{1 - {\alpha \over 2}} = 2$$, is:
 
 $$
 [ z_1 = \bar{z} - 2 s_z; z_2 = \bar{z} + 2 s_z]
