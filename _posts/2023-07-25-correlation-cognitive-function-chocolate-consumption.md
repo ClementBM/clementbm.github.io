@@ -58,7 +58,7 @@ A correlation coefficient of $$r = 0.791$$ indicates a positive and linear corre
 
 The p-value is really low $$ p < 0.0001 $$, which is extremely significant, we are pretty sure that we can reject the null hypothesis, that the correlation is not equal to zero. In other word, it is highly unlikely that the observed correlation is only due to chance.
 
-However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis. Why is there a correlation? Which are the reasons causing it? And what is the strength of the correlation?. Actually, we could have a similar p-value on a tiny correlation ratio although it would need a larger sample size. (for $$\alpha=0.0001$$, and an effect size of 0.1 the sample size needed is 2070)
+However proving that the correlation is significantly different than zero doesn't give that much information about the alternative hypothesis. Why is there a correlation? Which are the reasons causing it? And what is the strength of the correlation? Actually, we could have a similar p-value on a tiny correlation ratio although it would need a larger sample size. (for $$\alpha=0.0001$$, and an effect size of 0.1 the sample size needed is 2070)
 To have a better grasp of the correlation at stake, let's calculate the confidence interval.
 
 # A little improvement of the statistical evidence
@@ -75,13 +75,13 @@ z(r) = { 1 \over 2 } \ln \left( { 1 + r \over 1 - r } \right) = \text{arctanh} (
 $$
 
 $$z$$ approximately follows a normal distribution with
-* $$mean(z) = \text{arctanh} (\rho) $$ and
+* mean $$\bar{z} = \text{arctanh} (r) $$,
 * standard error $$s_z = { 1 \over \sqrt{n -3}}$$
 
 As $$z$$ has a normal distribution, the confidence interval of $$z$$ for 95% is:
 
 $$
-[ z_1 = z - 2 s_z; z_2 = z + 2 s_z]
+[ z_1 = \bar{z} - 2 s_z; z_2 = \bar{z} + 2 s_z]
 $$
 
 Then the confidence interval of $$r$$ is:
