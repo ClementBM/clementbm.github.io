@@ -9,7 +9,7 @@ author: Clément Brutti-Mairesse
 
 theme: minima
 
-paginate: 7
+paginate: 100
 paginate_path: "/page/:num/"
 show_excerpts: true
 
