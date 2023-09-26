@@ -264,7 +264,7 @@ The transfer fonction is composed of:
 $$
 \underline{\underline{\Theta_{\ell}}} \underline{a_{\ell-1}} = \underline{z_{\ell}}
 $$
-, respectivly the weigts with the input of the $$\ell^{\text{th}}$$ layer, given $$\underline{z_{\ell}} \in \mathbb{R}^{\text{H}_{ \ell }}$$
+, respectivly the weights with the input of the $$\ell^{\text{th}}$$ layer, given $$\underline{z_{\ell}} \in \mathbb{R}^{\text{H}_{ \ell }}$$
 * an activation function $$g_{\ell}: \mathbb{R}^{\text{H}_{ \ell }} \rightarrow \mathbb{R}^{\text{H}_{ \ell }}$$ such as
 
 $$
@@ -493,7 +493,7 @@ $$
 \end{equation}
 $$
 
-Which is commonly written more or less is the following form
+Which is commonly written in the following form
 
 $$
     {\partial E_{\text{CE}} \over \partial \underline{\underline{\Theta_{\text{L}}}}}
