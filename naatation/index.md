@@ -6,12 +6,15 @@ permalink: /naatation/
 
 # Annotation tool for Google Doc™ (NAATation)
 
+![NAAT logo](naat.png){: style="float: left; padding:15px" }
 NAATation is a free Google Doc™ add-on that helps annotate climate/environmental litigation summaries on Google Doc™.
 
 The following image is a screenshot of the add-on sidebar:
 ![Screenshot of the document's add-on](addon-screenshot.png)
 
 This add-on enables NAAT's volunteers to structure the information inside textual summaries of the climate trials.
+
+
 
 With `NAATation` you can:
 * select a piece of text
