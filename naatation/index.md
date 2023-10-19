@@ -11,103 +11,99 @@ NAATation is a free Google Doc™ add-on that helps annotate climate/environment
 The following image is a screenshot of the add-on sidebar:
 ![Screenshot of the document's add-on](addon-screenshot.png)
 
-This add-on enables NAAT's volunteers to structure the information inside textual summaries of the climate trials. One can edit trial's attributes by selecting a piece of text and then click on the desired attribute in the add-on's sidebar. The user may also export the informed attributes in a given spreadsheet.
+This add-on enables NAAT's volunteers to structure the information inside textual summaries of the climate trials.
+
+With `NAATation` you can:
+* select a piece of text
+* annotate it by clicking on the desired attribute in the add-on's sidebar
+* export the annotations in a given spreadsheet
 
 ## Privacy Policy
 
-This Google Doc™ Add-on:
+### About
 
-Does not sell in-app products nor advertise to its users (completely and will always be free)
-Does not collect nor store any personal information about the user or his or her Google Documents
-Does not communicate with the user unless he or she has submitted an issue report/has emailed me
+This add-on is tightly integrated to your Google account and the data stored in the said account. When installing  the add-on from the Google Workspace Marketplace, you will be prompted to authorize different accesses to your Google account. Those authorizations will only be used to perform the service you are requesting from the add-on you have installed.
 
-Docs to Markdown requires only three permissions:
-* permission to access the current document ([to read and convert it](https://www.googleapis.com/auth/documents))
+To remove the add-on access to your Google account, you must uninstall the add-on from the Google Workspace Marketplace. Add-ons are created and powered by Google Apps Script, on Google servers.
+
+* Information gathered by `NAATation` will never be sold or shared to external people.
+* `NAATation` does not sell in-app products nor advertise to its users (completely and will always be free).
+* `NAATation` does not communicate with the user unless he or she has submitted an issue report/has emailed me.
+
+Our App's use of information received, and App's transfer of information to any other app received from Google APIs will adhere to [Google API User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the [Limited Use Requirements](https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes).
+
+### Data Access
+
+When you install `NAATation`, you are asked to accept the following authorizations:
+* see your primary Google Account email address (https://www.googleapis.com/auth/userinfo.email)
+* see your personal info, including any personal info you've made publicly available (https://www.googleapis.com/auth/userinfo.profile)
+* see, edit, create, and delete all your Google Docs documents (https://www.googleapis.com/auth/documents)
 * permission to create a sidebar (https://www.googleapis.com/auth/script.container.ui)
-* permission to access spreadsheets (https://www.googleapis.com/auth/spreadsheets)
+* see, edit, create, and delete all your Google Sheets spreadsheets (https://www.googleapis.com/auth/spreadsheets)
+
+Why does `NAATation` need those access scopes?
+* **Google Docs**: to save the annotations into the properties of the Google Doc™
+* **Google Sheets**: to exportsthe annotations into a single dedicated file
+* **Sidebars**: to open `NAATation` as a sidebar in your Google applications
+
+### Retention time
+We only retain collected information for as long as necessary to provide you with your requested service. What data we store, we’ll protect within commercially acceptable means to prevent loss and theft, as well as unauthorized access, disclosure, copying, use or modification.
+
+### Changes to this Privacy Policy
+This Privacy Policy is subject to occasional revision, and we reserve the right to modify this Privacy Policy relating to `NAATation` at any time, effective upon posting of an updated version of this Privacy Policy.
 
 ## Terms and Conditions
-Last updated: July 28, 2023
 
-Please read these terms and conditions carefully before using Our Service.
+These terms and conditions ("Agreement") sets forth the general terms and conditions of your use of the "NAATation" application ("Application", "Service", “App”, or “Add-on”) and any of its related products and services (collectively, "Services"). This Agreement is legally binding between you ("User", "you" or "your") and this Application developer ("Operator", "we", "us" or "our").
 
-## Interpretation and Definitions
-### Interpretation
-The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.
+By accessing and using the Application and Services, you acknowledge that you have read, understood, and agree to be bound by the terms of this Agreement. If you are entering into this Agreement on behalf of a business or other legal entity, you represent that you have the authority to bind such entity to this Agreement, in which case the terms "User", "you" or "your" shall refer to such entity. If you do not have such authority, or if you do not agree with the terms of this Agreement, you must not accept this Agreement and may not access and use the Application and Services.
 
-### Definitions
-For the purposes of these Terms and Conditions:
+You acknowledge that this Agreement is a contract between you and the Operator, even though it is electronic and is not physically signed by you, and it governs your use of the Application and Services.
 
-* Application means the software program provided by the Company downloaded by You on any electronic device, named **NAATation**
-* Application Store means the digital distribution service operated and developed by Google Inc. (Google Workspace Marketplace) in which the Application has been downloaded.
-* Affiliate means an entity that controls, is controlled by or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.
-* Country refers to: France
-* Company (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to **NAAT**.
-* Device means any device that can access the Service such as a computer, a cellphone or a digital tablet.
-* Service refers to the Application.
-* Terms and Conditions (also referred as "Terms") mean these Terms and Conditions that form the entire agreement between You and the Company regarding the use of the Service. This Terms and Conditions agreement has been created with the help of the Terms and Conditions Generator.
-* Third-party Social Media Service means any services or content (including data, information, products or services) provided by a third-party that may be displayed, included or made available by the Service.
-* You means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.
+### Acceptance of Terms
+You acknowledge that you have read this Agreement and agree to all its terms and conditions. By accessing and using the Application and Services you agree to be bound by this Agreement. If you do not agree to abide by the terms of this Agreement, you are not authorized to access or use the Application and Services.
 
-## Acknowledgment
-These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the Service.
+Specifically, `NAATation` can only be installed from the Google Workspace Marketplace and when installing, Google will prompt you to accept this Agreement: “By clicking Continue, you acknowledge that your information will be used in accordance with the terms of service and privacy policy of this application.”
 
-Your access to and use of the Service is conditioned on Your acceptance of and compliance with these Terms and Conditions. These Terms and Conditions apply to all visitors, users and others who access or use the Service.
+### Use of Service
+If you create a Google account to use the Add-on, you are responsible for maintaining the security of your account and you are fully responsible for all activities that occur under the account and any other actions taken in connection with it. We will not be liable for any acts or omissions by you, including any damages of any kind incurred as a result of such acts or omissions.
 
-By accessing or using the Service You agree to be bound by these Terms and Conditions. If You disagree with any part of these Terms and Conditions then You may not access the Service.
+We may suspend, disable, or delete your `NAATation` account (or any part thereof) if we determine that you have violated any provision of this Agreement or that your conduct or content would tend to damage our reputation and goodwill. If we delete your account for the foregoing reasons, you may not re-register for our Services. We may block your email address and Internet protocol address to prevent further registration.
 
-You represent that you are over the age of 18. The Company does not permit those under 18 to use the Service.
+### Prohibited Uses
+In addition to other terms as set forth in the Agreement, you are prohibited from using the Add-on and Services or Content:
 
-Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy Policy of the Company. Our Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your personal information when You use the Application or the Website and tells You about Your privacy rights and how the law protects You. Please read Our Privacy Policy carefully before using Our Service.
+1. for any unlawful purpose;
+2. to solicit others to perform or participate in any unlawful acts;
+3. to violate any international, federal, provincial or state regulations, rules, laws, or local ordinances;
+4. to infringe upon or violate our intellectual property rights or the intellectual property rights of others;
+5. to harass, abuse, insult, harm, defame, slander, disparage, intimidate, or discriminate based on gender, sexual orientation, religion, ethnicity, race, age, national origin, or disability;
+6. to submit false or misleading information;
+7. to upload or transmit viruses or any other type of malicious code that will or may be used in any way that will affect the functionality or operation of the Application and Services, third party products and services, or the Internet;
+8. to spam, phish, pharm, pretext, spider, crawl, or scrape;
+9. for any obscene or immoral purpose;
+10. to interfere with or circumvent the security features of the Application and Services, third party products and services, or the Internet.
 
-## Links to Other Websites
-Our Service may contain links to third-party web sites or services that are not owned or controlled by the Company.
+We reserve the right to terminate your use of the Application and Services for violating any of the prohibited uses.
 
-The Company has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that the Company shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any such content, goods or services available on or through any such web sites or services.
+### Intellectual property rights
+"Intellectual Property Rights" means all present and future rights conferred by statute, common law or equity in or in relation to any copyright and related rights, trademarks, designs, patents, inventions, goodwill and the right to sue for passing off, rights to inventions, rights to use, and all other intellectual property rights, in each case whether registered or unregistered and including all applications and rights to apply for and be granted, rights to claim priority from, such rights and all similar or equivalent rights or forms of protection and any other results of intellectual activity which subsist or will subsist now or in the future in any part of the world.
 
-We strongly advise You to read the terms and conditions and privacy policies of any third-party web sites or services that You visit.
+This Agreement does not transfer to you any intellectual property owned by the Operator or third parties, and all rights, titles, and interests in and to such property will remain (as between the parties) solely with the Operator. All trademarks, service marks, graphics and logos used in connection with the Application and Services, are trademarks or registered trademarks of the Operator or its licensors. Other trademarks, service marks, graphics and logos used in connection with the Application and Services may be the trademarks of other third parties. Your use of the Application and Services grants you no right or license to reproduce or otherwise use any of the Operator or third party trademarks.
 
-## Termination
-We may terminate or suspend Your access immediately, without prior notice or liability, for any reason whatsoever, including without limitation if You breach these Terms and Conditions.
+### Changes and Amendments
+These Terms are subject to occasional revision, and we reserve the right to modify this Agreement or its terms relating to the Add-on and Services at any time, effective upon posting of an updated version of this Agreement.
 
-Upon termination, Your right to use the Service will cease immediately.
+If your business or legal entity needs to be explicitly notified in case of changes to the terms, you may send an email to clement.brutti.mairesse@gmail.com to be added to our notification list.
 
-## "AS IS" and "AS AVAILABLE" Disclaimer
+### Disclaimer of Warranty
+THE SERVICE IS PROVIDED ON AN “AS IS” BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES OF TITLE, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT.
 
-The Service is provided to You "AS IS" and "AS AVAILABLE" and with all faults and defects without warranty of any kind. To the maximum extent permitted under applicable law, the Company, on its own behalf and on behalf of its Affiliates and its and their respective licensors and service providers, expressly disclaims all warranties, whether express, implied, statutory or otherwise, with respect to the Service, including all implied warranties of merchantability, fitness for a particular purpose, title and non-infringement, and warranties that may arise out of course of dealing, course of performance, usage or trade practice. Without limitation to the foregoing, the Company provides no warranty or undertaking, and makes no representation of any kind that the Service will meet Your requirements, achieve any intended results, be compatible or work with any other software, applications, systems or services, operate without interruption, meet any performance or reliability standards or be error free or that any errors or defects can or will be corrected.
+WE MAKE NO WARRANTY THAT:
 
-Without limiting the foregoing, neither the Company nor any of the company's provider makes any representation or warranty of any kind, express or implied: (i) as to the operation or availability of the Service, or the information, content, and materials or products included thereon; (ii) that the Service will be uninterrupted or error-free; (iii) as to the accuracy, reliability, or currency of any information or content provided through the Service; or (iv) that the Service, its servers, the content, or e-mails sent from or on behalf of the Company are free of viruses, scripts, trojan horses, worms, malware, timebombs or other harmful components.
-
-Some jurisdictions do not allow the exclusion of certain types of warranties or limitations on applicable statutory rights of a consumer, so some or all of the above exclusions and limitations may not apply to You. But in such a case the exclusions and limitations set forth in this section shall be applied to the greatest extent enforceable under applicable law.
-
-## Governing Law
-The laws of the Country, excluding its conflicts of law rules, shall govern this Terms and Your use of the Service. Your use of the Application may also be subject to other local, state, national, or international laws.
-
-## Disputes Resolution
-If You have any concern or dispute about the Service, You agree to first try to resolve the dispute informally by contacting the Company.
-
-## For European Union (EU) Users
-If You are a European Union consumer, you will benefit from any mandatory provisions of the law of the country in which you are resident in.
-
-## United States Legal Compliance
-You represent and warrant that (i) You are not located in a country that is subject to the United States government embargo, or that has been designated by the United States government as a "terrorist supporting" country, and (ii) You are not listed on any United States government list of prohibited or restricted parties.
-
-## Severability and Waiver
-### Severability
-If any provision of these Terms is held to be unenforceable or invalid, such provision will be changed and interpreted to accomplish the objectives of such provision to the greatest extent possible under applicable law and the remaining provisions will continue in full force and effect.
-
-### Waiver
-Except as provided herein, the failure to exercise a right or to require performance of an obligation under these Terms shall not effect a party's ability to exercise such right or require such performance at any time thereafter nor shall the waiver of a breach constitute a waiver of any subsequent breach.
-
-## Translation Interpretation
-These Terms and Conditions may have been translated if We have made them available to You on our Service. You agree that the original English text shall prevail in the case of a dispute.
-
-## Changes to These Terms and Conditions
-We reserve the right, at Our sole discretion, to modify or replace these Terms at any time. If a revision is material We will make reasonable efforts to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at Our sole discretion.
-
-By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms. If You do not agree to the new terms, in whole or in part, please stop using the website and the Service.
+1. THE SERVICE WILL BE ERROR-FREE OR UNINTERRUPTED (INCLUDING, WITHOUT LIMITATION, INTERRUPTIONS THAT OCCUR IN THE CONTEXT OF REGULARLY SCHEDULED MAINTENANCE);
+2. ANY INFORMATION OR ADVICE OBTAINED BY YOU IN CONNECTION WITH THE SERVICE WILL BE ACCURATE OR COMPLETE; OR
+3. THE RESULTS OF USING THE SERVICE WILL MEET YOUR REQUIREMENTS. SOME STATES DO NOT ALLOW EXCLUSION OF AN IMPLIED WARRANTY, SO THIS DISCLAIMER MAY NOT APPLY TO USERS.
 
 ## Contact Us
-If you have any questions about these Terms and Conditions, You can contact us:
-
-By visiting this page on our website: https://github.com/ClementBM/naatation/issues
+If you have any questions about these Privacy Policy or Terms and Conditions, you can contact us by visiting this page https://github.com/ClementBM/naatation/issues.
