@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Four simple instantiations of ARIMA processes as a cheat sheet"
-excerpt: "ARIMA processes in a nutshell with four simple instantiations"
+excerpt: "ARIMA processes in a nutshell with four simple instantiations, some common notations and functions in time series analysis"
 date:   2022-12-17
 categories: [theory]
 tags: [time series, ARIMA, linear models]

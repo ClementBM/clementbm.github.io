@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Compute simple corpus descriptive metrics"
-excerpt: "Get a quick overview of a corpus with some basic descriptive metrics with the help of NLTK"
+excerpt: "Sometimes we lack descriptive informations about raw textual data, here is a quick overview of assessing corpus quality using some basic descriptive metrics with the help of NLTK"
 date:   2022-07-06
 categories: [theory]
 tags: [NLTK, NLP, tokenizer, metrics]

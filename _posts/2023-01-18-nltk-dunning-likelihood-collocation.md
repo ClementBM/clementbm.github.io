@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to get collocations with the dunning likelihood ratio?"
-excerpt: "Explore a corpus with NLTK and the dunning likelihood ratio to find common collocations"
+excerpt: "Explore a corpus with NLTK and the dunning likelihood ratio to discover common collocations or word combinations"
 date:   2023-01-18
 categories: [theory]
 tags: [NLTK, NLP, statistic, collocation]

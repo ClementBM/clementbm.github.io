@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Try to uncover clusters among time series data"
-excerpt: "Utilizing DBA-k-means techniques on time series data and assessing them using silhouette scores"
+excerpt: "Attempt to identify patterns or groupings within time series datasets utilizing DBA-k-means techniques on time series data and assessing them using silhouette scores"
 date:   2023-09-01
 categories: [study]
 tags: [time series, dtw, clustering, dba, k-means]

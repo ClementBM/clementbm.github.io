@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to statistically test the residuals from forecasted data?"
-excerpt: "Hands-on testing the residuals from electric power consumption forecast"
+excerpt: "Practical examination of the forecast residuals in a time series prediction for electricity consumption and conducting a series of statistical tests on time-dependent data"
 date:   2023-01-06
 categories: [study]
 tags: [time series, residuals]

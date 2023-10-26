@@ -2,6 +2,30 @@
 layout: default
 ---
 
+<style>
+.thumbnail-image {
+  opacity: 1;
+  transition: .5s ease;
+  backface-visibility: hidden;
+  border-radius: 6px 6px 0 0;
+}
+
+li:hover .thumbnail-image {
+  opacity: 0.3;
+}
+
+li {
+  background-color: white;
+  transition: .5s ease;
+  border-radius: 6px;
+}
+
+li:hover {
+  background-color: #F4F4F4;
+}
+
+</style>
+
 <div class="home">
   {%- if page.title -%}
     <h1 class="page-heading">{{ page.title }}</h1>
@@ -17,7 +41,9 @@ layout: default
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
 
         {%- if post.image -%}
-          <img src="{{ post.image }}" style="margin-bottom: 5px"/>
+          <a href="{{ post.url | relative_url }}">
+            <img src="{{ post.image }}" style="margin-bottom: 5px" class="thumbnail-image"/>
+          </a>
         {%- endif -%}
 
         <h3 style="margin-bottom: 5px">
