@@ -5,6 +5,7 @@ excerpt: "ARIMA processes in a nutshell with four simple instantiations"
 date:   2022-12-17
 categories: [theory]
 tags: [time series, ARIMA, linear models]
+image: assets/2022-12-17/rose-apple-thumbnail.jpg
 ---
 
 ![Rose apples a.k.a. bell fruits](/assets/2022-12-17/rose-apple-g2ad7309a0_1280.jpg)

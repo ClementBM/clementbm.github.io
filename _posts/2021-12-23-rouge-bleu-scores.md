@@ -5,6 +5,7 @@ excerpt: "ROUGE and BLEU similarity metric for evaluating models"
 date:   2021-12-23
 categories: [theory]
 tags: [ROUGE, BLEU, NLP, Metrics]
+image: assets/2021-12-23/blueberries-raspberries-thumbnail.jpg
 ---
 
 ![Blueberries and raspberries](/assets/2021-12-23/blueberries-raspberries.jpg)

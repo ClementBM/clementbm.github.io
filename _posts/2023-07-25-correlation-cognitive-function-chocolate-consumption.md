@@ -5,6 +5,7 @@ excerpt: "Reading a study on the relationship between chocolate consumption and 
 date:   2023-07-25
 categories: [study]
 tags: [chocolate, correlation]
+image: assets/2023-07-25/chocolate-consumption-thumbnail.jpg
 ---
 
 ![Chocolate consumption](/assets/2023-07-25/chocolate-diva.jpg){: width="50%" style="margin-left: auto;margin-right: auto;display: block;"  }

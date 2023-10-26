@@ -5,6 +5,7 @@ excerpt: "A brief glance at the jurisdictions that are involved in climate chang
 date:   2023-08-30
 categories: [project]
 tags: [bokeh, graph, climate cases, visualization]
+image: assets/2023-08-30/corn-thumbnail.jpg
 ---
 
 ![Corn photo](/assets/2023-08-30/corn.jpg){: width="100%" style="margin-left: auto;margin-right: auto;display: block;"  }

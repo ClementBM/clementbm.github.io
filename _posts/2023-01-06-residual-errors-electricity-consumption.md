@@ -5,6 +5,7 @@ excerpt: "Hands-on testing the residuals from electric power consumption forecas
 date:   2023-01-06
 categories: [study]
 tags: [time series, residuals]
+image: assets/2023-01-06/beetroot-thumbnail.jpg
 ---
 
 ![Beetroots illustration](/assets/2023-01-06/beetroot-gee78938b9_1280.jpg)

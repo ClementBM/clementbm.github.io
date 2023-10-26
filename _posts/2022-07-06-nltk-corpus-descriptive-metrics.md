@@ -5,6 +5,7 @@ excerpt: "Get a quick overview of a corpus with some basic descriptive metrics w
 date:   2022-07-06
 categories: [theory]
 tags: [NLTK, NLP, tokenizer, metrics]
+image: assets/2022-07-06/pexels-trang-doan-thumbnail.jpg
 ---
 
 ![Multiple fruits](/assets/2022-07-06/pexels-trang-doan-1128678.jpg)

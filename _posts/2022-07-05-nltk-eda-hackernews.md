@@ -5,6 +5,7 @@ excerpt: "How to perform a quick analysis on hacker news top stories with NLTK"
 date:   2022-07-05
 categories: [study]
 tags: [NLTK, NLP, visualization]
+image: assets/2022-07-05/pexels-irina-kaminskaya-thumbnail.jpg
 ---
 
 ![Original fruit](/assets/2022-07-05/pexels-irina-kaminskaya-12633634.jpg)

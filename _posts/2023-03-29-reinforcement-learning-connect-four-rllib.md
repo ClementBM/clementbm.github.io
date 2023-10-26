@@ -5,6 +5,7 @@ excerpt: "Train a PPO agent to play connect four with RLlib reinforcement learni
 date:   2023-03-29
 categories: [project]
 tags: [reinforcement learning, rllib, hugging face, gradio, multi agents, torch, onnx, petting zoo, ppo]
+image: assets/2023-03-29/chili-thumbnail.jpg
 ---
 
 ![Red Hot Peppers](/assets/2023-03-29/chili-g100503ee3_1280.jpg){: width="100%"  }

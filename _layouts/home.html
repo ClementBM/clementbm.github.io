@@ -15,7 +15,21 @@ layout: default
       {%- for post in paginator.posts -%}
       <li>
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">
+
+        {%- if post.image -%}
+          <img src="{{ post.image }}" style="margin-bottom: 5px"/>
+        {%- endif -%}
+
+        <h3 style="margin-bottom: 5px">
+          <a class="post-link" href="{{ post.url | relative_url }}">
+            {{ post.title | escape }}
+          </a>
+        </h3>
+        {%- if site.show_excerpts -%}
+          <div style="margin-bottom: 5px"> {{ post.excerpt }} </div>
+        {%- endif -%}
+
+        <div class="post-meta">
           <time class="dt-published" datetime="{{ post.date | date_to_xmlschema }}">
             {{ post.date | date: date_format }}
           </time>
@@ -24,15 +38,7 @@ layout: default
             <a href="{% link categories/index.html %}#{{ category }}">{{ category }}</a>
             {% endfor -%}
           {%- endif %}
-        </span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
+        </div>
       </li>
       {%- endfor -%}
     </ul>

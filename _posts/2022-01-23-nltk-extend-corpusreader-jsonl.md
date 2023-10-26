@@ -5,6 +5,7 @@ excerpt: "How to load a json corpus with NLTK on hacker news top stories"
 date:   2022-01-23
 categories: [coding]
 tags: [NLTK, jsonl, EDA, NLP, tokenizer]
+image: assets/2022-01-23/split-apple-thumbnail.jpg
 ---
 
 ![Split of an apple](/assets/2022-01-23/split-apple.jpg)

@@ -5,6 +5,7 @@ excerpt: "Utilizing DBA-k-means techniques on time series data and assessing the
 date:   2023-09-01
 categories: [study]
 tags: [time series, dtw, clustering, dba, k-means]
+image: assets/2023-09-01/strawberry-thumbnail.jpeg
 ---
 
 Clustering is an unsupervised data mining technique for organizing data series into groups based on their similarity. In this post we make a focus on clustering large number of Time Series. Though the objective of the technique remains the same (maximize data similarity within clusters and minimize it across clusters) the implementation details are adapted to this particular data type.
