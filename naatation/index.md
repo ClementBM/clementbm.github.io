@@ -45,8 +45,8 @@ When you install `NAATation`, you are asked to accept the following authorizatio
 * see, edit, create, and delete all your Google Sheets spreadsheets (https://www.googleapis.com/auth/spreadsheets)
 
 Why does `NAATation` need those access scopes?
-* **Google Docs**: to save the annotations into the properties of the Google Doc™
-* **Google Sheets**: to exportsthe annotations into a single dedicated file
+* **Google Docs**: I will need read/write access to Google Docs documents in order to add properties to the document so that my app can save the annotated content. A narrower scope would not be sufficient because I wouldn't be able to save textual annotations to the document of interest.
+* **Google Sheets**: I will need read/write access to Google Sheets documents in order to append and modify rows within an aggregation file so that my app can export the textual annotations from the Google Doc to one specific Google Sheet document. A narrower scope would not be sufficient because I wouldn't be able to gather the textual annotations into one Google Sheet document.
 * **Sidebars**: to open `NAATation` as a sidebar in your Google applications
 
 ### Retention time
