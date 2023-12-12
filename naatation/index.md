@@ -4,6 +4,9 @@ title: NAATation
 permalink: /naatation/
 ---
 
+* [Link to the add-on Google Workspace Marketplace](https://workspace.google.com/marketplace/app/naatation/879669756842)
+* [Link to the open source Github repository](https://github.com/ClementBM/naatation)
+
 # Annotation tool for Google Doc™ (NAATation)
 
 ![NAAT logo](naat.png){: style="float: left; padding:15px" }
