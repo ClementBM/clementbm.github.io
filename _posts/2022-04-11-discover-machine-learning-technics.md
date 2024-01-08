@@ -31,6 +31,7 @@ You should try something like:
 Second tip is to search on specialized search engine like arxiv, paperswithcode, sci-hub ...
 * [arxiv-sanity-lite.com](https://arxiv-sanity-lite.com/)
 * [scholar.google.com](https://scholar.google.com/)
+* [SciSpace](https://typeset.io/)
 
 You can also try searching on [awesome list search](https://awesomelists.top) or if you're daring by exploring THE [awesome list](https://github.com/sindresorhus/awesome).
 
