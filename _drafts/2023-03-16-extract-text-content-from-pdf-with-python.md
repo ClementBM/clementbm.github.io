@@ -10,6 +10,7 @@ tags: [nlp, content extraction]
 - [Requirements](#requirements)
 - [Processing library](#processing-library)
 - [Raw extraction](#raw-extraction)
+- [Libraries for parsing pdf files](#libraries-for-parsing-pdf-files)
 - [Libraries for extracting web contents](#libraries-for-extracting-web-contents)
 - [Sources](#sources)
 
@@ -29,6 +30,10 @@ https://github.com/hi-primus/optimus
 
 # Raw extraction
 
+
+# Libraries for parsing pdf files
+* pypdfium2 (https://towardsdatascience.com/how-to-extract-text-from-any-pdf-and-image-for-large-language-model-2d17f02875e6?gi=c64a12cdc71f)
+* Deep Search IBM
 
 # Libraries for extracting web contents
 
