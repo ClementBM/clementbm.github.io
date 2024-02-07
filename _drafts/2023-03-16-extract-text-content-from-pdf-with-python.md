@@ -12,7 +12,11 @@ tags: [nlp, content extraction]
 - [Raw extraction](#raw-extraction)
 - [Libraries for parsing pdf files](#libraries-for-parsing-pdf-files)
 - [Libraries for extracting web contents](#libraries-for-extracting-web-contents)
+- [Document AI](#document-ai)
 - [Sources](#sources)
+
+
+extracting metadata from PDF documents: Science-Parse by Allen AI
 
 
 # Requirements
@@ -45,6 +49,10 @@ https://github.com/hi-primus/optimus
 * [requests-html](https://github.com/psf/requests-html) - Pythonic HTML Parsing for Humans.
 * [textract](https://github.com/deanmalmgren/textract) - Extract text from any document, Word, PowerPoint, PDFs, etc.
 
+# Document AI
+
+https://huggingface.co/blog/document-ai
+There are at least six general use cases for building document AI solutions. These use cases differ in the kind of document inputs and outputs. A combination of approaches is often necessary when solving enterprise Document AI problems.
 
 # Sources
 * https://pdfminersix.readthedocs.io/en/latest/tutorial/highlevel.html
@@ -53,3 +61,5 @@ https://github.com/hi-primus/optimus
 * https://github.com/chrismattmann/tika-python
 * https://superuser.com/questions/198392/how-to-copy-text-out-of-a-pdf-without-losing-formatting
 * https://github.com/pymupdf/PyMuPDF
+* pdfplumber
+* InftyReader
