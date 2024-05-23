@@ -2,38 +2,56 @@
 layout: post
 title:  "Formal language of street skateboarding"
 excerpt: "Formal language of street skateboarding"
-date:   2023-06-23
+date:   2024-05-14
 categories: []
 tags: []
 ---
 
 
-
-
+# Problematic
 It has been shown that the tricks judging can be sometimes pretty sloppy. (show link to video `data skateboarding`)
 
-* ants package for design context less language
-* diagram of the context less language
-* three levels of skateboard language
-  1. coding skateboard tricking
-     1. precise, and mathematical way of describing a trick
-     2. rotation axis, 
-  2. standardize skateboark tricking
-     1. no ambiguities
-     2. still some exception, but clearly listed
-  3. natural skateboard tricking
-     * ambiguities
-     * multiple way of calling the same trick
-     * certain shortcut for some tricks
-       * ex: cabalerial => fakie 360
-* what's the minimal machine that could read tricks skateboarding language
+* Running BATB through Elo rating system: https://www.youtube.com/watch?v=JbWO8a_LFDU
+* SLS judging: https://www.youtube.com/watch?v=mKJCsHzgZDU
+* Hurricane scares judge: https://www.youtube.com/watch?v=OcLxfrdm_hs
 
-# Grading issues
+## Grading issues
 * not a limited bag of tricks, new tricks come out at every competition
 * each skater has its "own" special tricks, which nobody else do
 * environment change at each competition, obstacles are different
 * a lot of possible combinations
 * from 0 to 10, with one decimal
+ 
+## Three levels of skateboard language
+1. coding skateboard tricking
+  1. precise, and mathematical way of describing a trick
+  2. rotation axis, 
+2. standardize skateboark tricking
+  1. no ambiguities
+  2. still some exception, but clearly listed
+3. natural skateboard tricking
+  * ambiguities
+  * multiple way of calling the same trick
+  * certain shortcut for some tricks
+  * ex:
+    * cabalerial => fakie 360
+    * alley hoop 50-50 grind => 
+
+## What's the minimal machine that could read tricks skateboarding language
+* ants package for design context less language
+* diagram of the context less language
+
+## Tricks
+
+* Backside tailslide Backside Shove-it
+* Frontside 50-50 grind kickflip out
+* Backside tailslide kickflip out
+
+
+## Impossible tricks
+1. certain slide configurations impose posterior possible tricks like:
+   1. Backside tailslide, nollie flip out
+* 
 
 
 ## Judging philosophy
@@ -76,35 +94,51 @@ ANTLR reads a language description file called a grammar and generates a number 
 
 # EBNF
 ```ebnf
+
 TrickCombo = Stance, { Trick, Manual}, Trick ;
 Trick = ( ({ AirTrick, SlideOrGrind }-) | AirTrick), Obstacle ;
 AirTrick = Start, [ Rotation ], [ BoardVariation ], [ Grab ] ;
 SlideOrGrind = Way, ( (Slide, Reception) | Grind) ;
 Rotation = Way, Turn ;
 
-Grab = "Indy grab" | "Mute grab" | "Melon grab" | "Stallfish grab" | "Tail grab" | "Nose grab" | "Nosebone grab";
-Reception = "To Fakie" | "To Forward" ;
 Stance = "Regular" | "Switch" ;
 Start = "Ollie" | "Nollie" ;
 BoardVariation = "Kickflip" | "Heelflip" | "Pop Shove-it" | "Frontside Pop Shove-it" | "Hardflip" | "360 flip" | "Varial Kickflip" | "Varial Heelflip" | "Impossible";
 Way = "Frontside" | "Backside" ;
 Turn = "180" | "360" | "540" ;
-Obstacle = "Over the Gap" | "Over the Stairs" | "On flat" | "On rail" | "On curb" | "On hubba";
+Manual = "Nosemanual" | "Manual" ;
 Slide = "Boardslide" | "Lipslide" | "Noseslide" | "Tailslide" | "Bluntslide" | "Noseblunt slide" ;
 Grind = "50-50 grind" | "5-0 grind" | "Nosegrind" | "Crooked grind" | "Feeble grind" | "Smith grind";
-Manual = "Nosemanual" | "Manual" ;
+Grab = "Indy grab" | "Mute grab" | "Melon grab" | "Stallfish grab" | "Tail grab" | "Nose grab" | "Nosebone grab";
+Obstacle = "Over the Gap" | "Over the Stairs" | "On flat" | "On rail" | "On curb" | "On hubba";
+Reception = "To Fakie" | "To Forward" ;
 ```
+
+![Time span comparison](/assets/2024-05-14/ebnf.png){: width="50%" style="margin-left: auto;margin-right: auto;display: inline;"  }
 
 # Resources
 * Data Skeptic: The theory of Formal Languages
 * http://www.worldskate.org/skateboarding/news-skateboarding/2929-world-skate-international-skateboarding-judging-commission-workshop.html
 * https://www.sk8.net/wp/
 * [NLTK Book, Context Free Grammar](https://www.nltk.org/book/ch08.html)
+* https://www.nltk.org/api/nltk.grammar.html
 * https://medium.com/@ivarrvinter/context-free-grammar-in-python-using-nltk-for-nlp-examples-d76726514897
 * https://www.nltk.org/api/nltk.grammar.html
+* [Context-free Grammar in Python using NLTK for NLP + Examples](https://medium.com/@ivarrvinter/context-free-grammar-in-python-using-nltk-for-nlp-examples-d76726514897)
+* [Converting Context-free Grammar to Chomsky Normal Form (Step-by-step Guide)](https://medium.com/@ivarrvinter/converting-context-free-grammar-to-chomsky-normal-form-step-by-step-guide-f4624a306eee)
+* [Tutoriel sur la mise en place d'une grammaire avec ANTLR](https://yvesmouafo.developpez.com/tutoriels/java/grammaire-antlr/)
+* vs code and antlr4
 
 ## Tricks encyclopedia
 * https://www.exploratorium.edu/skateboarding/largeglossary.html
 * https://www.surfertoday.com/skateboarding/the-ultimate-list-of-skateboard-tricks
 * https://www.skateboardhere.com/skateboard-culture.html
 * https://entirelyextreme.com/skateboard-tricks/
+
+## Misc
+https://web.archive.org/web/20160306235425/http://shredditapp.com/2015/02/01/historyofskateboarding/
+
+* Marcus, Ben, and Lucia Daniella. Griggi. The Skateboard: The Good, the Rad, and the Gnarly:
+* An Illustrated History. Minneapolis, MN: MVP, 2011. Print.
+* Mullen, Rodney, and Sean Mortimer. The Mutt: How to Skateboard and Not Kill Yourself. New
+* York: Regan, 2004. Print.
