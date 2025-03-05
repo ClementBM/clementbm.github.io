@@ -11,6 +11,7 @@ tags: [nlp, content extraction]
 - [Processing library](#processing-library)
 - [Raw extraction](#raw-extraction)
 - [Libraries for parsing pdf files](#libraries-for-parsing-pdf-files)
+  - [Docling](#docling)
 - [Libraries for extracting web contents](#libraries-for-extracting-web-contents)
 - [Document AI](#document-ai)
 - [Sources](#sources)
@@ -38,6 +39,10 @@ https://github.com/hi-primus/optimus
 # Libraries for parsing pdf files
 * pypdfium2 (https://towardsdatascience.com/how-to-extract-text-from-any-pdf-and-image-for-large-language-model-2d17f02875e6?gi=c64a12cdc71f)
 * Deep Search IBM
+* [Docling](https://github.com/DS4SD/docling)
+
+## Docling
+Docling simplifies document processing, parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the gen AI ecosystem.
 
 # Libraries for extracting web contents
 
@@ -49,6 +54,9 @@ https://github.com/hi-primus/optimus
 * [requests-html](https://github.com/psf/requests-html) - Pythonic HTML Parsing for Humans.
 * [textract](https://github.com/deanmalmgren/textract) - Extract text from any document, Word, PowerPoint, PDFs, etc.
 
+
+* camelot: pas très bon
+* tabula: pas très bon
 # Document AI
 
 https://huggingface.co/blog/document-ai
